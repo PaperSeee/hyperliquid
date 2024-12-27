@@ -273,7 +273,138 @@
             }
         }
 
-        /* Modal styles */
+        .filters-container {
+            padding: 1rem 2rem;
+            background: transparent;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .filter-button {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            border-color: #22543D;
+            background: var(--hover-bg);
+        }
+
+        .filter-button i {
+            font-size: 0.8rem;
+        }
+
+        /* Ajout des nouveaux styles pour le header */
+        .header-wrapper {
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            filter: brightness(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .social-banner {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(34, 84, 61, 0.05);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        .social-banner a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-banner a i {
+            font-size: 1.1rem;
+            color: #22543D;
+        }
+
+        .social-banner a:hover {
+            background: rgba(34, 84, 61, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: rgba(34, 84, 61, 0.05);
+            border: 1px solid var(--border-color);
+            color: #22543D;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(34, 84, 61, 0.2);
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .social-banner {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Styles pour le modal */
         .modal {
             display: none;
             position: fixed;
@@ -315,127 +446,225 @@
         .checkbox-item {
             display: flex;
             align-items: center;
+            gap: 0.5rem;
         }
 
-        .checkbox-item input {
-            margin-right: 0.5rem;
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #22543D;
         }
 
-        .checkbox-item label {
-            font-size: 1rem;
+        .comments-area {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .comments-area textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-color);
+            border-radius: 4px;
+        }
+
+        tr {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <a href="#" class="logo">Brand Name</a>
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <i class="fas fa-moon"></i>
+<header class="header-wrapper">
+    <div class="header-content">
+        <a href="#" class="logo">
+            <img src="assets/Hyperliquid-Logo-2.png" alt="Hyperliquid Logo" />
+        </a>
+
+        <div class="social-banner">
+            <a href="https://discord.com" target="_blank">
+                <i class="fab fa-discord"></i>
+                Discord
+            </a>
+            <a href="https://x.com" target="_blank">
+                <i class="fab fa-x-twitter"></i>
+                X
+            </a>
+            <a href="https://telegram.org" target="_blank">
+                <i class="fab fa-telegram"></i>
+                Telegram
+            </a>
+        </div>
+
+        <button id="themeToggle" class="theme-toggle">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+</header>
+
+    <div class="filters-container">
+        <div class="filters">
+            <button class="filter-button" onclick="sortTable('price')">
+                Prix
+                <i class="fas fa-sort"></i>
+            </button>
+            <button class="filter-button" onclick="sortTable('alpha')">
+                Alphabétique
+                <i class="fas fa-sort-alpha-down"></i>
             </button>
         </div>
-    </header>
+    </div>
 
     <main>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Token</th>
-                        <th>Price</th>
-                        <th>Market Cap</th>
-                        <th>24h Change</th>
+                        <th>Ticker N°</th>
+                        <th>Ticker</th>
+                        <th>Launch Date</th>
+                        <th>Team Allocation</th>
+                        <th>Airdrop 1</th>
+                        <th>Airdrop 2</th>
+                        <th>Dev/Team</th>
+                        <th>Auction Price</th>
+                        <th>Launch Price</th>
+                        <th>Launch Marketcap</th>
+                        <th>Launch Circ Supply</th>
+                        <th>Twitter Handle</th>
+                        <th>Telegram/Discord</th>
+                        <th>Website</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="token-cell">
-                            <span class="token-symbol">BTC</span>
-                            <span class="token-name">Bitcoin</span>
-                        </td>
-                        <td>$50,000</td>
-                        <td>$900B</td>
-                        <td class="positive">+5%</td>
+                        <td>1</td>
+                        <td>TCKR1</td>
+                        <td>2024-01-15</td>
+                        <td>20%</td>
+                        <td>500</td>
+                        <td>200</td>
+                        <td>30%</td>
+                        <td>$0.50</td>
+                        <td>$1.00</td>
+                        <td>$5M</td>
+                        <td>1M</td>
+                        <td>@ticker1</td>
+                        <td>discord.gg/ticker1</td>
+                        <td>www.ticker1.com</td>
                     </tr>
                     <tr>
-                        <td class="token-cell">
-                            <span class="token-symbol">ETH</span>
-                            <span class="token-name">Ethereum</span>
-                        </td>
-                        <td>$4,000</td>
-                        <td>$400B</td>
-                        <td class="negative">-2%</td>
+                        <td>2</td>
+                        <td>TCKR2</td>
+                        <td>2024-02-20</td>
+                        <td>15%</td>
+                        <td>400</td>
+                        <td>300</td>
+                        <td>25%</td>
+                        <td>$0.60</td>
+                        <td>$1.20</td>
+                        <td>$6M</td>
+                        <td>1.2M</td>
+                        <td>@ticker2</td>
+                        <td>discord.gg/ticker2</td>
+                        <td>www.ticker2.com</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About</h3>
-                <p>Learn about our company and our values.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <a href="#">Twitter</a>
-                <a href="#">Facebook</a>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: support@brand.com</p>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2024 Brand Name. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
+    <!-- Ajouter le modal -->
+    <div id="tickerModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Filter Tokens</h2>
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
             <div class="checkbox-grid">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="filter1">
-                    <label for="filter1">Filter 1</label>
+                    <input type="checkbox" id="devReputation">
+                    <label for="devReputation">Dev Reputation</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="filter2">
-                    <label for="filter2">Filter 2</label>
+                    <input type="checkbox" id="spread">
+                    <label for="spread">Spread <3%</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="filter3">
-                    <label for="filter3">Filter 3</label>
+                    <input type="checkbox" id="liquidity">
+                    <label for="liquidity">Thick OB/Liquidity</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="filter4">
-                    <label for="filter4">Filter 4</label>
+                    <input type="checkbox" id="sellPressure">
+                    <label for="sellPressure">No Sell Pressure</label>
                 </div>
+            </div>
+            <div class="comments-area">
+                <h3>Comments</h3>
+                <textarea id="comments" placeholder="Add your comments here..."></textarea>
             </div>
         </div>
     </div>
 
+    <footer>
+    
+        <div class="copyright">
+            <p>&copy; 2024 Hyperliquid. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
-        function toggleTheme() {
-            const root = document.documentElement;
-            if (root.getAttribute('data-theme') === 'light') {
-                root.setAttribute('data-theme', 'dark');
-            } else {
-                root.setAttribute('data-theme', 'light');
+        const themeToggleButton = document.getElementById('themeToggle');
+        themeToggleButton.addEventListener('click', () => {
+            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        });
+
+
+        function sortTable(type) {
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                if (type === 'price') {
+                    const priceA = parseFloat(a.cells[8].textContent.replace('$', ''));
+                    const priceB = parseFloat(b.cells[8].textContent.replace('$', ''));
+                    return priceB - priceA;
+                } else if (type === 'alpha') {
+                    const textA = a.cells[1].textContent.toLowerCase();
+                    const textB = b.cells[1].textContent.toLowerCase();
+                    return textA.localeCompare(textB);
+                }
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Ajout du code pour le modal
+        const modal = document.getElementById('tickerModal');
+        const span = document.getElementsByClassName('close')[0];
+        const tbody = document.querySelector('tbody');
+
+        // Fermer le modal quand on clique sur X
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Fermer le modal quand on clique en dehors
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
 
-        function openModal() {
-            document.getElementById("modal").style.display = "block";
-        }
-
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-        }
+        // Ajouter les événements click sur les lignes du tableau
+        tbody.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            if (row) {
+                const ticker = row.cells[1].textContent;
+                document.getElementById('modalTitle').textContent = ticker;
+                modal.style.display = "block";
+            }
+        });
     </script>
 </body>
 </html>
