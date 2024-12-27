@@ -5,8 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrolling Table</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+
     <style>
         :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --card-bg: rgba(34, 84, 61, 0.1);
+            --border-color: rgba(34, 84, 61, 0.2);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --secondary-text: rgba(0, 0, 0, 0.6);
+            --table-header-bg: rgba(34, 84, 61, 0.1);
+            --hover-bg: rgba(34, 84, 61, 0.1);
+            --filter-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
             --bg-color: #000000;
             --text-color: #ffffff;
             --card-bg: rgba(34, 84, 61, 0.02);
@@ -16,17 +31,6 @@
             --table-header-bg: rgba(34, 84, 61, 0.05);
             --hover-bg: rgba(34, 84, 61, 0.05);
             --filter-bg: rgba(0, 0, 0, 0.95);
-        }
-
-        [data-theme="light"] {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --card-bg: rgba(34, 84, 61, 0.1);
-            --border-color: rgba(34, 84, 61, 0.2);
-            --header-bg: rgba(255, 255, 255, 0.95);
-            --secondary-text: rgba(0, 0, 0, 0.6);
-            --table-header-bg: rgba(34, 84, 61, 0.1);
-            --hover-bg: rgba(34, 84, 61, 0.1);
         }
 
         * {
@@ -203,40 +207,12 @@
         footer {
             background: var(--header-bg);
             border-top: 1px solid var(--border-color);
-            padding: 2rem 0;
+            padding: 0.5rem 0;
             margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1800px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-section h3 {
-            color: #22543D;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .footer-section p, .footer-section a {
-            color: var(--secondary-text);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-            text-decoration: none;
-        }
-
-        .footer-section a:hover {
-            color: #22543D;
+            text-align: center;
         }
 
         .copyright {
-            text-align: center;
-            padding-top: 2rem;
             color: var(--secondary-text);
             font-size: 0.8rem;
         }
@@ -473,9 +449,103 @@
         tr {
             cursor: pointer;
         }
+
+        .footer-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #22543D;
+            transform: translateY(-2px);
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #22543D;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .newsletter-form button {
+            padding: 0.5rem 1rem;
+            background: #22543D;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: #1a4231;
+        }
+
+        .modal-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .save-button {
+            padding: 0.75rem 1.5rem;
+            background: #22543D;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-button:hover {
+            background: #1a4231;
+        }
     </style>
 </head>
-<body>
+<body data-theme="light">
 <header class="header-wrapper">
     <div class="header-content">
         <a href="#" class="logo">
@@ -506,11 +576,11 @@
     <div class="filters-container">
         <div class="filters">
             <button class="filter-button" onclick="sortTable('price')">
-                Prix
+                Price
                 <i class="fas fa-sort"></i>
             </button>
             <button class="filter-button" onclick="sortTable('alpha')">
-                Alphabétique
+                Alphabetical
                 <i class="fas fa-sort-alpha-down"></i>
             </button>
         </div>
@@ -575,6 +645,12 @@
         </div>
     </main>
 
+    <footer>
+        <div class="copyright">
+            <p>&copy; 2024 Hyperliquid. All rights reserved.</p>
+        </div>
+    </footer>
+
     <!-- Ajouter le modal -->
     <div id="tickerModal" class="modal">
         <div class="modal-content">
@@ -602,20 +678,19 @@
                 <h3>Comments</h3>
                 <textarea id="comments" placeholder="Add your comments here..."></textarea>
             </div>
+            <div class="modal-actions">
+                <button id="saveButton" class="save-button">Save Changes</button>
+            </div>
         </div>
     </div>
-
-    <footer>
-    
-        <div class="copyright">
-            <p>&copy; 2024 Hyperliquid. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script>
         const themeToggleButton = document.getElementById('themeToggle');
         themeToggleButton.addEventListener('click', () => {
             document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+            // Mettre à jour l'icône
+            const icon = themeToggleButton.querySelector('i');
+            icon.className = document.body.getAttribute('data-theme') === 'light' ? 'fas fa-sun' : 'fas fa-moon';
         });
 
 
@@ -662,6 +737,65 @@
             if (row) {
                 const ticker = row.cells[1].textContent;
                 document.getElementById('modalTitle').textContent = ticker;
+                modal.style.display = "block";
+            }
+        });
+
+        // Ajout de la logique de sauvegarde
+        document.getElementById('saveButton').addEventListener('click', () => {
+            const ticker = document.getElementById('modalTitle').textContent;
+            const checkboxes = {
+                devReputation: document.getElementById('devReputation').checked,
+                spread: document.getElementById('spread').checked,
+                liquidity: document.getElementById('liquidity').checked,
+                sellPressure: document.getElementById('sellPressure').checked
+            };
+            const comments = document.getElementById('comments').value;
+
+            // Sauvegarder dans localStorage
+            const savedData = JSON.parse(localStorage.getItem('tickerData') || '{}');
+            savedData[ticker] = {
+                checkboxes,
+                comments,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('tickerData', JSON.stringify(savedData));
+
+            // Feedback visuel
+            const button = document.getElementById('saveButton');
+            button.textContent = 'Saved!';
+            button.style.background = '#4CAF50';
+            setTimeout(() => {
+                button.textContent = 'Save Changes';
+                button.style.background = '#22543D';
+                modal.style.display = "none";
+            }, 1500);
+        });
+
+        // Charger les données sauvegardées lors de l'ouverture du modal
+        tbody.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            if (row) {
+                const ticker = row.cells[1].textContent;
+                document.getElementById('modalTitle').textContent = ticker;
+                
+                // Charger les données sauvegardées
+                const savedData = JSON.parse(localStorage.getItem('tickerData') || '{}')[ticker];
+                if (savedData) {
+                    document.getElementById('devReputation').checked = savedData.checkboxes.devReputation;
+                    document.getElementById('spread').checked = savedData.checkboxes.spread;
+                    document.getElementById('liquidity').checked = savedData.checkboxes.liquidity;
+                    document.getElementById('sellPressure').checked = savedData.checkboxes.sellPressure;
+                    document.getElementById('comments').value = savedData.comments;
+                } else {
+                    // Réinitialiser le formulaire
+                    document.getElementById('devReputation').checked = false;
+                    document.getElementById('spread').checked = false;
+                    document.getElementById('liquidity').checked = false;
+                    document.getElementById('sellPressure').checked = false;
+                    document.getElementById('comments').value = '';
+                }
+                
                 modal.style.display = "block";
             }
         });
