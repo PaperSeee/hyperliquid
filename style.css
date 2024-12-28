@@ -45,47 +45,57 @@ body {
 .header-wrapper {
     background: var(--header-bg);
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
 }
 
 .header-content {
     max-width: 1800px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+    display: flex;
     align-items: center;
     gap: 2rem;
 }
 
-.logo img {
-    height: 40px;
-    filter: brightness(1.2);
-    transition: transform 0.3s ease;
+.logo {
+    flex-shrink: 0;
+    width: 140px;
 }
 
-.logo:hover img {
-    transform: scale(1.05);
+.logo img {
+    height: 35px;
 }
 
 /* Social Banner */
 .social-banner {
+    flex-shrink: 0;
     display: flex;
-    gap: 1.5rem;
     align-items: center;
+    gap: 1rem;
     background: rgba(34, 84, 61, 0.05);
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
     border: 1px solid var(--border-color);
+    margin-left: auto;
 }
 
 .social-banner a {
-    color: var(--text-color);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.social-banner a i, 
+.social-banner a svg {
+    font-size: 1.1rem;
     border-radius: 25px;
     transition: all 0.3s ease;
     font-size: 0.9rem;
@@ -186,9 +196,16 @@ tr:hover {
 
 .filters {
     display: flex;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
     max-width: 1800px;
     margin: 0 auto;
+    gap: 2rem;
+}
+
+.filters-left {
+    display: flex;
+    gap: 1rem;
 }
 
 .filter-button {
@@ -202,6 +219,7 @@ tr:hover {
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .filter-button:hover {
@@ -296,9 +314,9 @@ footer {
 /* Search Container */
 .search-container {
     position: relative;
-    max-width: 300px;
-    width: 100%;
-    margin: 0 auto;
+    width: 300px;
+    min-width: 200px;
+    margin-left: auto;
 }
 
 .search-container input {

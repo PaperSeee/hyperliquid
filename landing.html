@@ -14,10 +14,6 @@
             <a href="#" class="logo">
                 <img src="assets/Hyperliquid-Logo-2.png" alt="Hyperliquid Logo" />
             </a>
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search tokens...">
-                <i class="fas fa-magnifying-glass search-icon"></i>
-            </div>
             <div class="social-banner">
                 <a href="https://discord.com" target="_blank">
                     <i class="fab fa-discord"></i>
@@ -30,23 +26,29 @@
                 <a href="https://telegram.org" target="_blank">
                     <i class="fab fa-telegram"></i>
                 </a>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
-            <button id="themeToggle" class="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
         </div>
     </header>
 
     <div class="filters-container">
         <div class="filters">
-            <button class="filter-button" onclick="sortTable('price')">
-                Price
-                <i class="fas fa-sort"></i>
-            </button>
-            <button class="filter-button" onclick="sortTable('alpha')">
-                Alphabetical
-                <i class="fas fa-sort-alpha-down"></i>
-            </button>
+            <div class="filters-left">
+                <button class="filter-button" onclick="sortTable('price')">
+                    Price
+                    <i class="fas fa-sort"></i>
+                </button>
+                <button class="filter-button" onclick="sortTable('alpha')">
+                    Alphabetical
+                    <i class="fas fa-sort-alpha-down"></i>
+                </button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search tokens...">
+                <i class="fas fa-magnifying-glass search-icon"></i>
+            </div>
         </div>
     </div>
 
