@@ -94,14 +94,23 @@ body {
     gap: 0.5rem;
 }
 
-.social-banner a i {
+.social-banner a i, 
+.social-banner a svg {
     font-size: 1.1rem;
     color: #22543D;
+}
+
+.social-banner svg path {
+    fill: #22543D;
 }
 
 .social-banner a:hover {
     background: rgba(34, 84, 61, 0.1);
     transform: translateY(-2px);
+}
+
+.social-banner svg {
+    vertical-align: middle;
 }
 
 /* Theme Toggle */
@@ -282,4 +291,39 @@ footer {
     padding: 1rem;
     text-align: center;
     border-top: 1px solid var(--border-color);
+}
+
+/* Search Container */
+.search-container {
+    position: relative;
+    max-width: 300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 8px 35px 8px 38px;  /* Augmenté le padding gauche pour l'icône */
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: #22543D;
+    box-shadow: 0 0 0 2px rgba(34, 84, 61, 0.1);
+}
+
+.search-container .search-icon {
+    position: absolute;
+    left: 12px;  /* Changé de right à left */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #22543D;
+    pointer-events: none;
+    font-size: 1rem;
 }

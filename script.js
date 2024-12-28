@@ -77,7 +77,41 @@ function saveTickerData() {
 }
 
 // Gestionnaires d'événements
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Charger les données JSON
+        const response = await fetch('allTokens.json');
+        const tokens = await response.json();
+        
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = ''; // Nettoyer le contenu existant
+        
+        // Remplir le tableau avec les données
+        tokens.forEach((token, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${token.name}</td>
+                <td>${token.launchDate || 'N/A'}</td>
+                <td>${token.teamAllocation || 'N/A'}</td>
+                <td>${token.airdrop1 || 'N/A'}</td>
+                <td>${token.airdrop2 || 'N/A'}</td>
+                <td>${token.devTeamPercentage || 'N/A'}</td>
+                <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
+                <td>N/A</td>
+                <td>${token.launchMarketCap || 'N/A'}</td>
+                <td>${token.launchCircSupply || 'N/A'}</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+
     const modal = document.getElementById('tickerModal');
     const tbody = document.querySelector('tbody');
     const span = document.getElementsByClassName('close')[0];
@@ -115,4 +149,74 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(`Mode switched to: ${isAdmin ? 'Admin' : 'User'}`);
     };
     document.body.appendChild(toggleButton);
+
+    // Gestion du thème
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    // Charger le thème sauvegardé
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    // Gestionnaire du bouton de thème
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+
+    function updateThemeIcon(theme) {
+        themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    // Fonction de recherche
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
 });
+
+// Fonction de tri
+function sortTable(type) {
+    const table = document.querySelector('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    rows.sort((a, b) => {
+        let aValue, bValue;
+        
+        if (type === 'price') {
+            // Tri par prix (colonne auction price)
+            aValue = parseFloat(a.cells[7].textContent.replace('$', '')) || 0;
+            bValue = parseFloat(b.cells[7].textContent.replace('$', '')) || 0;
+            return bValue - aValue; // Tri décroissant
+        } else if (type === 'alpha') {
+            // Tri alphabétique (colonne ticker)
+            aValue = a.cells[1].textContent.trim();
+            bValue = b.cells[1].textContent.trim();
+            return aValue.localeCompare(bValue);
+        }
+        
+        return 0;
+    });
+
+    // Vider et reremplir le tbody avec les lignes triées
+    tbody.innerHTML = '';
+    rows.forEach(row => tbody.appendChild(row));
+
+    // Mettre à jour les numéros d'index
+    rows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}

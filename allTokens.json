@@ -1,0 +1,1322 @@
+[
+  {
+    "name": "USDC",
+    "tokenId": "0x6d1e7cde53ba9467b783cb7c530ce054",
+    "launchDate": null,
+    "auctionPrice": "1.0",
+    "launchCircSupply": "2059427545.69040394",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PURR",
+    "tokenId": "0xc1fb593aeffbeb02f85e0308e9956a90",
+    "launchDate": null,
+    "auctionPrice": "0.35061",
+    "launchCircSupply": "597829018.86172998",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HFUN",
+    "tokenId": "0xbaf265ef389da684513d98d68edf4eae",
+    "launchDate": "2024-05-16",
+    "auctionPrice": "172.55",
+    "launchCircSupply": "997024.79125783",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "LICK",
+    "tokenId": "0xba3aaf468f793d9b42fd3328e24f1de9",
+    "launchDate": "2024-05-17",
+    "auctionPrice": "0.00056216",
+    "launchCircSupply": "4875644017.32159042",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "MANLET",
+    "tokenId": "0xe9ced9225d2a69ccc8d6a5b224524b99",
+    "launchDate": "2024-05-22",
+    "auctionPrice": "0.048355",
+    "launchCircSupply": "9777567.64847",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "JEFF",
+    "tokenId": "0xfcf28885456bf7e7cbe5b7a25407c5bc",
+    "launchDate": "2024-05-24",
+    "auctionPrice": "19.284",
+    "launchCircSupply": "991173.68324",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "SIX",
+    "tokenId": "0x50a9391b4a40caffbe8b16303b95a0c1",
+    "launchDate": "2024-05-25",
+    "auctionPrice": "0.779945",
+    "launchCircSupply": "6658445.80232805",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "WAGMI",
+    "tokenId": "0x649efea44690cf88d464f512bc7e2818",
+    "launchDate": "2024-05-26",
+    "auctionPrice": "0.003402",
+    "launchCircSupply": "367510409.04703254",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "CAPPY",
+    "tokenId": "0x3f8abf62220007cc7ab6d33ef2963d88",
+    "launchDate": "2024-05-28",
+    "auctionPrice": "0.00025764",
+    "launchCircSupply": "983020214.36217999",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "POINTS",
+    "tokenId": "0xbb03842e1f71ed27ed8fa012b29affd4",
+    "launchDate": "2024-05-29",
+    "auctionPrice": "0.0324655",
+    "launchCircSupply": "99574631.19410001",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "TRUMP",
+    "tokenId": "0x368cb581f0d51e21aa19996d38ffdf6f",
+    "launchDate": "2024-05-31",
+    "auctionPrice": "0.013369",
+    "launchCircSupply": "99782213.8501714",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "GMEOW",
+    "tokenId": "0x07615193eaa63d1da6feda6e0ac9e014",
+    "launchDate": "2024-06-01",
+    "auctionPrice": "0.00079559",
+    "launchCircSupply": "998421383.13773537",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PEPE",
+    "tokenId": "0x79b6e1596ea0deb2e6912ff8392c9325",
+    "launchDate": "2024-06-02",
+    "auctionPrice": "0.00763",
+    "launchCircSupply": "99731935.92592511",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "XULIAN",
+    "tokenId": "0x6cc648be7e4c38a8c7fcd8bfa6714127",
+    "launchDate": "2024-06-04",
+    "auctionPrice": "0.00072691",
+    "launchCircSupply": "693214338.18448997",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "RUG",
+    "tokenId": "0x4978f3f49f30776d9d7397b873223c2d",
+    "launchDate": "2024-06-05",
+    "auctionPrice": "0.0391275",
+    "launchCircSupply": "99782050.69012",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ILIENS",
+    "tokenId": "0xa74984ea379be6d899c1bf54db923604",
+    "launchDate": "2024-06-06",
+    "auctionPrice": "0.00062207",
+    "launchCircSupply": "692466599.80596995",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FUCKY",
+    "tokenId": "0x7de5b7a8c115edf0174333446ba0ea78",
+    "launchDate": "2024-06-08",
+    "auctionPrice": "0.00229",
+    "launchCircSupply": "138391029.36276323",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "CZ",
+    "tokenId": "0x3b5ff6cb91f71032578b53960090adfb",
+    "launchDate": "2024-06-08",
+    "auctionPrice": "0.32358",
+    "launchCircSupply": "4437494.4304286",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "BAGS",
+    "tokenId": "0x979978fd8cb07141f97dcab921ba697a",
+    "launchDate": "2024-06-10",
+    "auctionPrice": "0.00104775",
+    "launchCircSupply": "733507792.58376002",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ANSEM",
+    "tokenId": "0xa96cfac10eaecba151f646c5cb4c5507",
+    "launchDate": "2024-06-12",
+    "auctionPrice": "0.0123855",
+    "launchCircSupply": "99961797.54594",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "TATE",
+    "tokenId": "0xfba416cad5d8944e954deb6bfb2a8672",
+    "launchDate": "2024-06-12",
+    "auctionPrice": "0.023508",
+    "launchCircSupply": "99930464.49013001",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FUN",
+    "tokenId": "0x3dc9f93c39ddd9f0182ad1e584bae0d4",
+    "launchDate": "2024-06-14",
+    "auctionPrice": "0.366355",
+    "launchCircSupply": "10650123.351386",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "SUCKY",
+    "tokenId": "0xfd2ac85551ac85d3f04369e296ed8cd3",
+    "launchDate": "2024-06-15",
+    "auctionPrice": "0.00046978",
+    "launchCircSupply": "806843098.08299005",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "BIGBEN",
+    "tokenId": "0x231f2a687770b13fe12adb1f339ff722",
+    "launchDate": "2024-06-17",
+    "auctionPrice": "0.002095",
+    "launchCircSupply": "159273982.44971457",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "KOBE",
+    "tokenId": "0x0d2556646326733d86c3fc4c2fa22ad4",
+    "launchDate": "2024-06-18",
+    "auctionPrice": "0.00045059",
+    "launchCircSupply": "758244436.72419",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "VEGAS",
+    "tokenId": "0xb693d596cd02f5f38e532e647bb43b69",
+    "launchDate": "2024-06-19",
+    "auctionPrice": "0.305235",
+    "launchCircSupply": "9955875.73331759",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PUMP",
+    "tokenId": "0xefa7e286b99ea49ce6a21d21bb41636f",
+    "launchDate": "2024-06-21",
+    "auctionPrice": "0.00047578",
+    "launchCircSupply": "1047357036.99995005",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "SCHIZO",
+    "tokenId": "0xe140201197ced74f8884a698190da7aa",
+    "launchDate": "2024-06-22",
+    "auctionPrice": "6.4304",
+    "launchCircSupply": "997964.01549475",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "CATNIP",
+    "tokenId": "0x8bb39ef7881404c5d019a07b1cf21725",
+    "launchDate": "2024-06-23",
+    "auctionPrice": "0.117035",
+    "launchCircSupply": "9926394.26459751",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HAPPY",
+    "tokenId": "0x3d06abbbc860b7e97feb1478c21c5cd6",
+    "launchDate": "2024-06-24",
+    "auctionPrice": "0.51671",
+    "launchCircSupply": "988606.02934354",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "SELL",
+    "tokenId": "0x18bce4e1865f0535689b3c4c71e86a84",
+    "launchDate": "2024-06-26",
+    "auctionPrice": "0.00084502",
+    "launchCircSupply": "318988879.97908002",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HBOOST",
+    "tokenId": "0xe292ab8f7d9ddd078ebbcbc4d328665c",
+    "launchDate": "2024-06-27",
+    "auctionPrice": "0.00028487",
+    "launchCircSupply": "897394413.69988",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FARMED",
+    "tokenId": "0x002911b408c1ae4ddc144e756cebdc17",
+    "launchDate": "2024-06-28",
+    "auctionPrice": "0.00772",
+    "launchCircSupply": "85969912.53233939",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PURRPS",
+    "tokenId": "0x1254a7b73720e7e9d53cf822a8603fbf",
+    "launchDate": "2024-06-29",
+    "auctionPrice": "0.00029301",
+    "launchCircSupply": "901878983.77253997",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "GUP",
+    "tokenId": "0x5a9a44de6fbdb012284eec608c1cf9b8",
+    "launchDate": "2024-06-30",
+    "auctionPrice": "0.326235",
+    "launchCircSupply": "868410.85702221",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "GPT",
+    "tokenId": "0x2f9f45766eba7b62f30082f3d4ecc77c",
+    "launchDate": "2024-07-02",
+    "auctionPrice": "0.000127",
+    "launchCircSupply": "3110374049.4611454",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PANDA",
+    "tokenId": "0x92588529ba00e2d2bec07c12c804a580",
+    "launchDate": "2024-07-03",
+    "auctionPrice": "0.0165035",
+    "launchCircSupply": "78207109.88338999",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "BID",
+    "tokenId": "0x21c5fd69973e1bee64c92af9eb47420a",
+    "launchDate": "2024-07-05",
+    "auctionPrice": "0.00002734",
+    "launchCircSupply": "19934857503.95275879",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HODL",
+    "tokenId": "0x33b1ee8db7496b484db887a7b748d20f",
+    "launchDate": "2024-07-06",
+    "auctionPrice": "0.006447",
+    "launchCircSupply": "96485110.75594208",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "RAGE",
+    "tokenId": "0x0ae968c613d445364de97769f1afb16b",
+    "launchDate": "2024-07-07",
+    "auctionPrice": "0.10983",
+    "launchCircSupply": "36392926.55002879",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ASI",
+    "tokenId": "0x8811d8fc24b9f4ace2c0bd21996d5899",
+    "launchDate": "2024-07-09",
+    "auctionPrice": "0.006254",
+    "launchCircSupply": "96837358.28871091",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "LEAP",
+    "tokenId": "0xd2f2e10dbfbd43d6147f8784358f5dc4"
+  },
+  {
+    "name": "VAPOR",
+    "tokenId": "0xdb5190bea4b6ab178da0162420c93a73",
+    "launchDate": "2024-07-11",
+    "auctionPrice": "0.019535",
+    "launchCircSupply": "1002257553.50621998",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PVP",
+    "tokenId": "0x42825e552b0242aa26d641f5cb6aff56"
+  },
+  {
+    "name": "X",
+    "tokenId": "0x54198368f92dcfbe88e3c2090526690a"
+  },
+  {
+    "name": "PILL",
+    "tokenId": "0xd56f8732f1cae4fc2db2e48863c25d81",
+    "launchDate": "2024-07-14",
+    "auctionPrice": "0.009996",
+    "launchCircSupply": "89418614.54161395",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ADHD",
+    "tokenId": "0xba13ed91905624d50318d54651ad3bab",
+    "launchDate": "2024-07-16",
+    "auctionPrice": "0.0092947",
+    "launchCircSupply": "99417669.72342999",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "LADY",
+    "tokenId": "0x71378e1ba5403eb35ad4e1af2048c6e3",
+    "launchDate": "2024-07-18",
+    "auctionPrice": "0.092101",
+    "launchCircSupply": "6391382.0476563",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "CAT",
+    "tokenId": "0x7631702302e6c7fbf69d369e0bcf45d6",
+    "launchDate": "2024-07-19",
+    "auctionPrice": "4.18995",
+    "launchCircSupply": "1159470.080071",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HPEPE",
+    "tokenId": "0x501ebeddf15e7433cb84d7cc396cdfa5",
+    "launchDate": "2024-07-20",
+    "auctionPrice": "0.01000705",
+    "launchCircSupply": "98437480.85206001",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "MBAPPE",
+    "tokenId": "0x03e1ad7d4d6d82b3da89ac8d35cc917b",
+    "launchDate": "2024-07-22",
+    "auctionPrice": "0.053013",
+    "launchCircSupply": "6730877.011057",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "MAGA",
+    "tokenId": "0x9b91002773083d9292b8cb02dacb7e79",
+    "launchDate": "2024-07-23",
+    "auctionPrice": "0.00774",
+    "launchCircSupply": "80610516.8846174",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "MOG",
+    "tokenId": "0xbe7772099df97ec90f6ff9c4caf670d1",
+    "launchDate": "2024-07-24",
+    "auctionPrice": "0.00031",
+    "launchCircSupply": "880597006.11591101",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "OMNIX",
+    "tokenId": "0x216a1428334ac9e908e76a02a1812416",
+    "launchDate": "2024-07-25",
+    "auctionPrice": "0.0082238",
+    "launchCircSupply": "568045091.24108005",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "COKE",
+    "tokenId": "0x2f0f48f1d1698fd483a0f6f8ebe9782e"
+  },
+  {
+    "name": "JEET",
+    "tokenId": "0x15fa03f87df338eb7d858da86498ea0e",
+    "launchDate": "2024-07-28",
+    "auctionPrice": "0.00333505",
+    "launchCircSupply": "82816539.32529999",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "DROP",
+    "tokenId": "0x6c30da3dd84bd4f59642fd73fcd46ad6",
+    "launchDate": "2024-07-29",
+    "auctionPrice": "0.003737",
+    "launchCircSupply": "95262986.2136441",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "CBD",
+    "tokenId": "0xb7bf6dd48ffeb66c22524e065abe6733"
+  },
+  {
+    "name": "ARI",
+    "tokenId": "0xb0027f425afd8f8d7bdab3d0e22c7e54",
+    "launchDate": "2024-08-01",
+    "auctionPrice": "0.003798",
+    "launchCircSupply": "97048188.84365064",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "TEST",
+    "tokenId": "0x677482db6e19ad72108bb042b190709e",
+    "launchDate": "2024-08-02",
+    "auctionPrice": "0.0034759",
+    "launchCircSupply": "95196283.61634",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "KING",
+    "tokenId": "0x4b5aea9c6624f354fdfe28274a363f27"
+  },
+  {
+    "name": "MEOW",
+    "tokenId": "0xcb820fb2715cad58356916847960a73c",
+    "launchDate": "2024-08-05",
+    "auctionPrice": "0.0070214",
+    "launchCircSupply": "173523396.92886701",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ANT",
+    "tokenId": "0x8a7ade54439539fd1268ca60a528396a",
+    "launchDate": "2024-08-06",
+    "auctionPrice": "0.278985",
+    "launchCircSupply": "999574.31174149",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FRAC",
+    "tokenId": "0x58fb407b5fce2b90348cdf090d6dd3d4",
+    "launchDate": "2024-08-07",
+    "auctionPrice": "0.076307",
+    "launchCircSupply": "3996733.945278",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ATEHUN",
+    "tokenId": "0xbebb35d03b83a302a2aa06dbaa67dd9f",
+    "launchDate": "2024-08-08",
+    "auctionPrice": "6.1486",
+    "launchCircSupply": "907560.58204137",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FRCT",
+    "tokenId": "0xfebf76468dd13f240281e4a8ef11932d"
+  },
+  {
+    "name": "COZY",
+    "tokenId": "0xd998e1032a1fabfeaf6cf11ae7ddec2a",
+    "launchDate": "2024-08-11",
+    "auctionPrice": "0.620045",
+    "launchCircSupply": "1233012.84759743",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "WASH",
+    "tokenId": "0x2e348026257e41c936119bf69d9c313f",
+    "launchDate": "2024-08-13",
+    "auctionPrice": "1.6941",
+    "launchCircSupply": "1038536.80979709",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "POP",
+    "tokenId": "0x99ffa3c6ae342dcd532c8431bf4f3474"
+  },
+  {
+    "name": "NFT",
+    "tokenId": "0x5c621972ab84c077a1056d77f509a30f",
+    "launchDate": "2024-08-15",
+    "auctionPrice": "0.934325",
+    "launchCircSupply": "841026.29240222",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "JEFE",
+    "tokenId": "0xe711c656aaadefe8f15579ca22679acd"
+  },
+  {
+    "name": "PEAR",
+    "tokenId": "0x1ad748b576a84f6eb6541389bb53d164",
+    "launchDate": "2024-08-18",
+    "auctionPrice": "0.0138015",
+    "launchCircSupply": "99898449.09508801",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "RICH",
+    "tokenId": "0x263db50b9946a0701ccba65b52928dab",
+    "launchDate": "2024-08-19",
+    "auctionPrice": "0.3951",
+    "launchCircSupply": "931082.90672908",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "BRIDGE",
+    "tokenId": "0xc196d2b7598991bd0425fc959bc1a40f"
+  },
+  {
+    "name": "GUESS",
+    "tokenId": "0x8211bcb445c7c006059cfcccb4f1a1b8"
+  },
+  {
+    "name": "LORA",
+    "tokenId": "0xc6d6fb326749974a028425d9db7681c4"
+  },
+  {
+    "name": "CATBAL",
+    "tokenId": "0x38348c17e1a18559bbda232d22007695"
+  },
+  {
+    "name": "TJIF",
+    "tokenId": "0xa167acb332328faa26eda9ec38770eec",
+    "launchDate": "2024-08-26",
+    "auctionPrice": "0.550855",
+    "launchCircSupply": "788399.47619221",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "NEIRO",
+    "tokenId": "0x0d04cae66af89099270d2931709afb32"
+  },
+  {
+    "name": "TIME",
+    "tokenId": "0xae3f9675b5825ab20850ce6229c4bdbd"
+  },
+  {
+    "name": "BERA",
+    "tokenId": "0x0b6ae68f39bfd088744374daa99db226"
+  },
+  {
+    "name": "ANGY",
+    "tokenId": "0x56236a47fbbcc41ea8043207bfa0118d"
+  },
+  {
+    "name": "DOG",
+    "tokenId": "0xb37dc8f9819f5c7be5393c2241d28d28"
+  },
+  {
+    "name": "MOON",
+    "tokenId": "0xeff9411a23ab28ad69f67fbd9759d491"
+  },
+  {
+    "name": "MAXI",
+    "tokenId": "0xed660d18ef6a87bc3dc1b3eeeb94fe21"
+  },
+  {
+    "name": "PAIN",
+    "tokenId": "0x6e99a27fd1de4723848e32d7106aa59f"
+  },
+  {
+    "name": "VDO",
+    "tokenId": "0x2364d4a94a2a9f89a53b976fa8cadc80"
+  },
+  {
+    "name": "HQ",
+    "tokenId": "0xf6f58625ba95ecde953f4aafc7af53fd"
+  },
+  {
+    "name": "EUR",
+    "tokenId": "0xd125b605fa732968610dd4962e9a7fb9"
+  },
+  {
+    "name": "REGARD",
+    "tokenId": "0x86df9bf70b2d72f2b168508f90026469"
+  },
+  {
+    "name": "YUM",
+    "tokenId": "0x6bc45d95a04a7fba29fdb3ecbeeb053d"
+  },
+  {
+    "name": "REKT",
+    "tokenId": "0x4626a44a785134109cae9ea21f33d9a0"
+  },
+  {
+    "name": "NMTD",
+    "tokenId": "0x22bafa9342b3ac5762056d944a2f6b2a",
+    "launchDate": "2024-09-14",
+    "auctionPrice": "0.564195",
+    "launchCircSupply": "505879.66943475",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HPUMP",
+    "tokenId": "0xaa6f295683beb4906a9d21accbe5e604"
+  },
+  {
+    "name": "PIGEON",
+    "tokenId": "0xb901e2dfb2dbe1902e03be3c1e3e72ce"
+  },
+  {
+    "name": "LAUNCH",
+    "tokenId": "0xa82aa458b2c146e97733d0c05374aa0e"
+  },
+  {
+    "name": "IRL",
+    "tokenId": "0x2ef25ace7c11f77f0de071b15e8b0bc0"
+  },
+  {
+    "name": "RISE",
+    "tokenId": "0x51973ef5533887afcace6b26de5f19dd",
+    "launchDate": "2024-09-20",
+    "auctionPrice": "0.01475",
+    "launchCircSupply": "58068921.5882332",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "WOW",
+    "tokenId": "0xc81b9a04884f4a8107f734c4d88f811a"
+  },
+  {
+    "name": "CINDY",
+    "tokenId": "0xf00cf2c0647e1ce1ee5c1274b4650e40"
+  },
+  {
+    "name": "CHINA",
+    "tokenId": "0x650ba53f534d00834002ca10c4792d06"
+  },
+  {
+    "name": "STACK",
+    "tokenId": "0x9728448fd10546a8527b21298a9b41e4",
+    "launchDate": "2024-09-25",
+    "auctionPrice": "1.26835",
+    "launchCircSupply": "414484.66267939",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FRIED",
+    "tokenId": "0xbd859b02096be7a23dd1527269be10a0"
+  },
+  {
+    "name": "PICKL",
+    "tokenId": "0x1a69662de430e900be096c00ea28b810"
+  },
+  {
+    "name": "SHREK",
+    "tokenId": "0x550ff22831954938f2be76028b15eb18"
+  },
+  {
+    "name": "NOCEX",
+    "tokenId": "0x5901399de6f487a6f7b11b1487811c86"
+  },
+  {
+    "name": "VAULT",
+    "tokenId": "0x288553d859333b90ede88640b4279598",
+    "launchDate": "2024-10-02",
+    "auctionPrice": "0.58386",
+    "launchCircSupply": "9993497.83656693",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "RANK",
+    "tokenId": "0xd0a824284314e8ceb8cf3c3b31ddf0bd"
+  },
+  {
+    "name": "L",
+    "tokenId": "0xdb7d7cd808bdad7cedf44b5864c3866c"
+  },
+  {
+    "name": "H",
+    "tokenId": "0x52a110041682dbf38277c80a72eecba6"
+  },
+  {
+    "name": "G",
+    "tokenId": "0x7ee78dd38408381c2b5b979b7383e2e1"
+  },
+  {
+    "name": "SCAM",
+    "tokenId": "0x425e14eb167930e81390c8091bc2d8b7"
+  },
+  {
+    "name": "MONAD",
+    "tokenId": "0x3413da62384685cda2528d4ba085a055"
+  },
+  {
+    "name": "BOZO",
+    "tokenId": "0x2030eb01e794e9f7e94b9e6b82a08bfb"
+  },
+  {
+    "name": "RIP",
+    "tokenId": "0xc20825d6e56b3bf1aa15d1f80471b166"
+  },
+  {
+    "name": "UP",
+    "tokenId": "0xaa60905298f022ad8efab6d4348bc61b"
+  },
+  {
+    "name": "GIGA",
+    "tokenId": "0xe536ad7c82d63a53aafe6ae9f19c7e03"
+  },
+  {
+    "name": "FELIX",
+    "tokenId": "0x601138020f6eeb930be04fbc31379f08"
+  },
+  {
+    "name": "SPH",
+    "tokenId": "0xaced5d1ad2c5ce7b7c789abfb7955b27"
+  },
+  {
+    "name": "STHYPE",
+    "tokenId": "0x244d19a8576a492f44ee19622f4104e4"
+  },
+  {
+    "name": "HPL",
+    "tokenId": "0x5e887f0c6c3deec190c36186bf23369f"
+  },
+  {
+    "name": "KHYPE",
+    "tokenId": "0xbc8a22f25703a03101630ce6b09f4baa"
+  },
+  {
+    "name": "HOPE",
+    "tokenId": "0xe6ac9d5a7cf91cdd9fdf34fcbbdd58e9"
+  },
+  {
+    "name": "SHOE",
+    "tokenId": "0x706aae9a576b939bc8ef1656f9fe9ed0"
+  },
+  {
+    "name": "KNTQ",
+    "tokenId": "0xbd31bd605c0a1b82c72aae3587f9061f"
+  },
+  {
+    "name": "BUSSY",
+    "tokenId": "0xd27ab3aa48f744ca0c469902a13c8656"
+  },
+  {
+    "name": "FATCAT",
+    "tokenId": "0x1b00cbe4c41fc38e2701df2d75dad892",
+    "launchDate": "2024-10-29",
+    "auctionPrice": "0.41451",
+    "launchCircSupply": "726562.69756843",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "PIP",
+    "tokenId": "0xe85f43e1f91e3c8cdf3acbd7e0855b8e"
+  },
+  {
+    "name": "YEETI",
+    "tokenId": "0x2150c49b1b981b88349dae535d607ce2"
+  },
+  {
+    "name": "LQNA",
+    "tokenId": "0x0dd6980f71e51e6f218a9b7d53c837f6"
+  },
+  {
+    "name": "NASDAQ",
+    "tokenId": "0x6a53c88cfa761cd324b0ab4cd50dc2d5"
+  },
+  {
+    "name": "SYLVI",
+    "tokenId": "0x21c7f844092376ba85aa3875180e194b",
+    "launchDate": "2024-11-05",
+    "auctionPrice": "1.9306",
+    "launchCircSupply": "809459.53681918",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "FEIT",
+    "tokenId": "0x0c29857bd79a8e17437b19f9eaa322a4"
+  },
+  {
+    "name": "STRICT",
+    "tokenId": "0x83a38493d264bf3f5b1f47c8ebd67eea"
+  },
+  {
+    "name": "FRUDO",
+    "tokenId": "0xb3d30d38259b99d4a6daaf72ded7bf34"
+  },
+  {
+    "name": "VIZN",
+    "tokenId": "0x7e640c7d4d529e332c89ac86075a1855"
+  },
+  {
+    "name": "AUTIST",
+    "tokenId": "0x7b659352508b25500406b4cd7fdc4f8c",
+    "launchDate": "2024-11-11",
+    "auctionPrice": "4.72985",
+    "launchCircSupply": "564933.81211857",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HGOD",
+    "tokenId": "0xd84e1b57dad6c106c3eb8842905d773c"
+  },
+  {
+    "name": "LIQUID",
+    "tokenId": "0x8e821d72325ab1effd3193c3ac5f9c4b"
+  },
+  {
+    "name": "CHEF",
+    "tokenId": "0xb59b1334dfefe55b4d6895bdec3ed16c"
+  },
+  {
+    "name": "AZUR",
+    "tokenId": "0x14167e36345f2652e90b44ed1a015782"
+  },
+  {
+    "name": "EARTH",
+    "tokenId": "0xc9a3be0e82dde365b038c34674ed4046",
+    "launchDate": "2024-11-18",
+    "auctionPrice": "0.457425",
+    "launchCircSupply": "568077.46318963",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "NIGGO",
+    "tokenId": "0x2e73765c9718421ca426a2bb2d7243b0"
+  },
+  {
+    "name": "LUCKY",
+    "tokenId": "0x6558e9071cbb754b7ee56568a9f5d80a",
+    "launchDate": "2024-11-20",
+    "auctionPrice": "0.0010928",
+    "launchCircSupply": "924706216.77802002",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "HOP",
+    "tokenId": "0x9b2cff929d260e8d5015fa188167be74"
+  },
+  {
+    "name": "FAN",
+    "tokenId": "0x1fedb171e381fce7051832b8bc72ef34"
+  },
+  {
+    "name": "MUNCH",
+    "tokenId": "0x26f2bebc98ec2a579febeb5d7b7e3456"
+  },
+  {
+    "name": "COPE",
+    "tokenId": "0x53184ac4c2f5d4729f4e0c0077af63e3"
+  },
+  {
+    "name": "HPYH",
+    "tokenId": "0x18a98375ce42a0f1e40d0d666eb69e15",
+    "launchDate": "2024-11-26",
+    "auctionPrice": "1.4258",
+    "launchCircSupply": "723623.10848927",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "YAP",
+    "tokenId": "0x7555ea01e1100621bcbf5f9ce3351a69"
+  },
+  {
+    "name": "HYPE",
+    "tokenId": "0x0d01dc56dcaaca66ad901c959b4011ec"
+  },
+  {
+    "name": "STEEL",
+    "tokenId": "0x7a176eea76f7c1337134d143d2f4939e"
+  },
+  {
+    "name": "RETARD",
+    "tokenId": "0x888b2490ddbb2a176fcd0da1e53d44c5"
+  },
+  {
+    "name": "HOLD",
+    "tokenId": "0xdaf550b8afca818dadb7949937528bc6",
+    "launchDate": "2024-12-01",
+    "auctionPrice": "0.37478",
+    "launchCircSupply": "996863.18464322",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "STAR",
+    "tokenId": "0x68aa39b6a6d8abe04ba97d3953fea816"
+  },
+  {
+    "name": "WATAR",
+    "tokenId": "0xc48ddbfec007fa7443259f6b1598797c"
+  },
+  {
+    "name": "GENESY",
+    "tokenId": "0xc8469678541042226507fd880a105523"
+  },
+  {
+    "name": "SOLV",
+    "tokenId": "0xcf548188e24a0ce3dc3b281242baafd9"
+  },
+  {
+    "name": "BUBZ",
+    "tokenId": "0x9563495f7d4c195047fc891e2622673b",
+    "launchDate": "2024-12-08",
+    "auctionPrice": "0.845785",
+    "launchCircSupply": "1038747.81822405",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "SHEEP",
+    "tokenId": "0xd99348c20362c8513e2808ac24adc777"
+  },
+  {
+    "name": "HYFI",
+    "tokenId": "0x1c351bfdefb12591e9329adb38cdcbae"
+  },
+  {
+    "name": "FARM",
+    "tokenId": "0x11c83b5cfeb6419a74a85a5aaba0511d"
+  },
+  {
+    "name": "FLASK",
+    "tokenId": "0x7edce821fc9e272192e73420ac9ad319"
+  },
+  {
+    "name": "SOVRN",
+    "tokenId": "0xc6aef97252f0081eb8246e24f24c5fe7"
+  },
+  {
+    "name": "MON",
+    "tokenId": "0x622cf551933f19f9136303dcab56488c"
+  },
+  {
+    "name": "GOD",
+    "tokenId": "0x5e525c76aa6e1f0a80fd8a0e71b77c45"
+  },
+  {
+    "name": "CREAM",
+    "tokenId": "0x45b7ba9b61a02d94c19e606d99b7a263"
+  },
+  {
+    "name": "ANIME",
+    "tokenId": "0x0d5012952afd6e4d76baa0a73d16a937"
+  },
+  {
+    "name": "HYENA",
+    "tokenId": "0xf1b242b9725266c3c634909fb575ef10",
+    "launchDate": "2024-12-21",
+    "auctionPrice": "4.0832",
+    "launchCircSupply": "1041190.83028125",
+    "teamAllocation": null,
+    "airdrop1": null,
+    "airdrop2": null,
+    "launchMarketCap": null,
+    "devTeamPercentage": null
+  },
+  {
+    "name": "ETHC",
+    "tokenId": "0x8d3aeb9873bfbe64eb0554e6fde38a8b"
+  },
+  {
+    "name": "ANZ",
+    "tokenId": "0xd50882aa1d890629d02b2a616dde56e5"
+  },
+  {
+    "name": "GAME",
+    "tokenId": "0x323f0986ba5b7f6e8e968e3d072bcd3e"
+  },
+  {
+    "name": "RIFT",
+    "tokenId": "0x0b983d0a300f75b148a6a96ed4c6f793"
+  },
+  {
+    "name": "SWELL",
+    "tokenId": "0xc2fb8b0d924e6fffe98dd85e6f18f362"
+  }
+]
