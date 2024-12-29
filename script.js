@@ -288,8 +288,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update initial button visibility
     updateEditButtonVisibility();
-
-    loadTableData();
 });
 
 // Fonction de tri
@@ -421,41 +419,27 @@ async function saveEditedData() {
         return;
     }
 
+    // Send request to server to update data (replace with actual server request)
     try {
-        // Update table in real-time
-        const row = findTickerRow(ticker);
-        if (row) {
-            const columnIndex = getColumnIndex(column);
-            if (columnIndex !== -1) {
-                // Save to backend
-                const response = await fetch('/updateTickerData', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ ticker, column, newValue })
-                });
+        const response = await fetch('/updateData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ticker, column, newValue })
+        });
 
-                if (response.ok) {
-                    // Update table cell
-                    row.cells[columnIndex].textContent = newValue;
-                    
-                    // Show success message
-                    alert('Data updated successfully.');
-                    closeEditPanel();
-                    
-                    // Clear input fields
-                    document.getElementById('editValue').value = '';
-                    document.getElementById('editColumn').selectedIndex = 0;
-                    document.getElementById('editTicker').selectedIndex = 0;
-                } else {
-                    alert('Failed to update data.');
-                }
-            } else {
-                alert('Column not found.');
+        if (response.ok) {
+            // Update table in real-time
+            const row = findTickerRow(ticker);
+            if (row) {
+                const columnIndex = getColumnIndex(column);
+                row.cells[columnIndex].textContent = newValue;
             }
+            alert('Data updated successfully.');
+            closeEditPanel();
         } else {
-            alert('Ticker not found in table.');
+            alert('Failed to update data.');
         }
     } catch (error) {
         console.error('Error updating data:', error);
@@ -473,33 +457,3 @@ function getColumnIndex(columnName) {
     }
     return -1;
 }
-
-// Function to load table data from backend
-async function loadTableData() {
-    try {
-        const response = await fetch('/getTickerData');
-        const savedData = await response.json();
-        for (const ticker in savedData) {
-            const row = findTickerRow(ticker);
-            if (row) {
-                for (const column in savedData[ticker]) {
-                    const columnIndex = getColumnIndex(column);
-                    if (columnIndex !== -1) {
-                        row.cells[columnIndex].textContent = savedData[ticker][column];
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Error loading data:', error);
-    }
-}
-
-// Call loadTableData on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // ...existing code...
-    loadTableData();
-    // ...existing code...
-});
-
-// ...existing code...
