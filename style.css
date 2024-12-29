@@ -922,20 +922,20 @@ footer {
 
 .edit-panel .panel-actions {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem; /* Add gap between buttons */
+    flex-direction: column; /* Change to column layout */
+    gap: 0.5rem; /* Adjust gap for vertical layout */
 }
 
 .edit-panel .save-button,
 .edit-panel .cancel-button {
+    width: 100%; /* Take full width */
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex: 1; /* Make both buttons take equal space */
-    font-weight: 500; /* Match font weight */
-    font-size: 1rem; /* Match font size */
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .edit-panel .save-button {
