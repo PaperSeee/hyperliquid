@@ -83,30 +83,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('allTokens.json');
         const tokens = await response.json();
         
-        const tbody = document.querySelector('table tbody');
-        tbody.innerHTML = ''; // Nettoyer le contenu existant
+        // Trier les tokens par ordre alphabétique
+        tokens.sort((a, b) => a.name.localeCompare(b.name));
         
-        // Remplir le tableau avec les données
-        tokens.forEach((token, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${token.name}</td>
-                <td>${token.launchDate || 'N/A'}</td>
-                <td>${token.teamAllocation || 'N/A'}</td>
-                <td>${token.airdrop1 || 'N/A'}</td>
-                <td>${token.airdrop2 || 'N/A'}</td>
-                <td>${token.devTeamPercentage || 'N/A'}</td>
-                <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
-                <td>N/A</td>
-                <td>${token.launchMarketCap || 'N/A'}</td>
-                <td>${token.launchCircSupply || 'N/A'}</td>
-                <td>N/A</td>
-                <td>N/A</td>
-                <td>N/A</td>
-            `;
-            tbody.appendChild(row);
+        const mainTableBody = document.querySelector('#mainTable tbody');
+        const unlistedTableBody = document.querySelector('#unlistedTable tbody');
+        const unlistedCount = document.getElementById('unlistedCount');
+        let unlistedTokens = 0;
+        
+        mainTableBody.innerHTML = '';
+        unlistedTableBody.innerHTML = '';
+        
+        // Index pour les tokens listés
+        let listedIndex = 1;
+
+        tokens.forEach(token => {
+            // Si le token n'a pas de launchCircSupply (pas défini ou non initialisé)
+            if (!token.launchCircSupply) {
+                const unlistedRow = document.createElement('tr');
+                unlistedRow.innerHTML = `<td>${token.name}</td>`;
+                unlistedTableBody.appendChild(unlistedRow);
+                unlistedTokens++;
+            } else {
+                const listedRow = document.createElement('tr');
+                listedRow.innerHTML = `
+                    <td>${listedIndex++}</td>
+                    <td>${token.name}</td>
+                    <td>${token.launchDate || 'N/A'}</td>
+                    <td>${token.teamAllocation || 'N/A'}</td>
+                    <td>${token.airdrop1 || 'N/A'}</td>
+                    <td>${token.airdrop2 || 'N/A'}</td>
+                    <td>${token.devTeamPercentage || 'N/A'}</td>
+                    <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
+                    <td>N/A</td>
+                    <td>${token.launchMarketCap || 'N/A'}</td>
+                    <td>${token.launchCircSupply}</td>
+                    <td>@${token.name.toLowerCase()}</td>
+                    <td>discord.gg/${token.name.toLowerCase()}</td>
+                    <td>www.${token.name.toLowerCase()}.com</td>
+                `;
+                mainTableBody.appendChild(listedRow);
+            }
         });
+
+        // Mettre à jour le compteur
+        unlistedCount.textContent = `(${unlistedTokens})`;
 
     } catch (error) {
         console.error('Error loading data:', error);
@@ -185,6 +206,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    const mainTable = document.getElementById('mainTable').getElementsByTagName('tbody')[0];
+    const unlistedTable = document.getElementById('unlistedTable').getElementsByTagName('tbody')[0];
+
+    function moveTokenToMainTable(ticker) {
+        const rows = unlistedTable.getElementsByTagName('tr');
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].getElementsByTagName('td')[0].innerText === ticker) {
+                const newRow = mainTable.insertRow();
+                // Add cells to the new row as needed
+                newRow.innerHTML = `
+                    <td>${mainTable.rows.length}</td>
+                    <td>${ticker}</td>
+                    <td>2024-XX-XX</td>
+                    <td>XX%</td>
+                    <td>XXX</td>
+                    <td>XXX</td>
+                    <td>XX%</td>
+                    <td>$X.XX</td>
+                    <td>$X.XX</td>
+                    <td>$XM</td>
+                    <td>XM</td>
+                    <td>@${ticker.toLowerCase()}</td>
+                    <td>discord.gg/${ticker.toLowerCase()}</td>
+                    <td>www.${ticker.toLowerCase()}.com</td>
+                `;
+                unlistedTable.deleteRow(i);
+                break;
+            }
+        }
+    }
+
+    // Example usage: moveTokenToMainTable('TCKR3');
+
 });
 
 // Fonction de tri
@@ -219,4 +273,45 @@ function sortTable(type) {
     rows.forEach((row, index) => {
         row.cells[0].textContent = index + 1;
     });
+}
+
+function openModal(ticker) {
+    const modal = document.getElementById('tickerModal');
+    const modalTitle = document.getElementById('modalTitle');
+    modalTitle.textContent = ticker;
+    
+    // Trouver la ligne du ticker dans le tableau
+    const row = findTickerRow(ticker);
+    if (row) {
+        document.getElementById('twitterHandle').value = row.cells[11].textContent;
+        document.getElementById('telegramDiscord').value = row.cells[12].textContent;
+        document.getElementById('website').value = row.cells[13].textContent;
+    }
+    
+    modal.style.display = "block";
+}
+
+function saveModalChanges() {
+    const ticker = document.getElementById('modalTitle').textContent;
+    const row = findTickerRow(ticker);
+    if (row) {
+        // Sauvegarder les réseaux sociaux
+        row.cells[11].textContent = document.getElementById('twitterHandle').value;
+        row.cells[12].textContent = document.getElementById('telegramDiscord').value;
+        row.cells[13].textContent = document.getElementById('website').value;
+        
+        // ...existing save logic for other fields...
+    }
+    closeModal();
+}
+
+function findTickerRow(ticker) {
+    const table = document.getElementById('mainTable');
+    const rows = table.getElementsByTagName('tr');
+    for (let row of rows) {
+        if (row.cells[1].textContent === ticker) {
+            return row;
+        }
+    }
+    return null;
 }
