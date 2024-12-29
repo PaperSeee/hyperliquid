@@ -546,7 +546,7 @@ footer {
     position: relative;
     width: 300px;
     min-width: 200px;
-    margin-left: auto;
+    /* Supprimé: margin-left: auto; */
 }
 
 .search-container input {
@@ -743,13 +743,13 @@ footer {
     }
 
     .search-container {
-        order: 3;
+        order: 1; /* Changé: de 3 à 1 */
         width: 100%;
         margin: 0.5rem 0;
     }
 
     .social-banner {
-        margin-left: 0;
+        margin-left: auto; /* Ajouté */
     }
 
     .filters {
