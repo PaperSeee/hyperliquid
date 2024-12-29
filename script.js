@@ -76,6 +76,10 @@ function saveTickerData() {
     }, 1500);
 }
 
+// Ajoutez ces variables globales au début du fichier
+let currentSortColumn = null;
+let isAscending = true;
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -239,39 +243,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Example usage: moveTokenToMainTable('TCKR3');
 
+    // Add click handlers for all table headers
+    const headers = document.querySelectorAll('#mainTable th');
+    headers.forEach((header, index) => {
+        header.style.cursor = 'pointer';
+        header.addEventListener('click', () => sortTable(index));
+    });
+
 });
 
 // Fonction de tri
-function sortTable(type) {
-    const table = document.querySelector('table');
+function sortTable(columnIndex) {
+    const table = document.getElementById('mainTable');
     const tbody = table.querySelector('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
 
+    // Change sort direction if clicking the same column
+    if (currentSortColumn === columnIndex) {
+        isAscending = !isAscending;
+    } else {
+        isAscending = true;
+        currentSortColumn = columnIndex;
+    }
+
     rows.sort((a, b) => {
-        let aValue, bValue;
-        
-        if (type === 'price') {
-            // Tri par prix (colonne auction price)
-            aValue = parseFloat(a.cells[7].textContent.replace('$', '')) || 0;
-            bValue = parseFloat(b.cells[7].textContent.replace('$', '')) || 0;
-            return bValue - aValue; // Tri décroissant
-        } else if (type === 'alpha') {
-            // Tri alphabétique (colonne ticker)
-            aValue = a.cells[1].textContent.trim();
-            bValue = b.cells[1].textContent.trim();
-            return aValue.localeCompare(bValue);
+        let aValue = a.cells[columnIndex].textContent.trim();
+        let bValue = b.cells[columnIndex].textContent.trim();
+
+        // Convert to numbers if possible
+        if (aValue.startsWith('$')) {
+            aValue = parseFloat(aValue.replace('$', '').replace(/[MB]/g, '')) || 0;
+            bValue = parseFloat(bValue.replace('$', '').replace(/[MB]/g, '')) || 0;
+        } else if (!isNaN(aValue)) {
+            aValue = parseFloat(aValue) || 0;
+            bValue = parseFloat(bValue) || 0;
         }
-        
+
+        if (aValue < bValue) return isAscending ? -1 : 1;
+        if (aValue > bValue) return isAscending ? 1 : -1;
         return 0;
     });
 
-    // Vider et reremplir le tbody avec les lignes triées
+    // Clear and refill tbody
     tbody.innerHTML = '';
-    rows.forEach(row => tbody.appendChild(row));
-
-    // Mettre à jour les numéros d'index
     rows.forEach((row, index) => {
         row.cells[0].textContent = index + 1;
+        tbody.appendChild(row);
     });
 }
 
