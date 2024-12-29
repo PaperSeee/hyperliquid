@@ -80,52 +80,6 @@ function saveTickerData() {
 let currentSortColumn = null;
 let isAscending = true;
 
-// Update the API URL
-const API_URL = 'http://localhost:3000';
-
-// Add this helper function
-async function fetchWithTimeout(url, options, timeout = 5000) {
-    try {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
-        const response = await fetch(url, {
-            ...options,
-            signal: controller.signal
-        });
-        clearTimeout(id);
-        return response;
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please check if the server is running at ' + API_URL);
-        }
-        throw error;
-    }
-}
-
-// Ajouter cette fonction pour charger les données sauvegardées
-async function loadSavedData() {
-    try {
-        const response = await fetchWithTimeout(`${API_URL}/getData`);
-        if (response.ok) {
-            const data = await response.json();
-            // Mettre à jour chaque cellule avec les données sauvegardées
-            for (const [ticker, values] of Object.entries(data)) {
-                const row = findTickerRow(ticker);
-                if (row) {
-                    for (const [column, value] of Object.entries(values)) {
-                        const columnIndex = getColumnIndex(column);
-                        if (columnIndex !== -1) {
-                            row.cells[columnIndex].textContent = value;
-                        }
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Error loading saved data:', error);
-    }
-}
-
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -179,11 +133,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Mettre à jour le compteur
         unlistedCount.textContent = `(${unlistedTokens})`;
 
-        // Charger les données sauvegardées après l'initialisation de la table
-        await loadSavedData();
-
     } catch (error) {
-        console.error('Error during initialization:', error);
+        console.error('Error loading data:', error);
     }
 
     const modal = document.getElementById('tickerModal');
@@ -395,46 +346,18 @@ function openModal(ticker) {
     modal.style.display = "block";
 }
 
-async function saveModalChanges() {
+function saveModalChanges() {
     const ticker = document.getElementById('modalTitle').textContent;
     const row = findTickerRow(ticker);
     if (row) {
-        const twitterHandle = document.getElementById('twitterHandle').value;
-        const telegramDiscord = document.getElementById('telegramDiscord').value;
-        const website = document.getElementById('website').value;
-
-        try {
-            // Send data to the server
-            const response = await fetchWithTimeout(`${API_URL}/updateSocialLinks`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ticker,
-                    twitterHandle,
-                    telegramDiscord,
-                    website
-                })
-            });
-
-            if (response.ok) {
-                // Update table cells
-                row.cells[11].textContent = twitterHandle;
-                row.cells[12].textContent = telegramDiscord;
-                row.cells[13].textContent = website;
-
-                // Show success message
-                alert('Social links updated successfully.');
-                closeModal();
-            } else {
-                alert('Failed to update social links on the server.');
-            }
-        } catch (error) {
-            console.error('Error updating social links:', error);
-            alert(`Failed to update social links: ${error.message}\nMake sure the server is running at ${API_URL}`);
-        }
+        // Sauvegarder les réseaux sociaux
+        row.cells[11].textContent = document.getElementById('twitterHandle').value;
+        row.cells[12].textContent = document.getElementById('telegramDiscord').value;
+        row.cells[13].textContent = document.getElementById('website').value;
+        
+        // ...existing save logic for other fields...
     }
+    closeModal();
 }
 
 function findTickerRow(ticker) {
@@ -502,34 +425,25 @@ async function saveEditedData() {
         if (row) {
             const columnIndex = getColumnIndex(column);
             if (columnIndex !== -1) {
-                // Send data to the server
-                const response = await fetchWithTimeout(`${API_URL}/updateData`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ticker,
-                        column,
-                        newValue
-                    })
-                });
-
-                if (response.ok) {
-                    // Update table cell
-                    row.cells[columnIndex].textContent = newValue;
-
-                    // Show success message
-                    alert('Data updated successfully.');
-                    closeEditPanel();
-
-                    // Clear input fields
-                    document.getElementById('editValue').value = '';
-                    document.getElementById('editColumn').selectedIndex = 0;
-                    document.getElementById('editTicker').selectedIndex = 0;
-                } else {
-                    alert('Failed to update data on the server.');
+                // Save to localStorage
+                const savedData = JSON.parse(localStorage.getItem('tableData') || '{}');
+                if (!savedData[ticker]) {
+                    savedData[ticker] = {};
                 }
+                savedData[ticker][column] = newValue;
+                localStorage.setItem('tableData', JSON.stringify(savedData));
+
+                // Update table cell
+                row.cells[columnIndex].textContent = newValue;
+                
+                // Show success message
+                alert('Data updated successfully.');
+                closeEditPanel();
+                
+                // Clear input fields
+                document.getElementById('editValue').value = '';
+                document.getElementById('editColumn').selectedIndex = 0;
+                document.getElementById('editTicker').selectedIndex = 0;
             } else {
                 alert('Column not found.');
             }
@@ -538,7 +452,7 @@ async function saveEditedData() {
         }
     } catch (error) {
         console.error('Error updating data:', error);
-        alert(`Failed to update data: ${error.message}\nMake sure the server is running at ${API_URL}`);
+        alert('An error occurred while updating data.');
     }
 }
 

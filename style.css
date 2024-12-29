@@ -922,7 +922,7 @@ footer {
 
 .edit-panel .panel-actions {
     display: flex;
-    flex-direction: column; /* Stack buttons vertically */
+    justify-content: space-between;
     gap: 1rem; /* Add gap between buttons */
 }
 
@@ -933,6 +933,7 @@ footer {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex: 1; /* Make both buttons take equal space */
     font-weight: 500; /* Match font weight */
     font-size: 1rem; /* Match font size */
 }
