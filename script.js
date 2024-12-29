@@ -172,6 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleButton.onclick = () => {
         isAdmin = !isAdmin;
         alert(`Mode switched to: ${isAdmin ? 'Admin' : 'User'}`);
+        updateEditButtonVisibility();
     };
     document.body.appendChild(toggleButton);
 
@@ -250,6 +251,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         header.addEventListener('click', () => sortTable(index));
     });
 
+    // Update Edit Data button visibility
+    updateEditButtonVisibility();
+
+    // Edit Data button click event
+    const editButton = document.getElementById('editButton');
+    editButton.addEventListener('click', openEditPanel);
+
+    // Cancel button click event
+    const cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', closeEditPanel);
+
+    // Save button click event
+    const saveEditButton = document.getElementById('saveEditButton');
+    saveEditButton.addEventListener('click', saveEditedData);
+
+    // Edit Data button functionality
+    const editPanel = document.getElementById('editPanel');
+    const editTicker = document.getElementById('editTicker');
+
+    // Populate ticker dropdown with existing tickers
+    const populateTickerDropdown = () => {
+        const tickers = Array.from(document.querySelectorAll('#mainTable tbody tr')).map(row => row.cells[1].textContent);
+        editTicker.innerHTML = '<option value="">Select Ticker</option>' + 
+            tickers.map(ticker => `<option value="${ticker}">${ticker}</option>`).join('');
+    };
+
+    // Initialize edit functionality
+    editButton.addEventListener('click', () => {
+        populateTickerDropdown();
+        openEditPanel();
+    });
+
+    cancelButton.addEventListener('click', closeEditPanel);
+    saveEditButton.addEventListener('click', saveEditedData);
+
+    // Update initial button visibility
+    updateEditButtonVisibility();
 });
 
 // Fonction de tri
@@ -339,4 +377,92 @@ function toggleSocialLinks() {
     
     content.classList.toggle('active');
     icon.classList.toggle('active');
+}
+
+// Function to update the visibility of the Edit Data button
+function updateEditButtonVisibility() {
+    const editButton = document.getElementById('editButton');
+    if (checkAdminStatus()) {
+        editButton.style.display = 'block';
+    } else {
+        editButton.style.display = 'none';
+    }
+}
+
+// Function to open the edit panel
+function openEditPanel() {
+    const editPanel = document.getElementById('editPanel');
+    editPanel.style.display = 'block'; // Make sure panel is visible
+    setTimeout(() => { // Add slight delay to ensure display: block is applied
+        editPanel.classList.add('active');
+    }, 10);
+}
+
+// Function to close the edit panel
+function closeEditPanel() {
+    const editPanel = document.getElementById('editPanel');
+    editPanel.classList.remove('active');
+    setTimeout(() => { // Hide panel after transition
+        editPanel.style.display = 'none';
+    }, 300); // Match transition duration
+}
+
+// Function to save the edited data
+async function saveEditedData() {
+    const ticker = document.getElementById('editTicker').value;
+    const column = document.getElementById('editColumn').value;
+    const newValue = document.getElementById('editValue').value;
+
+    // Validate inputs
+    if (!ticker || !column || !newValue) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    try {
+        // Update table in real-time
+        const row = findTickerRow(ticker);
+        if (row) {
+            const columnIndex = getColumnIndex(column);
+            if (columnIndex !== -1) {
+                // Save to localStorage
+                const savedData = JSON.parse(localStorage.getItem('tableData') || '{}');
+                if (!savedData[ticker]) {
+                    savedData[ticker] = {};
+                }
+                savedData[ticker][column] = newValue;
+                localStorage.setItem('tableData', JSON.stringify(savedData));
+
+                // Update table cell
+                row.cells[columnIndex].textContent = newValue;
+                
+                // Show success message
+                alert('Data updated successfully.');
+                closeEditPanel();
+                
+                // Clear input fields
+                document.getElementById('editValue').value = '';
+                document.getElementById('editColumn').selectedIndex = 0;
+                document.getElementById('editTicker').selectedIndex = 0;
+            } else {
+                alert('Column not found.');
+            }
+        } else {
+            alert('Ticker not found in table.');
+        }
+    } catch (error) {
+        console.error('Error updating data:', error);
+        alert('An error occurred while updating data.');
+    }
+}
+
+// Function to get the column index based on the column name
+function getColumnIndex(columnName) {
+    const headers = document.querySelectorAll('#mainTable th');
+    for (let i = 0; i < headers.length; i++) {
+        if (headers[i].textContent === columnName) {
+            return i;
+        }
+    }
+    return -1;
 }

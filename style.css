@@ -282,7 +282,7 @@ body {
     transform: translateY(-2px);
 }
 
-.social-banner svg {
+social-banner svg {
     vertical-align: middle;
 }
 
@@ -867,4 +867,100 @@ footer {
 /* Ajout pour le mode sombre */
 [data-theme="dark"] .social-links-header {
     background: rgba(51, 65, 85, 0.3);
+}
+
+/* Edit Data Button and Panel */
+.edit-button {
+    display: none; /* Hidden by default */
+    background: #22543D;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    background: #1a4231;
+}
+
+.edit-panel {
+    display: block; /* Changed from 'none' */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: var(--bg-color);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.edit-panel.active {
+    transform: translateX(0);
+}
+
+.edit-panel h2 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.edit-panel select,
+.edit-panel input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.edit-panel .panel-actions {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 1rem; /* Add gap between buttons */
+}
+
+.edit-panel .save-button,
+.edit-panel .cancel-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500; /* Match font weight */
+    font-size: 1rem; /* Match font size */
+}
+
+.edit-panel .save-button {
+    background: #22543D;
+    color: white;
+}
+
+.edit-panel .save-button:hover {
+    background: #1a4231;
+}
+
+.edit-panel .cancel-button {
+    background: #ccc;
+    color: #333;
+}
+
+.edit-panel .cancel-button:hover {
+    background: #bbb;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .edit-panel .cancel-button {
+    background: rgba(51, 65, 85, 0.5);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .edit-panel .cancel-button:hover {
+    background: rgba(51, 65, 85, 0.7);
 }

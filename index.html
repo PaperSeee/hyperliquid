@@ -41,6 +41,7 @@
                 <input type="text" id="searchInput" placeholder="Search tokens...">
                 <i class="fas fa-magnifying-glass search-icon"></i>
             </div>
+            <button id="editButton" class="edit-button">Edit Data</button>
         </div>
     </div>
 
@@ -112,6 +113,34 @@
             </table>
         </div>
     </main>
+
+    <div id="editPanel" class="edit-panel">
+        <h2>Edit Data</h2>
+        <select id="editTicker">
+            <option value="">Select Ticker</option>
+            <!-- Options will be populated dynamically -->
+        </select>
+        <select id="editColumn">
+            <option value="">Select Column</option>
+            <option value="Launch Date">Launch Date</option>
+            <option value="Team Allocation">Team Allocation</option>
+            <option value="Airdrop 1">Airdrop 1</option>
+            <option value="Airdrop 2">Airdrop 2</option>
+            <option value="Dev/Team">Dev/Team</option>
+            <option value="Auction Price">Auction Price</option>
+            <option value="Launch Price">Launch Price</option>
+            <option value="Launch Marketcap">Launch Marketcap</option>
+            <option value="Launch Circ Supply">Launch Circ Supply</option>
+            <option value="Twitter Handle">Twitter Handle</option>
+            <option value="Telegram/Discord">Telegram/Discord</option>
+            <option value="Website">Website</option>
+        </select>
+        <input type="text" id="editValue" placeholder="New Value">
+        <div class="panel-actions">
+            <button id="saveEditButton" class="save-button">Save</button>
+            <button id="cancelButton" class="cancel-button">Cancel</button>
+        </div>
+    </div>
 
     <footer>
         <div class="copyright">
