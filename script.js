@@ -315,3 +315,11 @@ function findTickerRow(ticker) {
     }
     return null;
 }
+
+function toggleSocialLinks() {
+    const content = document.querySelector('.social-links-content');
+    const icon = document.querySelector('.toggle-icon');
+    
+    content.classList.toggle('active');
+    icon.classList.toggle('active');
+}
