@@ -102,6 +102,30 @@ async function fetchWithTimeout(url, options, timeout = 5000) {
     }
 }
 
+// Ajouter cette fonction pour charger les données sauvegardées
+async function loadSavedData() {
+    try {
+        const response = await fetchWithTimeout(`${API_URL}/getData`);
+        if (response.ok) {
+            const data = await response.json();
+            // Mettre à jour chaque cellule avec les données sauvegardées
+            for (const [ticker, values] of Object.entries(data)) {
+                const row = findTickerRow(ticker);
+                if (row) {
+                    for (const [column, value] of Object.entries(values)) {
+                        const columnIndex = getColumnIndex(column);
+                        if (columnIndex !== -1) {
+                            row.cells[columnIndex].textContent = value;
+                        }
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading saved data:', error);
+    }
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -155,8 +179,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Mettre à jour le compteur
         unlistedCount.textContent = `(${unlistedTokens})`;
 
+        // Charger les données sauvegardées après l'initialisation de la table
+        await loadSavedData();
+
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error during initialization:', error);
     }
 
     const modal = document.getElementById('tickerModal');
