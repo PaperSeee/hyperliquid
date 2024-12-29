@@ -288,6 +288,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update initial button visibility
     updateEditButtonVisibility();
+
+    loadTableData();
 });
 
 // Fonction de tri
@@ -425,25 +427,30 @@ async function saveEditedData() {
         if (row) {
             const columnIndex = getColumnIndex(column);
             if (columnIndex !== -1) {
-                // Save to localStorage
-                const savedData = JSON.parse(localStorage.getItem('tableData') || '{}');
-                if (!savedData[ticker]) {
-                    savedData[ticker] = {};
-                }
-                savedData[ticker][column] = newValue;
-                localStorage.setItem('tableData', JSON.stringify(savedData));
+                // Save to backend
+                const response = await fetch('/updateTickerData', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ticker, column, newValue })
+                });
 
-                // Update table cell
-                row.cells[columnIndex].textContent = newValue;
-                
-                // Show success message
-                alert('Data updated successfully.');
-                closeEditPanel();
-                
-                // Clear input fields
-                document.getElementById('editValue').value = '';
-                document.getElementById('editColumn').selectedIndex = 0;
-                document.getElementById('editTicker').selectedIndex = 0;
+                if (response.ok) {
+                    // Update table cell
+                    row.cells[columnIndex].textContent = newValue;
+                    
+                    // Show success message
+                    alert('Data updated successfully.');
+                    closeEditPanel();
+                    
+                    // Clear input fields
+                    document.getElementById('editValue').value = '';
+                    document.getElementById('editColumn').selectedIndex = 0;
+                    document.getElementById('editTicker').selectedIndex = 0;
+                } else {
+                    alert('Failed to update data.');
+                }
             } else {
                 alert('Column not found.');
             }
@@ -466,3 +473,33 @@ function getColumnIndex(columnName) {
     }
     return -1;
 }
+
+// Function to load table data from backend
+async function loadTableData() {
+    try {
+        const response = await fetch('/getTickerData');
+        const savedData = await response.json();
+        for (const ticker in savedData) {
+            const row = findTickerRow(ticker);
+            if (row) {
+                for (const column in savedData[ticker]) {
+                    const columnIndex = getColumnIndex(column);
+                    if (columnIndex !== -1) {
+                        row.cells[columnIndex].textContent = savedData[ticker][column];
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+// Call loadTableData on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing code...
+    loadTableData();
+    // ...existing code...
+});
+
+// ...existing code...
