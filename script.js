@@ -121,8 +121,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 ? token.airdrop1.amount : 'N/A'}</td>
-                    <td>${token.airdrop2 ? token.airdrop2.amount : 'N/A'}</td>
+                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : 'N/A'}</td>
+                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : 'N/A'}</td> 
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
                     <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
                     <td>N/A</td>
@@ -132,6 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.discord || 'N/A'}</td>
                     <td>${token.website || 'N/A'}</td>
                 `;
+
+                console.log(token.airdrop1);
                 mainTableBody.appendChild(listedRow);
             }
         });
@@ -507,8 +509,8 @@ function updateTables(tokens) {
                 <td>${token.name}</td>
                 <td>${token.launchDate || 'N/A'}</td>
                 <td>${token.teamAllocation || 'N/A'}</td>
-                <td>${token.airdrop1 ? token.airdrop1.amount : 'N/A'}</td>
-                <td>${token.airdrop2 ? token.airdrop2.amount : 'N/A'}</td>
+                <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : 'N/A'}</td>
+                <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : 'N/A'}</td>
                 <td>${token.devReputation ? 'Yes' : 'No'}</td>
                 <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
                 <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
