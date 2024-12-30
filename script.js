@@ -115,6 +115,27 @@ function formatSocialLinks(twitter, discord, website) {
     return { twitterLink, discordLink, websiteLink };
 }
 
+// Modifier la fonction formatNumber
+function formatNumber(number) {
+    if (!number) return '';
+    // Convertir en nombre et fixer 2 décimales
+    const num = parseFloat(number).toFixed(2);
+    // Séparer la partie entière et décimale
+    const [whole, decimal] = num.toString().split('.');
+    // Formater la partie entière avec des espaces tous les 3 chiffres
+    const formatted = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // Retourner le nombre formaté avec une virgule pour les décimales
+    return `${formatted},${decimal}`;
+}
+
+// Ajouter cette fonction pour formater les valeurs de marketcap
+function formatMarketCap(value) {
+    if (!value) return '/';
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    return `$${formatNumber(num)}`;
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -162,8 +183,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
                     <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
                     <td>N/A</td>
-                    <td>${token.launchMarketCap || 'N/A'}</td>
-                    <td>${token.launchCircSupply}</td>
+                    <td>${formatMarketCap(token.launchMarketCap)}</td>
+                    <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
                     <td>${socialLinks.discordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
@@ -551,8 +572,8 @@ function updateTables(tokens) {
                 <td>${token.devReputation ? 'Yes' : 'No'}</td>
                 <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
                 <td>${token.startPx ?  token.startPx + '$'  : 'N/A'}</td>
-                <td>${token.launchMarketCap || 'N/A'}</td>
-                <td>${token.launchCircSupply}</td>
+                <td>${formatMarketCap(token.launchMarketCap)}</td>
+                <td>${formatNumber(token.launchCircSupply)}</td>
                 <td>${socialLinks.twitterLink}</td>
                 <td>${socialLinks.discordLink}</td>
                 <td>${socialLinks.websiteLink}</td>
