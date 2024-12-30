@@ -112,7 +112,13 @@ function formatSocialLinks(twitter, telegram, discord, website) {
     const telegramLink = telegram ? `<a href="${telegram}" target="_blank">View</a>` : '/';
     const discordLink = discord ? `<a href="${discord}" target="_blank">View</a>` : '/';
     const websiteLink = website ? `<a href="${website}" target="_blank">View</a>` : '/';
-    return { twitterLink, telegramLink, discordLink, websiteLink };
+
+    // Avoid duplicates in Telegram/Discord
+    const telegramDiscordLink = telegramLink !== '/' && discordLink !== '/' && telegramLink !== discordLink
+        ? `${telegramLink} ${discordLink}`
+        : telegramLink !== '/' ? telegramLink : discordLink;
+
+    return { twitterLink, telegramDiscordLink, websiteLink };
 }
 
 // Modifier la fonction formatNumber
@@ -186,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
                     <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.telegramLink} ${socialLinks.discordLink}</td>
+                    <td>${socialLinks.telegramDiscordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
                 `;
 
@@ -691,7 +697,7 @@ async function loadData() {
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
                     <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.telegramLink} ${socialLinks.discordLink}</td>
+                    <td>${socialLinks.telegramDiscordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
                 `;
                 mainTableBody.appendChild(listedRow);

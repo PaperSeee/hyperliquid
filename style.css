@@ -1145,3 +1145,15 @@ footer {
         gap: 0.5rem;
     }
 }
+
+/* ...existing code... */
+
+table th:nth-child(13), table td:nth-child(13) {
+    width: 200px; /* Adjust width as needed */
+}
+
+table th:nth-child(14), table td:nth-child(14) {
+    width: 200px; /* Adjust width as needed */
+}
+
+/* ...existing code... */
