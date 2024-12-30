@@ -965,3 +965,17 @@ footer {
 [data-theme="dark"] .edit-panel .cancel-button:hover {
     background: rgba(51, 65, 85, 0.7);
 }
+
+/* New styles for the new fields */
+[data-theme="dark"] .modal-content .checkbox-item input[type="checkbox"] {
+    accent-color: #4ade80;
+}
+
+[data-theme="dark"] .modal-content .social-input input {
+    border-color: rgba(71, 85, 105, 0.4);
+}
+
+[data-theme="dark"] .modal-content .social-input input:focus {
+    border-color: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}

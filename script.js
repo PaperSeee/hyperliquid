@@ -83,9 +83,15 @@ let isAscending = true;
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Charger les données JSON
-        const response = await fetch('allTokens.json');
-        const tokens = await response.json();
+        // Charger les données depuis l'API backend
+        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const data = await response.json();
+
+        if (!Array.isArray(data.tokens)) {
+            throw new TypeError('Expected an array of tokens');
+        }
+
+        const tokens = data.tokens;
         
         // Trier les tokens par ordre alphabétique
         tokens.sort((a, b) => a.name.localeCompare(b.name));
@@ -115,16 +121,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 || 'N/A'}</td>
-                    <td>${token.airdrop2 || 'N/A'}</td>
-                    <td>${token.devTeamPercentage || 'N/A'}</td>
+                    <td>${token.airdrop1 ? token.airdrop1.amount : 'N/A'}</td>
+                    <td>${token.airdrop2 ? token.airdrop2.amount : 'N/A'}</td>
+                    <td>${token.devReputation ? 'Yes' : 'No'}</td>
                     <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
                     <td>N/A</td>
                     <td>${token.launchMarketCap || 'N/A'}</td>
                     <td>${token.launchCircSupply}</td>
-                    <td>@${token.name.toLowerCase()}</td>
-                    <td>discord.gg/${token.name.toLowerCase()}</td>
-                    <td>www.${token.name.toLowerCase()}.com</td>
+                    <td>@${token.twitter || 'N/A'}</td>
+                    <td>${token.discord || 'N/A'}</td>
+                    <td>${token.website || 'N/A'}</td>
                 `;
                 mainTableBody.appendChild(listedRow);
             }
@@ -419,23 +425,26 @@ async function saveEditedData() {
         return;
     }
 
-    // Send request to server to update data (replace with actual server request)
+    // Find the token index
+    const tokenRow = findTickerRow(ticker);
+    if (!tokenRow) {
+        alert('Ticker not found.');
+        return;
+    }
+    const tokenIndex = tokenRow.cells[0].textContent;
+
+    // Send request to server to update data
     try {
-        const response = await fetch('/updateData', {
-            method: 'POST',
+        const response = await fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ticker, column, newValue })
+            body: JSON.stringify({ [column]: newValue })
         });
 
         if (response.ok) {
-            // Update table in real-time
-            const row = findTickerRow(ticker);
-            if (row) {
-                const columnIndex = getColumnIndex(column);
-                row.cells[columnIndex].textContent = newValue;
-            }
+            loadData();
             alert('Data updated successfully.');
             closeEditPanel();
         } else {
@@ -457,3 +466,64 @@ function getColumnIndex(columnName) {
     }
     return -1;
 }
+
+// Function to load data from the backend
+async function loadData() {
+    try {
+        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const data = await response.json();
+
+        if (!Array.isArray(data.tokens)) {
+            throw new TypeError('Expected an array of tokens');
+        }
+
+        const tokens = data.tokens;
+        updateTables(tokens);
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+// Function to update tables with the fetched data
+function updateTables(tokens) {
+    const mainTableBody = document.querySelector('#mainTable tbody');
+    const unlistedTableBody = document.querySelector('#unlistedTable tbody');
+    const unlistedCount = document.getElementById('unlistedCount');
+    let unlistedTokens = 0;
+
+    mainTableBody.innerHTML = '';
+    unlistedTableBody.innerHTML = '';
+
+    tokens.forEach((token, index) => {
+        if (!token.launchCircSupply) {
+            const unlistedRow = document.createElement('tr');
+            unlistedRow.innerHTML = `<td>${token.name}</td>`;
+            unlistedTableBody.appendChild(unlistedRow);
+            unlistedTokens++;
+        } else {
+            const listedRow = document.createElement('tr');
+            listedRow.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${token.name}</td>
+                <td>${token.launchDate || 'N/A'}</td>
+                <td>${token.teamAllocation || 'N/A'}</td>
+                <td>${token.airdrop1 ? token.airdrop1.amount : 'N/A'}</td>
+                <td>${token.airdrop2 ? token.airdrop2.amount : 'N/A'}</td>
+                <td>${token.devReputation ? 'Yes' : 'No'}</td>
+                <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
+                <td>${token.launchPrice ? '$' + token.launchPrice : 'N/A'}</td>
+                <td>${token.launchMarketCap || 'N/A'}</td>
+                <td>${token.launchCircSupply}</td>
+                <td>@${token.twitter || 'N/A'}</td>
+                <td>${token.discord || 'N/A'}</td>
+                <td>${token.website || 'N/A'}</td>
+            `;
+            mainTableBody.appendChild(listedRow);
+        }
+    });
+
+    unlistedCount.textContent = `(${unlistedTokens})`;
+}
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', loadData);
