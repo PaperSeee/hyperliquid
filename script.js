@@ -513,7 +513,7 @@ function updateTables(tokens) {
                 <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : 'N/A'}</td>
                 <td>${token.devReputation ? 'Yes' : 'No'}</td>
                 <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
-                <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
+                <td>${token.startPx ?  token.startPx + '$'  : 'N/A'}</td>
                 <td>${token.launchMarketCap || 'N/A'}</td>
                 <td>${token.launchCircSupply}</td>
                 <td>@${token.twitter || 'N/A'}</td>
