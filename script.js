@@ -203,21 +203,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const modal = document.getElementById('tickerModal');
-    const tbody = document.querySelector('tbody');
+    const mainTableBody = document.querySelector('#mainTable tbody');
+    const unlistedTableBody = document.querySelector('#unlistedTable tbody');
     const span = document.getElementsByClassName('close')[0];
     const saveButton = document.getElementById('saveButton');
 
-    // Ouvrir le modal
-    tbody.addEventListener('click', (e) => {
+    // Ouvrir le modal pour les tokens listés
+    mainTableBody.addEventListener('click', (e) => {
         const row = e.target.closest('tr');
         if (row) {
             const ticker = row.cells[1].textContent;
-            document.getElementById('modalTitle').textContent = ticker;
-            loadTickerData(ticker);
-            updateModalView();
-            modal.style.display = "block";
+            openModalWithData(ticker, true);
         }
     });
+
+    // Ouvrir le modal pour les tokens non listés
+    unlistedTableBody.addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (row) {
+            const ticker = row.cells[0].textContent; // Pour les unlisted tokens, le ticker est dans la première colonne
+            openModalWithData(ticker, false);
+        }
+    });
+
+    // Ajouter cette nouvelle fonction pour gérer l'ouverture du modal
+    function openModalWithData(ticker, isListed) {
+        document.getElementById('modalTitle').textContent = ticker;
+        if (isListed) {
+            loadTickerData(ticker);
+        } else {
+            // Réinitialiser les champs pour un nouveau token non listé
+            document.getElementById('devReputation').checked = false;
+            document.getElementById('spreadLessThanThree').checked = false;
+            document.getElementById('thickObLiquidity').checked = false;
+            document.getElementById('noSellPressure').checked = false;
+            document.getElementById('twitterHandle').value = '';
+            document.getElementById('telegramDiscord').value = '';
+            document.getElementById('website').value = '';
+            document.getElementById('comments').value = '';
+        }
+        updateModalView();
+        modal.style.display = "block";
+    }
 
     // Fermer le modal
     span.onclick = () => modal.style.display = "none";
