@@ -48,6 +48,12 @@ async function loadTickerData(ticker) {
             document.getElementById('twitterHandle').value = token.twitter || '';
             document.getElementById('telegramDiscord').value = token.discord || '';
             document.getElementById('website').value = token.website || '';
+            
+            // Mise à jour du champ commentaire avec les données du backend
+            const comments = document.getElementById('comments');
+            if (comments) {
+                comments.value = token.comment || 'No comment available';
+            }
         }
     } catch (error) {
         console.error('Error loading token data:', error);
@@ -61,30 +67,40 @@ function saveTickerData() {
     const ticker = document.getElementById('modalTitle').textContent;
     const checkboxes = {
         devReputation: document.getElementById('devReputation').checked,
-        spread: document.getElementById('spread').checked,
-        liquidity: document.getElementById('liquidity').checked,
-        sellPressure: document.getElementById('sellPressure').checked
+        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
+        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
+        noSellPressure: document.getElementById('noSellPressure').checked
     };
-    const comments = document.getElementById('comments').value;
+    const comment = document.getElementById('comments').value;
 
-    // Sauvegarder dans localStorage (à remplacer par votre base de données)
-    const savedData = JSON.parse(localStorage.getItem('adminTickerData') || '{}');
-    savedData[ticker] = {
-        checkboxes,
-        comments,
-        timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('adminTickerData', JSON.stringify(savedData));
-
-    // Feedback visuel
-    const button = document.getElementById('saveButton');
-    button.textContent = 'Saved!';
-    button.style.background = '#4CAF50';
-    setTimeout(() => {
-        button.textContent = 'Save Changes';
-        button.style.background = '#22543D';
-        modal.style.display = "none";
-    }, 1500);
+    // Envoyer les données au backend
+    fetch(`https://backend-hl.vercel.app/api/tokens/${ticker}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ...checkboxes,
+            comment
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        // Feedback visuel
+        const button = document.getElementById('saveButton');
+        button.textContent = 'Saved!';
+        button.style.background = '#4CAF50';
+        setTimeout(() => {
+            button.textContent = 'Save Changes';
+            button.style.background = '#22543D';
+            document.getElementById('tickerModal').style.display = "none";
+        }, 1500);
+    })
+    .catch(error => {
+        console.error('Error saving data:', error);
+        alert('Failed to save changes');
+    });
 }
 
 // Ajoutez ces variables globales au début du fichier
