@@ -582,6 +582,29 @@ async function saveEditedData() {
     }
     const tokenIndex = tokenRow.cells[0].textContent;
 
+    // Map column names to token fields
+    const columnMapping = {
+        'Team Allocation': 'teamAllocation',
+        'Launch Date': 'launchDate',
+        'Airdrop 1': 'airdrop1',
+        'Airdrop 2': 'airdrop2',
+        'Dev Reputation': 'devReputation',
+        'Spread Less Than Three': 'spreadLessThanThree',
+        'Thick OB Liquidity': 'thickObLiquidity',
+        'No Sell Pressure': 'noSellPressure',
+        'Twitter': 'twitter',
+        'Telegram': 'telegram',
+        'Discord': 'discord',
+        'Website': 'website',
+        'Comment': 'comment'
+    };
+
+    const field = columnMapping[column];
+    if (!field) {
+        alert('Invalid column name.');
+        return;
+    }
+
     // Send request to server to update data
     try {
         const response = await fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
@@ -589,7 +612,7 @@ async function saveEditedData() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ [column]: newValue })
+            body: JSON.stringify({ [field]: newValue })
         });
 
         if (response.ok) {
