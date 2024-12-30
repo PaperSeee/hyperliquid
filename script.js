@@ -32,28 +32,20 @@ function updateModalView() {
 // Fonction pour charger les données
 async function loadTickerData(ticker) {
     try {
-        // Fetch token data from API
         const response = await fetch('https://backend-hl.vercel.app/api/tokens');
         const data = await response.json();
-        const token = data.tokens.find(t => t.name === ticker);
+        const token = data.find(t => t.name === ticker);
 
         if (token) {
-            // Update checkboxes with token data
             document.getElementById('devReputation').checked = token.devReputation || false;
             document.getElementById('spreadLessThanThree').checked = token.spreadLessThanThree || false;
             document.getElementById('thickObLiquidity').checked = token.thickObLiquidity || false;
             document.getElementById('noSellPressure').checked = token.noSellPressure || false;
             
-            // Update other fields...
             document.getElementById('twitterHandle').value = token.twitter || '';
-            document.getElementById('telegramDiscord').value = token.discord || '';
+            document.getElementById('telegramDiscord').value = token.discord || token.telegram || '';
             document.getElementById('website').value = token.website || '';
-            
-            // Mise à jour du champ commentaire avec les données du backend
-            const comments = document.getElementById('comments');
-            if (comments) {
-                comments.value = token.comment || 'No comment available';
-            }
+            document.getElementById('comments').value = token.comment || '';
         }
     } catch (error) {
         console.error('Error loading token data:', error);
@@ -108,11 +100,12 @@ let currentSortColumn = null;
 let isAscending = true;
 
 // Ajouter cette fonction utilitaire après les variables globales
-function formatSocialLinks(twitter, discord, website) {
+function formatSocialLinks(twitter, telegram, discord, website) {
     const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">@${twitter}</a>` : '/';
-    const discordLink = discord ? `<a href="${discord}" target="_blank">${discord}</a>` : '/';
-    const websiteLink = website ? `<a href="${website}" target="_blank">${website}</a>` : '/';
-    return { twitterLink, discordLink, websiteLink };
+    const telegramLink = telegram ? `<a href="${telegram}" target="_blank">View</a>` : '/';
+    const discordLink = discord ? `<a href="${discord}" target="_blank">View</a>` : '/';
+    const websiteLink = website ? `<a href="${website}" target="_blank">View</a>` : '/';
+    return { twitterLink, telegramLink, discordLink, websiteLink };
 }
 
 // Modifier la fonction formatNumber
@@ -171,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 unlistedTableBody.appendChild(unlistedRow);
                 unlistedTokens++;
             } else {
-                const socialLinks = formatSocialLinks(token.twitter, token.discord, token.website);
+                const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
                     <td>${listedIndex++}</td>
@@ -182,11 +175,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td> 
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
                     <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
-                    <td>N/A</td>
+                    <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
                     <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.discordLink}</td>
+                    <td>${socialLinks.telegramLink} ${socialLinks.discordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
                 `;
 
@@ -627,59 +620,52 @@ function getColumnIndex(columnName) {
 async function loadData() {
     try {
         const response = await fetch('https://backend-hl.vercel.app/api/tokens');
-        const data = await response.json();
-
-        if (!Array.isArray(data.tokens)) {
+        const tokens = await response.json();
+        
+        if (!Array.isArray(tokens)) {
             throw new TypeError('Expected an array of tokens');
         }
 
-        const tokens = data.tokens;
-        updateTables(tokens);
+        const mainTableBody = document.querySelector('#mainTable tbody');
+        const unlistedTableBody = document.querySelector('#unlistedTable tbody');
+        let unlistedTokens = 0;
+
+        mainTableBody.innerHTML = '';
+        unlistedTableBody.innerHTML = '';
+
+        tokens.forEach((token, index) => {
+            if (!token.launchCircSupply) {
+                const unlistedRow = document.createElement('tr');
+                unlistedRow.innerHTML = `<td>${token.name}</td>`;
+                unlistedTableBody.appendChild(unlistedRow);
+                unlistedTokens++;
+            } else {
+                const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
+                const listedRow = document.createElement('tr');
+                listedRow.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${token.name}</td>
+                    <td>${token.launchDate || 'N/A'}</td>
+                    <td>${token.teamAllocation || 'N/A'}</td>
+                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
+                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
+                    <td>${token.devReputation ? 'Yes' : 'No'}</td>
+                    <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
+                    <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
+                    <td>${formatMarketCap(token.launchMarketCap)}</td>
+                    <td>${formatNumber(token.launchCircSupply)}</td>
+                    <td>${socialLinks.twitterLink}</td>
+                    <td>${socialLinks.telegramLink} ${socialLinks.discordLink}</td>
+                    <td>${socialLinks.websiteLink}</td>
+                `;
+                mainTableBody.appendChild(listedRow);
+            }
+        });
+
+        document.getElementById('unlistedCount').textContent = `(${unlistedTokens})`;
     } catch (error) {
         console.error('Error loading data:', error);
     }
-}
-
-// Function to update tables with the fetched data
-function updateTables(tokens) {
-    const mainTableBody = document.querySelector('#mainTable tbody');
-    const unlistedTableBody = document.querySelector('#unlistedTable tbody');
-    const unlistedCount = document.getElementById('unlistedCount');
-    let unlistedTokens = 0;
-
-    mainTableBody.innerHTML = '';
-    unlistedTableBody.innerHTML = '';
-
-    tokens.forEach((token, index) => {
-        if (!token.launchCircSupply) {
-            const unlistedRow = document.createElement('tr');
-            unlistedRow.innerHTML = `<td>${token.name}</td>`;
-            unlistedTableBody.appendChild(unlistedRow);
-            unlistedTokens++;
-        } else {
-            const socialLinks = formatSocialLinks(token.twitter, token.discord, token.website);
-            const listedRow = document.createElement('tr');
-            listedRow.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${token.name}</td>
-                <td>${token.launchDate || 'N/A'}</td>
-                <td>${token.teamAllocation || 'N/A'}</td>
-                <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
-                <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
-                <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
-                <td>${token.startPx ?  token.startPx + '$'  : 'N/A'}</td>
-                <td>${formatMarketCap(token.launchMarketCap)}</td>
-                <td>${formatNumber(token.launchCircSupply)}</td>
-                <td>${socialLinks.twitterLink}</td>
-                <td>${socialLinks.discordLink}</td>
-                <td>${socialLinks.websiteLink}</td>
-            `;
-            mainTableBody.appendChild(listedRow);
-        }
-    });
-
-    unlistedCount.textContent = `(${unlistedTokens})`;
 }
 
 // Load data on page load
