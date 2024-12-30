@@ -30,16 +30,27 @@ function updateModalView() {
 }
 
 // Fonction pour charger les données
-function loadTickerData(ticker) {
-    // Simuler le chargement depuis une base de données
-    const savedData = JSON.parse(localStorage.getItem('adminTickerData') || '{}')[ticker];
-    
-    if (savedData) {
-        document.getElementById('devReputation').checked = savedData.checkboxes.devReputation;
-        document.getElementById('spread').checked = savedData.checkboxes.spread;
-        document.getElementById('liquidity').checked = savedData.checkboxes.liquidity;
-        document.getElementById('sellPressure').checked = savedData.checkboxes.sellPressure;
-        document.getElementById('comments').value = savedData.comments;
+async function loadTickerData(ticker) {
+    try {
+        // Fetch token data from API
+        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const data = await response.json();
+        const token = data.tokens.find(t => t.name === ticker);
+
+        if (token) {
+            // Update checkboxes with token data
+            document.getElementById('devReputation').checked = token.devReputation || false;
+            document.getElementById('spreadLessThanThree').checked = token.spreadLessThanThree || false;
+            document.getElementById('thickObLiquidity').checked = token.thickObLiquidity || false;
+            document.getElementById('noSellPressure').checked = token.noSellPressure || false;
+            
+            // Update other fields...
+            document.getElementById('twitterHandle').value = token.twitter || '';
+            document.getElementById('telegramDiscord').value = token.discord || '';
+            document.getElementById('website').value = token.website || '';
+        }
+    } catch (error) {
+        console.error('Error loading token data:', error);
     }
 }
 
