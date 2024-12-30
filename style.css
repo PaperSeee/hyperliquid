@@ -135,7 +135,7 @@
 
 /* Modification du logo en mode sombre */
 [data-theme="dark"] .logo img {
-    filter: brightness(0) invert(1) brightness(0.9);
+    filter: brightness(1) invert(1);
     transition: filter 0.3s ease;
 }
 
@@ -225,12 +225,39 @@ body {
 }
 
 .logo {
-    flex-shrink: 0;
-    width: 140px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    width: auto;
 }
 
 .logo img {
     height: 35px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover img {
+    transform: scale(1.05);
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+/* Mode sombre */
+[data-theme="dark"] .logo img {
+    filter: brightness(1) invert(1);
+}
+
+[data-theme="dark"] .logo-text {
+    color: var(--text-color);
 }
 
 /* Social Banner */
