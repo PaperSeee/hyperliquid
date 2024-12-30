@@ -1045,3 +1045,33 @@ footer {
     border-color: #4ade80;
     box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
 }
+
+/* Table Column Widths */
+#mainTable th:nth-child(1),  /* Ticker N° */
+#mainTable td:nth-child(1) {
+    width: 40px;
+    min-width: 40px;
+    text-align: center;
+}
+
+#mainTable th:nth-child(7),  /* Dev/Team */
+#mainTable td:nth-child(7) {
+    width: 60px;
+    min-width: 60px;
+    text-align: center;
+}
+
+#mainTable th:nth-child(12),  /* Twitter Handle */
+#mainTable td:nth-child(12) {
+    width: 100px;
+    min-width: 100px;
+}
+
+/* Optimiser l'affichage du contenu pour ces colonnes */
+#mainTable td:nth-child(1),
+#mainTable td:nth-child(7),
+#mainTable td:nth-child(12) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
