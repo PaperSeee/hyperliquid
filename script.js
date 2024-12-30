@@ -612,6 +612,14 @@ async function saveEditedData() {
         return;
     }
 
+    // Prepare the data to be sent
+    const data = {};
+    if (['devReputation', 'spreadLessThanThree', 'thickObLiquidity', 'noSellPressure'].includes(field)) {
+        data[field] = newValue.toLowerCase() === 'true';
+    } else {
+        data[field] = newValue;
+    }
+
     // Send request to server to update data
     try {
         const response = await fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
@@ -619,15 +627,13 @@ async function saveEditedData() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ [field]: newValue })
+            body: JSON.stringify(data)
         });
 
         if (response.ok) {
             loadData();
             alert('Data updated successfully.');
             closeEditPanel();
-        } else {
-            alert('Failed to update data.');
         }
     } catch (error) {
         console.error('Error updating data:', error);
