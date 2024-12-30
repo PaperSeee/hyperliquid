@@ -151,13 +151,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : 'N/A'}</td>
                     <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : 'N/A'}</td> 
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                    <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
+                    <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
                     <td>N/A</td>
                     <td>${token.launchMarketCap || 'N/A'}</td>
                     <td>${token.launchCircSupply}</td>
-                    <td>@${token.twitter || 'N/A'}</td>
-                    <td>${token.discord || 'N/A'}</td>
-                    <td>${token.website || 'N/A'}</td>
+                    <td>${token.twitter ? '@' + token.twitter : '/'}</td>
+                    <td>${token.discord || '/'}</td>
+                    <td>${token.website || '/'}</td>
                 `;
 
                 console.log(token.airdrop1);
@@ -539,13 +539,13 @@ function updateTables(tokens) {
                 <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : 'N/A'}</td>
                 <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : 'N/A'}</td>
                 <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                <td>${token.auctionPrice ? '$' + token.auctionPrice : 'N/A'}</td>
+                <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
                 <td>${token.startPx ?  token.startPx + '$'  : 'N/A'}</td>
                 <td>${token.launchMarketCap || 'N/A'}</td>
                 <td>${token.launchCircSupply}</td>
-                <td>@${token.twitter || 'N/A'}</td>
-                <td>${token.discord || 'N/A'}</td>
-                <td>${token.website || 'N/A'}</td>
+                <td>${token.twitter ? '@' + token.twitter : '/'}</td>
+                <td>${token.discord || '/'}</td>
+                <td>${token.website || '/'}</td>
             `;
             mainTableBody.appendChild(listedRow);
         }
