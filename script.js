@@ -107,6 +107,14 @@ function saveTickerData() {
 let currentSortColumn = null;
 let isAscending = true;
 
+// Ajouter cette fonction utilitaire après les variables globales
+function formatSocialLinks(twitter, discord, website) {
+    const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">@${twitter}</a>` : '/';
+    const discordLink = discord ? `<a href="${discord}" target="_blank">${discord}</a>` : '/';
+    const websiteLink = website ? `<a href="${website}" target="_blank">${website}</a>` : '/';
+    return { twitterLink, discordLink, websiteLink };
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -142,12 +150,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 unlistedTableBody.appendChild(unlistedRow);
                 unlistedTokens++;
             } else {
+                const socialLinks = formatSocialLinks(token.twitter, token.discord, token.website);
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
                     <td>${listedIndex++}</td>
                     <td>${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
-                    <td>${token.teamAllocation || '/'}</td>
+                    <td>${token.teamAllocation || 'N/A'}</td>
                     <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
                     <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td> 
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
@@ -155,9 +164,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>N/A</td>
                     <td>${token.launchMarketCap || 'N/A'}</td>
                     <td>${token.launchCircSupply}</td>
-                    <td>${token.twitter ? '@' + token.twitter : '/'}</td>
-                    <td>${token.discord || '/'}</td>
-                    <td>${token.website || '/'}</td>
+                    <td>${socialLinks.twitterLink}</td>
+                    <td>${socialLinks.discordLink}</td>
+                    <td>${socialLinks.websiteLink}</td>
                 `;
 
                 console.log(token.airdrop1);
@@ -530,12 +539,13 @@ function updateTables(tokens) {
             unlistedTableBody.appendChild(unlistedRow);
             unlistedTokens++;
         } else {
+            const socialLinks = formatSocialLinks(token.twitter, token.discord, token.website);
             const listedRow = document.createElement('tr');
             listedRow.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${token.name}</td>
                 <td>${token.launchDate || 'N/A'}</td>
-                <td>${token.teamAllocation || '/'}</td>
+                <td>${token.teamAllocation || 'N/A'}</td>
                 <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
                 <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
                 <td>${token.devReputation ? 'Yes' : 'No'}</td>
@@ -543,9 +553,9 @@ function updateTables(tokens) {
                 <td>${token.startPx ?  token.startPx + '$'  : 'N/A'}</td>
                 <td>${token.launchMarketCap || 'N/A'}</td>
                 <td>${token.launchCircSupply}</td>
-                <td>${token.twitter ? '@' + token.twitter : '/'}</td>
-                <td>${token.discord || '/'}</td>
-                <td>${token.website || '/'}</td>
+                <td>${socialLinks.twitterLink}</td>
+                <td>${socialLinks.discordLink}</td>
+                <td>${socialLinks.websiteLink}</td>
             `;
             mainTableBody.appendChild(listedRow);
         }
