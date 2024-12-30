@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Si le token n'a pas de launchCircSupply (pas défini ou non initialisé)
             if (!token.launchCircSupply) {
                 const unlistedRow = document.createElement('tr');
-                unlistedRow.innerHTML = `<td>${token.name}</td>`;
+                unlistedRow.innerHTML = `<td>${token.index} - ${token.name}</td>`;
                 unlistedTableBody.appendChild(unlistedRow);
                 unlistedTokens++;
             } else {
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
                     <td>${listedIndex++}</td>
-                    <td>${token.name}</td>
+                    <td>${token.index} - ${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
                     <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
@@ -659,7 +659,7 @@ async function loadData() {
         tokens.forEach((token, index) => {
             if (!token.launchCircSupply) {
                 const unlistedRow = document.createElement('tr');
-                unlistedRow.innerHTML = `<td>${token.name}</td>`;
+                unlistedRow.innerHTML = `<td>${token.index} - ${token.name}</td>`;
                 unlistedTableBody.appendChild(unlistedRow);
                 unlistedTokens++;
             } else {
@@ -667,7 +667,7 @@ async function loadData() {
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${token.name}</td>
+                    <td>${token.index} - ${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
                     <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
