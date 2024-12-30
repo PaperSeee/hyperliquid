@@ -355,6 +355,76 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateEditButtonVisibility();
 });
 
+// Ajouter ceci dans la fonction d'initialisation ou au début du fichier
+document.querySelectorAll('#mainTable th').forEach(headerCell => {
+    headerCell.addEventListener('click', () => {
+        const table = headerCell.closest('table');
+        const index = Array.from(headerCell.parentElement.children).indexOf(headerCell);
+        const sortState = headerCell.getAttribute('data-sort') || 'default';
+        
+        // Réinitialiser tous les autres en-têtes
+        headerCell.parentElement.querySelectorAll('th').forEach(th => {
+            if (th !== headerCell) {
+                th.setAttribute('data-sort', 'default');
+                th.classList.remove('sort-asc', 'sort-desc');
+            }
+        });
+
+        // Changer l'état de tri
+        let newSortState;
+        if (sortState === 'default') {
+            newSortState = 'asc';
+        } else if (sortState === 'asc') {
+            newSortState = 'desc';
+        } else {
+            newSortState = 'default';
+        }
+        
+        headerCell.setAttribute('data-sort', newSortState);
+        headerCell.classList.remove('sort-asc', 'sort-desc');
+        if (newSortState !== 'default') {
+            headerCell.classList.add(`sort-${newSortState}`);
+        }
+
+        // Trier le tableau
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+        const originalOrder = rows.map((row, idx) => ({ row, index: idx }));
+
+        if (newSortState === 'default') {
+            // Restaurer l'ordre original
+            rows.sort((a, b) => {
+                const indexA = originalOrder.find(item => item.row === a).index;
+                const indexB = originalOrder.find(item => item.row === b).index;
+                return indexA - indexB;
+            });
+        } else {
+            rows.sort((a, b) => {
+                let valueA = a.cells[index].textContent;
+                let valueB = b.cells[index].textContent;
+
+                // Conversion pour les nombres et les dates
+                if (!isNaN(valueA) && !isNaN(valueB)) {
+                    valueA = parseFloat(valueA);
+                    valueB = parseFloat(valueB);
+                } else if (valueA.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    valueA = new Date(valueA);
+                    valueB = new Date(valueB);
+                }
+
+                if (newSortState === 'asc') {
+                    return valueA > valueB ? 1 : -1;
+                } else {
+                    return valueA < valueB ? 1 : -1;
+                }
+            });
+        }
+
+        // Réinsérer les lignes triées
+        const tbody = table.querySelector('tbody');
+        rows.forEach(row => tbody.appendChild(row));
+    });
+});
+
 // Fonction de tri
 function sortTable(columnIndex) {
     const table = document.getElementById('mainTable');

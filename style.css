@@ -391,6 +391,30 @@ tr:hover {
     cursor: pointer;
 }
 
+/* Styles pour les en-têtes de colonnes triables */
+#mainTable th {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+}
+
+#mainTable th::after {
+    content: '⇅';
+    position: absolute;
+    right: 5px;
+    opacity: 0.3;
+}
+
+#mainTable th.sort-asc::after {
+    content: '↑';
+    opacity: 1;
+}
+
+#mainTable th.sort-desc::after {
+    content: '↓';
+    opacity: 1;
+}
+
 /* Filter Styles */
 .filters-container {
     padding: 1rem 2rem;
