@@ -675,7 +675,12 @@ async function loadData() {
         mainTableBody.innerHTML = '';
         unlistedTableBody.innerHTML = '';
 
-        tokens.forEach((token, index) => {
+        // Filter out duplicate tickers
+        const uniqueTokens = tokens.filter((token, index, self) =>
+            index === self.findIndex(t => t.name === token.name)
+        );
+
+        uniqueTokens.forEach((token, index) => {
             if (!token.launchCircSupply) {
                 const unlistedRow = document.createElement('tr');
                 unlistedRow.innerHTML = `<td>${token.name}</td>`;
