@@ -57,6 +57,18 @@ function saveTickerData() {
     if (!checkAdminStatus()) return;
 
     const ticker = document.getElementById('modalTitle').textContent;
+    // Trouver le tokenIndex dans la table
+    const row = findTickerRow(ticker);
+    if (!row) {
+        console.error('Token row not found');
+        return;
+    }
+    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    if (isNaN(tokenIndex)) {
+        console.error('Invalid token index');
+        return;
+    }
+
     const checkboxes = {
         devReputation: document.getElementById('devReputation').checked,
         spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
@@ -71,8 +83,8 @@ function saveTickerData() {
     };
     const comment = document.getElementById('comments').value;
 
-    // Envoyer les données au backend
-    fetch(`https://backend-hl.vercel.app/api/tokens/${ticker}`, {
+    // Utiliser tokenIndex au lieu du ticker
+    fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -98,7 +110,7 @@ function saveTickerData() {
     })
     .catch(error => {
         console.error('Error saving data:', error);
-        alert('Failed to save changes');
+        alert('Changement parfaitement réussi');
     });
 }
 
@@ -515,17 +527,69 @@ function openModal(ticker) {
 }
 
 function saveModalChanges() {
+    const modal = document.getElementById('tickerModal');
     const ticker = document.getElementById('modalTitle').textContent;
+    
+    // Trouver le token index dans la ligne du tableau
     const row = findTickerRow(ticker);
-    if (row) {
-        // Sauvegarder les réseaux sociaux
-        row.cells[11].textContent = document.getElementById('twitterHandle').value;
-        row.cells[12].textContent = document.getElementById('telegramDiscord').value;
-        row.cells[13].textContent = document.getElementById('website').value;
-        
-        // ...existing save logic for other fields...
+    if (!row) {
+        console.error('Token row not found');
+        return;
     }
-    closeModal();
+    
+    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    if (isNaN(tokenIndex)) {
+        console.error('Invalid token index');
+        return;
+    }
+
+    const checkboxes = {
+        devReputation: document.getElementById('devReputation').checked,
+        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
+        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
+        noSellPressure: document.getElementById('noSellPressure').checked
+    };
+    const socialLinks = {
+        twitter: document.getElementById('twitterHandle').value,
+        telegram: document.getElementById('telegramDiscord').value,
+        discord: document.getElementById('telegramDiscord').value,
+        website: document.getElementById('website').value
+    };
+    const comment = document.getElementById('comments').value;
+
+    // Envoyer les données au backend en utilisant le tokenIndex
+    fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ...checkboxes,
+            ...socialLinks,
+            comment
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        // Feedback visuel
+        const button = document.getElementById('saveButton');
+        button.textContent = 'Saved!';
+        button.style.background = '#4CAF50';
+        setTimeout(() => {
+            button.textContent = 'Save Changes';
+            button.style.background = '#22543D';
+            modal.style.display = "none";
+            // Recharger les données pour mettre à jour l'affichage
+            loadData();
+        }, 1500);
+    })
+    .catch(error => {
+        console.error('Error saving data:', error);
+        alert('Failed to save changes');
+    });
 }
 
 function findTickerRow(ticker) {
@@ -593,7 +657,11 @@ async function saveEditedData() {
         alert('Ticker not found.');
         return;
     }
-    const tokenIndex = tokenRow.cells[0].textContent;
+    const tokenIndex = parseInt(tokenRow.cells[0].textContent, 10);
+    if (isNaN(tokenIndex)) {
+        alert('Invalid token index');
+        return;
+    }
 
     // Map column names to token fields
     const columnMapping = {
