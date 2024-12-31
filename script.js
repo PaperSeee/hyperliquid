@@ -3,10 +3,16 @@
 // Simulation d'un système d'authentification
 let isAdmin = false; // À remplacer par votre véritable système d'auth
 
-// Fonction pour vérifier si l'utilisateur est admin
-function checkAdminStatus() {
-    // Ici, vous implémenteriez votre véritable logique d'authentification
-    return isAdmin;
+// Remplacez votre fonction checkAdminStatus existante
+async function checkAdminStatus() {
+    try {
+        const response = await fetch('https://backend-hl.vercel.app/api/check-auth', {
+            credentials: 'include'
+        });
+        return response.ok;
+    } catch {
+        return false;
+    }
 }
 
 // Fonction pour mettre à jour l'affichage du modal selon le rôle
