@@ -6,11 +6,17 @@ let isAdmin = false; // À remplacer par votre véritable système d'auth
 // Remplacez votre fonction checkAdminStatus existante
 async function checkAdminStatus() {
     try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            return false;
+        }
+
         const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
         console.log('Admin check response:', response.ok); // Debug log
@@ -57,23 +63,36 @@ async function updateModalView() {
 // Fonction pour charger les données
 async function loadTickerData(ticker) {
     try {
-        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
-        const data = await response.json();
-        console.log('Data received from API:', data); // Log the data received from the API
-        const token = data.find(t => t.name === ticker);
-
+        const token = localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
         if (token) {
-            document.getElementById('devReputation').checked = token.devReputation || false;
-            document.getElementById('spreadLessThanThree').checked = token.spreadLessThanThree || false;
-            document.getElementById('thickObLiquidity').checked = token.thickObLiquidity || false;
-            document.getElementById('noSellPressure').checked = token.noSellPressure || false;
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens', {
+            credentials: 'include',
+            headers
+        });
+        const data = await response.json();
+        console.log('Data received from API:', data);
+        
+        const tokenData = data.find(t => t.name === ticker); // Changé 'token' en 'tokenData'
+
+        if (tokenData) { // Changé 'token' en 'tokenData'
+            document.getElementById('devReputation').checked = tokenData.devReputation || false;
+            document.getElementById('spreadLessThanThree').checked = tokenData.spreadLessThanThree || false;
+            document.getElementById('thickObLiquidity').checked = tokenData.thickObLiquidity || false;
+            document.getElementById('noSellPressure').checked = tokenData.noSellPressure || false;
             
-            document.getElementById('twitterHandle').value = token.twitter || '';
-            document.getElementById('telegramDiscord').value = token.discord || token.telegram || '';
-            document.getElementById('website').value = token.website || '';
-            document.getElementById('comments').value = token.comment || '';
+            document.getElementById('twitterHandle').value = tokenData.twitter || '';
+            document.getElementById('telegramDiscord').value = tokenData.discord || tokenData.telegram || '';
+            document.getElementById('website').value = tokenData.website || '';
+            document.getElementById('comments').value = tokenData.comment || '';
         } else {
-            console.warn('Token not found:', ticker); // Log if the token is not found
+            console.warn('Token not found:', ticker);
         }
     } catch (error) {
         console.error('Error loading token data:', error);
@@ -83,6 +102,12 @@ async function loadTickerData(ticker) {
 // Fonction pour sauvegarder les données (admin uniquement)
 async function saveTickerData() {
     try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('You must be logged in to save changes');
+            return;
+        }
+
         const isAdmin = await checkAdminStatus();
         console.log('Is admin when saving:', isAdmin); // Debug log
         
@@ -116,7 +141,8 @@ async function saveTickerData() {
         const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             credentials: 'include', // Important: inclure les credentials
             body: JSON.stringify({
@@ -566,7 +592,13 @@ function saveModalChanges() {
     const modal = document.getElementById('tickerModal');
     const ticker = document.getElementById('modalTitle').textContent;
     
-    // Trouver le token index dans la ligne du tableau
+    // Récupérer le token d'authentification
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+        alert('You must be logged in to save changes');
+        return;
+    }
+    
     const row = findTickerRow(ticker);
     if (!row) {
         console.error('Token row not found');
@@ -597,7 +629,8 @@ function saveModalChanges() {
     fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({
             ...checkboxes,
@@ -677,6 +710,12 @@ function closeEditPanel() {
 
 // Function to save the edited data
 async function saveEditedData() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert('You must be logged in to edit data');
+        return;
+    }
+
     const ticker = document.getElementById('editTicker').value;
     const column = document.getElementById('editColumn').value;
     const newValue = document.getElementById('editValue').value;
@@ -735,8 +774,10 @@ async function saveEditedData() {
         const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -765,7 +806,19 @@ function getColumnIndex(columnName) {
 // Function to load data from the backend
 async function loadData() {
     try {
-        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
+        const token = localStorage.getItem('authToken');
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens', {
+            credentials: 'include',
+            headers
+        });
         const tokens = await response.json();
         
         if (!Array.isArray(tokens)) {
@@ -839,10 +892,12 @@ async function login(username, password) {
         }
 
         const data = await response.json();
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+        }
+        
         alert('Login successful!');
         window.location.href = '/index.html';
-        await updateModalView();
-        await updateEditButtonVisibility();
     } catch (error) {
         console.error('Error during login:', error);
         alert('Login failed');
@@ -852,12 +907,17 @@ async function login(username, password) {
 // Function to handle user logout
 async function logout() {
     try {
+        const token = localStorage.getItem('authToken');
         const response = await fetch('https://backend-finalllll.vercel.app/api/logout', {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
         if (response.ok) {
+            localStorage.removeItem('authToken');
             await updateModalView();
             await updateEditButtonVisibility();
             window.location.href = '/login.html';
