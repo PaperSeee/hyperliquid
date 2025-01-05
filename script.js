@@ -6,7 +6,7 @@ let isAdmin = false; // À remplacer par votre véritable système d'auth
 // Remplacez votre fonction checkAdminStatus existante
 async function checkAdminStatus() {
     try {
-        const response = await fetch('https://backend-hl.vercel.app/api/check-auth', {
+        const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
             credentials: 'include'
         });
         return response.ok;
@@ -16,8 +16,8 @@ async function checkAdminStatus() {
 }
 
 // Fonction pour mettre à jour l'affichage du modal selon le rôle
-function updateModalView() {
-    const isUserAdmin = checkAdminStatus();
+async function updateModalView() {
+    const isUserAdmin = await checkAuth();
     const checkboxes = document.querySelectorAll('.checkbox-item input');
     const comments = document.getElementById('comments');
     const saveButton = document.getElementById('saveButton');
@@ -38,7 +38,7 @@ function updateModalView() {
 // Fonction pour charger les données
 async function loadTickerData(ticker) {
     try {
-        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
         const data = await response.json();
         const token = data.find(t => t.name === ticker);
 
@@ -90,7 +90,7 @@ function saveTickerData() {
     const comment = document.getElementById('comments').value;
 
     // Utiliser tokenIndex au lieu du ticker
-    fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
+    fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ function formatMarketCap(value) {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Charger les données depuis l'API backend
-        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
         const data = await response.json();
 
         if (!Array.isArray(data.tokens)) {
@@ -564,7 +564,7 @@ function saveModalChanges() {
     const comment = document.getElementById('comments').value;
 
     // Envoyer les données au backend en utilisant le tokenIndex
-    fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
+    fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -702,7 +702,7 @@ async function saveEditedData() {
 
     // Send request to server to update data
     try {
-        const response = await fetch(`https://backend-hl.vercel.app/api/tokens/${tokenIndex}`, {
+        const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -735,7 +735,7 @@ function getColumnIndex(columnName) {
 // Function to load data from the backend
 async function loadData() {
     try {
-        const response = await fetch('https://backend-hl.vercel.app/api/tokens');
+        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
         const tokens = await response.json();
         
         if (!Array.isArray(tokens)) {
@@ -791,3 +791,69 @@ async function loadData() {
 
 // Load data on page load
 document.addEventListener('DOMContentLoaded', loadData);
+
+// Function to handle user login
+async function login(username, password) {
+    try {
+        const response = await fetch('https://backend-finalllll.vercel.app/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (!response.ok) {
+            throw new Error('Login failed');
+        }
+
+        const data = await response.json();
+        alert(data.message);
+        updateModalView();
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('Login failed');
+    }
+}
+
+// Function to handle user logout
+async function logout() {
+    try {
+        const response = await fetch('https://backend-finalllll.vercel.app/api/logout', {
+            method: 'POST'
+        });
+
+        if (!response.ok) {
+            throw new Error('Logout failed');
+        }
+
+        const data = await response.json();
+        alert(data.message);
+        updateModalView();
+    } catch (error) {
+        console.error('Error during logout:', error);
+        alert('Logout failed');
+    }
+}
+
+// Function to check if the user is authenticated
+async function checkAuth() {
+    try {
+        const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
+            credentials: 'include'
+        });
+
+        return response.ok;
+    } catch {
+        return false;
+    }
+}
+
+// Add event listeners for login and logout buttons
+document.getElementById('loginButton').addEventListener('click', () => {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    login(username, password);
+});
+
+document.getElementById('logoutButton').addEventListener('click', logout);
