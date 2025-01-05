@@ -17,7 +17,7 @@ async function checkAdminStatus() {
 
 // Fonction pour mettre à jour l'affichage du modal selon le rôle
 async function updateModalView() {
-    const isUserAdmin = await checkAuth();
+    const isUserAdmin = await checkAdminStatus();
     const checkboxes = document.querySelectorAll('.checkbox-item input');
     const comments = document.getElementById('comments');
     const saveButton = document.getElementById('saveButton');
@@ -59,8 +59,8 @@ async function loadTickerData(ticker) {
 }
 
 // Fonction pour sauvegarder les données (admin uniquement)
-function saveTickerData() {
-    if (!checkAdminStatus()) return;
+async function saveTickerData() {
+    if (!await checkAdminStatus()) return;
 
     const ticker = document.getElementById('modalTitle').textContent;
     // Trouver le tokenIndex dans la table
@@ -618,9 +618,9 @@ function toggleSocialLinks() {
 }
 
 // Function to update the visibility of the Edit Data button
-function updateEditButtonVisibility() {
+async function updateEditButtonVisibility() {
     const editButton = document.getElementById('editButton');
-    if (checkAdminStatus()) {
+    if (await checkAdminStatus()) {
         editButton.style.display = 'block';
     } else {
         editButton.style.display = 'none';
