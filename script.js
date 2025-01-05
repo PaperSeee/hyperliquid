@@ -40,6 +40,7 @@ async function loadTickerData(ticker) {
     try {
         const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
         const data = await response.json();
+        console.log('Data received from API:', data); // Log the data received from the API
         const token = data.find(t => t.name === ticker);
 
         if (token) {
@@ -52,6 +53,8 @@ async function loadTickerData(ticker) {
             document.getElementById('telegramDiscord').value = token.discord || token.telegram || '';
             document.getElementById('website').value = token.website || '';
             document.getElementById('comments').value = token.comment || '';
+        } else {
+            console.warn('Token not found:', ticker); // Log if the token is not found
         }
     } catch (error) {
         console.error('Error loading token data:', error);
@@ -166,12 +169,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Charger les données depuis l'API backend
         const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
         const data = await response.json();
+        console.log('Data received from API:', data); // Log the data received from the API
 
-        if (!Array.isArray(data.tokens)) {
+        if (!Array.isArray(data)) {
             throw new TypeError('Expected an array of tokens');
         }
 
-        const tokens = data.tokens;
+        const tokens = data;
         
         // Trier les tokens par ordre alphabétique
         tokens.sort((a, b) => a.name.localeCompare(b.name));
