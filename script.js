@@ -24,13 +24,14 @@ async function checkAdminStatus() {
 // Fonction pour mettre à jour l'affichage du modal selon le rôle
 async function updateModalView() {
     const isUserAdmin = await checkAdminStatus();
-    console.log('Is user admin:', isUserAdmin); // Debug log
-    
+    console.log('UpdateModalView - Is admin:', isUserAdmin); // Debug log
+
     const checkboxes = document.querySelectorAll('.checkbox-item input');
     const comments = document.getElementById('comments');
     const saveButton = document.getElementById('saveButton');
     const editButton = document.getElementById('editButton');
     const socialInputs = document.querySelectorAll('.social-input input');
+    const logoutButton = document.getElementById('logoutButton');
 
     if (isUserAdmin) {
         // Vue Admin
@@ -39,6 +40,8 @@ async function updateModalView() {
         saveButton.style.display = 'block';
         editButton.style.display = 'block';
         socialInputs.forEach(input => input.readOnly = false);
+        logoutButton.style.display = 'block';
+        document.getElementById('loginPageButton').style.display = 'none';
     } else {
         // Vue Utilisateur
         checkboxes.forEach(checkbox => checkbox.disabled = true);
@@ -46,6 +49,8 @@ async function updateModalView() {
         saveButton.style.display = 'none';
         editButton.style.display = 'none';
         socialInputs.forEach(input => input.readOnly = true);
+        logoutButton.style.display = 'none';
+        document.getElementById('loginPageButton').style.display = 'block';
     }
 }
 
@@ -77,49 +82,51 @@ async function loadTickerData(ticker) {
 
 // Fonction pour sauvegarder les données (admin uniquement)
 async function saveTickerData() {
-    if (!await checkAdminStatus()) return;
+    try {
+        const isAdmin = await checkAdminStatus();
+        console.log('Is admin when saving:', isAdmin); // Debug log
+        
+        if (!isAdmin) {
+            alert('You must be an admin to save changes');
+            return;
+        }
 
-    const ticker = document.getElementById('modalTitle').textContent;
-    // Trouver le tokenIndex dans la table
-    const row = findTickerRow(ticker);
-    if (!row) {
-        console.error('Token row not found');
-        return;
-    }
-    const tokenIndex = parseInt(row.cells[0].textContent, 10);
-    if (isNaN(tokenIndex)) {
-        console.error('Invalid token index');
-        return;
-    }
+        const ticker = document.getElementById('modalTitle').textContent;
+        const row = findTickerRow(ticker);
+        if (!row) {
+            console.error('Token row not found');
+            return;
+        }
+        const tokenIndex = parseInt(row.cells[0].textContent, 10);
 
-    const checkboxes = {
-        devReputation: document.getElementById('devReputation').checked,
-        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
-        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
-        noSellPressure: document.getElementById('noSellPressure').checked
-    };
-    const socialLinks = {
-        twitter: document.getElementById('twitterHandle').value,
-        telegram: document.getElementById('telegramDiscord').value,
-        discord: document.getElementById('telegramDiscord').value,
-        website: document.getElementById('website').value
-    };
-    const comment = document.getElementById('comments').value;
+        const checkboxes = {
+            devReputation: document.getElementById('devReputation').checked,
+            spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
+            thickObLiquidity: document.getElementById('thickObLiquidity').checked,
+            noSellPressure: document.getElementById('noSellPressure').checked
+        };
+        const socialLinks = {
+            twitter: document.getElementById('twitterHandle').value,
+            telegram: document.getElementById('telegramDiscord').value,
+            discord: document.getElementById('telegramDiscord').value,
+            website: document.getElementById('website').value
+        };
+        const comment = document.getElementById('comments').value;
 
-    // Utiliser tokenIndex au lieu du ticker
-    fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            ...checkboxes,
-            ...socialLinks,
-            comment
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
+        const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include', // Important: inclure les credentials
+            body: JSON.stringify({
+                ...checkboxes,
+                ...socialLinks,
+                comment
+            })
+        });
+
+        if (!response.ok) throw new Error('Failed to save changes');
         
         // Feedback visuel
         const button = document.getElementById('saveButton');
@@ -129,13 +136,13 @@ async function saveTickerData() {
             button.textContent = 'Save Changes';
             button.style.background = '#22543D';
             document.getElementById('tickerModal').style.display = "none";
-            loadData(); // Recharger les données pour mettre à jour l'affichage
+            loadData();
         }, 1500);
-    })
-    .catch(error => {
+
+    } catch (error) {
         console.error('Error saving data:', error);
         alert('Failed to save changes');
-    });
+    }
 }
 
 // Ajoutez ces variables globales au début du fichier
