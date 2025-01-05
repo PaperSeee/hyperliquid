@@ -3,23 +3,42 @@
 // Simulation d'un système d'authentification
 let isAdmin = false; // À remplacer par votre véritable système d'auth
 
+// Ajoutez cette fonction utilitaire au début du fichier
+async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('authToken');
+    const defaultOptions = {
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+    };
+
+    const mergedOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...(options.headers || {})
+        }
+    };
+
+    try {
+        const response = await fetch(url, mergedOptions);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+}
+
 // Remplacez votre fonction checkAdminStatus existante
 async function checkAdminStatus() {
     try {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            return false;
-        }
-
-        const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        console.log('Admin check response:', response.ok); // Debug log
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/check-auth');
         return response.ok;
     } catch (error) {
         console.error('Error checking admin status:', error);
@@ -63,19 +82,7 @@ async function updateModalView() {
 // Fonction pour charger les données
 async function loadTickerData(ticker) {
     try {
-        const token = localStorage.getItem('authToken');
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens', {
-            credentials: 'include',
-            headers
-        });
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens');
         const data = await response.json();
         console.log('Data received from API:', data);
         
@@ -138,13 +145,8 @@ async function saveTickerData() {
         };
         const comment = document.getElementById('comments').value;
 
-        const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+        const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            credentials: 'include', // Important: inclure les credentials
             body: JSON.stringify({
                 ...checkboxes,
                 ...socialLinks,
@@ -710,81 +712,81 @@ function closeEditPanel() {
 
 // Function to save the edited data
 async function saveEditedData() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        alert('You must be logged in to edit data');
-        return;
-    }
-
-    const ticker = document.getElementById('editTicker').value;
-    const column = document.getElementById('editColumn').value;
-    const newValue = document.getElementById('editValue').value;
-
-    // Validate inputs
-    if (!ticker || !column || !newValue) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    // Find the token index
-    const tokenRow = findTickerRow(ticker);
-    if (!tokenRow) {
-        alert('Ticker not found.');
-        return;
-    }
-    const tokenIndex = parseInt(tokenRow.cells[0].textContent, 10);
-    if (isNaN(tokenIndex)) {
-        alert('Invalid token index');
-        return;
-    }
-
-    // Map column names to token fields
-    const columnMapping = {
-        'Team Allocation': 'teamAllocation',
-        'Launch Date': 'launchDate',
-        'Airdrop 1': 'airdrop1',
-        'Airdrop 2': 'airdrop2',
-        'Dev Reputation': 'devReputation',
-        'Spread Less Than Three': 'spreadLessThanThree',
-        'Thick OB Liquidity': 'thickObLiquidity',
-        'No Sell Pressure': 'noSellPressure',
-        'Twitter': 'twitter',
-        'Telegram': 'telegram',
-        'Discord': 'discord',
-        'Website': 'website',
-        'Comment': 'comment'
-    };
-
-    const field = columnMapping[column];
-    if (!field) {
-        alert('Invalid column name.');
-        return;
-    }
-
-    // Prepare the data to be sent
-    const data = {};
-    if (['devReputation', 'spreadLessThanThree', 'thickObLiquidity', 'noSellPressure'].includes(field)) {
-        data[field] = newValue.toLowerCase() === 'true';
-    } else {
-        data[field] = newValue;
-    }
-
-    // Send request to server to update data
     try {
-        const response = await fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
+        const isAdmin = await checkAdminStatus();
+        if (!isAdmin) {
+            alert('You must be an admin to edit data');
+            return;
+        }
 
-        if (response.ok) {
-            loadData();
-            alert('Data updated successfully.');
-            closeEditPanel();
+        const ticker = document.getElementById('editTicker').value;
+        const column = document.getElementById('editColumn').value;
+        const newValue = document.getElementById('editValue').value;
+
+        // Validate inputs
+        if (!ticker || !column || !newValue) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Find the token index
+        const tokenRow = findTickerRow(ticker);
+        if (!tokenRow) {
+            alert('Ticker not found.');
+            return;
+        }
+        const tokenIndex = parseInt(tokenRow.cells[0].textContent, 10);
+        if (isNaN(tokenIndex)) {
+            alert('Invalid token index');
+            return;
+        }
+
+        // Map column names to token fields
+        const columnMapping = {
+            'Team Allocation': 'teamAllocation',
+            'Launch Date': 'launchDate',
+            'Airdrop 1': 'airdrop1',
+            'Airdrop 2': 'airdrop2',
+            'Dev Reputation': 'devReputation',
+            'Spread Less Than Three': 'spreadLessThanThree',
+            'Thick OB Liquidity': 'thickObLiquidity',
+            'No Sell Pressure': 'noSellPressure',
+            'Twitter': 'twitter',
+            'Telegram': 'telegram',
+            'Discord': 'discord',
+            'Website': 'website',
+            'Comment': 'comment'
+        };
+
+        const field = columnMapping[column];
+        if (!field) {
+            alert('Invalid column name.');
+            return;
+        }
+
+        // Prepare the data to be sent
+        const data = {};
+        if (['devReputation', 'spreadLessThanThree', 'thickObLiquidity', 'noSellPressure'].includes(field)) {
+            data[field] = newValue.toLowerCase() === 'true';
+        } else {
+            data[field] = newValue;
+        }
+
+        // Send request to server to update data
+        try {
+            const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                loadData();
+                alert('Data updated successfully.');
+                closeEditPanel();
+            }
+        } catch (error) {
+            console.error('Error updating data:', error);
+            alert('An error occurred while updating data.');
         }
     } catch (error) {
         console.error('Error updating data:', error);
@@ -815,10 +817,7 @@ async function loadData() {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens', {
-            credentials: 'include',
-            headers
-        });
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens');
         const tokens = await response.json();
         
         if (!Array.isArray(tokens)) {
@@ -878,26 +877,17 @@ document.addEventListener('DOMContentLoaded', loadData);
 // Function to handle user login
 async function login(username, password) {
     try {
-        const response = await fetch('https://backend-finalllll.vercel.app/api/login', {
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password }),
-            credentials: 'include'
+            body: JSON.stringify({ username, password })
         });
-
-        if (!response.ok) {
-            throw new Error('Login failed');
-        }
 
         const data = await response.json();
         if (data.token) {
             localStorage.setItem('authToken', data.token);
+            alert('Login successful!');
+            window.location.href = '/index.html';
         }
-        
-        alert('Login successful!');
-        window.location.href = '/index.html';
     } catch (error) {
         console.error('Error during login:', error);
         alert('Login failed');
@@ -907,13 +897,8 @@ async function login(username, password) {
 // Function to handle user logout
 async function logout() {
     try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch('https://backend-finalllll.vercel.app/api/logout', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/logout', {
+            method: 'POST'
         });
 
         if (response.ok) {
@@ -930,10 +915,7 @@ async function logout() {
 // Function to check if the user is authenticated
 async function checkAuth() {
     try {
-        const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
-            credentials: 'include'
-        });
-
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/check-auth');
         return response.ok;
     } catch {
         return false;
