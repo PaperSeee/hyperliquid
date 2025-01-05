@@ -115,11 +115,12 @@ async function saveTickerData() {
             button.textContent = 'Save Changes';
             button.style.background = '#22543D';
             document.getElementById('tickerModal').style.display = "none";
+            loadData(); // Recharger les données pour mettre à jour l'affichage
         }, 1500);
     })
     .catch(error => {
         console.error('Error saving data:', error);
-        alert('Changement parfaitement réussi');
+        alert('Failed to save changes');
     });
 }
 
