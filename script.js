@@ -804,7 +804,8 @@ async function login(username, password) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -824,7 +825,8 @@ async function login(username, password) {
 async function logout() {
     try {
         const response = await fetch('https://backend-finalllll.vercel.app/api/logout', {
-            method: 'POST'
+            method: 'POST',
+            credentials: 'include'
         });
 
         if (!response.ok) {
