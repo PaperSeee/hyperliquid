@@ -7,10 +7,16 @@ let isAdmin = false; // À remplacer par votre véritable système d'auth
 async function checkAdminStatus() {
     try {
         const response = await fetch('https://backend-finalllll.vercel.app/api/check-auth', {
-            credentials: 'include'
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
+        console.log('Admin check response:', response.ok); // Debug log
         return response.ok;
-    } catch {
+    } catch (error) {
+        console.error('Error checking admin status:', error);
         return false;
     }
 }
@@ -18,20 +24,28 @@ async function checkAdminStatus() {
 // Fonction pour mettre à jour l'affichage du modal selon le rôle
 async function updateModalView() {
     const isUserAdmin = await checkAdminStatus();
+    console.log('Is user admin:', isUserAdmin); // Debug log
+    
     const checkboxes = document.querySelectorAll('.checkbox-item input');
     const comments = document.getElementById('comments');
     const saveButton = document.getElementById('saveButton');
+    const editButton = document.getElementById('editButton');
+    const socialInputs = document.querySelectorAll('.social-input input');
 
     if (isUserAdmin) {
         // Vue Admin
         checkboxes.forEach(checkbox => checkbox.disabled = false);
         comments.readOnly = false;
         saveButton.style.display = 'block';
+        editButton.style.display = 'block';
+        socialInputs.forEach(input => input.readOnly = false);
     } else {
         // Vue Utilisateur
         checkboxes.forEach(checkbox => checkbox.disabled = true);
         comments.readOnly = true;
         saveButton.style.display = 'none';
+        editButton.style.display = 'none';
+        socialInputs.forEach(input => input.readOnly = true);
     }
 }
 
@@ -409,6 +423,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update initial button visibility
     updateEditButtonVisibility();
+
+    // Vérifiez l'état de l'authentification et mettez à jour l'interface
+    await updateModalView();
+    await updateEditButtonVisibility();
 });
 
 // Ajouter ceci dans la fonction d'initialisation ou au début du fichier
@@ -814,8 +832,10 @@ async function login(username, password) {
         }
 
         const data = await response.json();
-        alert(data.message);
-        updateModalView();
+        alert('Login successful!');
+        window.location.href = '/index.html';
+        await updateModalView();
+        await updateEditButtonVisibility();
     } catch (error) {
         console.error('Error during login:', error);
         alert('Login failed');
@@ -830,16 +850,13 @@ async function logout() {
             credentials: 'include'
         });
 
-        if (!response.ok) {
-            throw new Error('Logout failed');
+        if (response.ok) {
+            await updateModalView();
+            await updateEditButtonVisibility();
+            window.location.href = '/login.html';
         }
-
-        const data = await response.json();
-        alert(data.message);
-        updateModalView();
     } catch (error) {
         console.error('Error during logout:', error);
-        alert('Logout failed');
     }
 }
 

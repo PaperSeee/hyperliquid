@@ -1157,3 +1157,30 @@ table th:nth-child(14), table td:nth-child(14) {
 }
 
 /* ...existing code... */
+
+.edit-button, .logout-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+.edit-button:hover, .logout-button:hover {
+    opacity: 0.9;
+}
+
+/* Pour les inputs dans le modal */
+.social-input input:not([readonly]),
+.comments-area textarea:not([readonly]) {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+}
+
+.social-input input[readonly],
+.comments-area textarea[readonly] {
+    background-color: var(--disabled-bg);
+    cursor: not-allowed;
+}
