@@ -228,5 +228,12 @@
             </div>
         </div>
     </div>
+
+    <button id="loginPageButton" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background-color: var(--text-color); color: var(--bg-color); border: none; border-radius: 8px; cursor: pointer;">Admin Login</button>
+    <script>
+        document.getElementById('loginPageButton').addEventListener('click', () => {
+            window.location.href = '/login.html';
+        });
+    </script>
 </body>
 </html>
