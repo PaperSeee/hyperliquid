@@ -1184,3 +1184,67 @@ table th:nth-child(14), table td:nth-child(14) {
     background-color: var(--disabled-bg);
     cursor: not-allowed;
 }
+
+/* ...existing code... */
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1800px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-container {
+    width: 300px;
+    position: relative;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.8rem;
+    margin-left: auto;
+    align-items: center;
+}
+
+.edit-button {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.edit-button:hover {
+    opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1200px) {
+    .filters {
+        flex-wrap: wrap;
+    }
+
+    .left-section {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+}
+
+/* ...existing code... */
