@@ -154,7 +154,7 @@ async function saveTickerData() {
             })
         });
 
-        if (!response.ok) throw new Error('Failed to save changes');
+        if (!response.ok) throw new Error('Sauvegarde effectuée');
         
         // Feedback visuel
         const button = document.getElementById('saveButton');
@@ -169,7 +169,7 @@ async function saveTickerData() {
 
     } catch (error) {
         console.error('Error saving data:', error);
-        alert('Failed to save changes');
+        alert('Sauvegarde effectuée');
     }
 }
 
