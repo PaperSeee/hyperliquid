@@ -240,6 +240,20 @@ function formatMarketCap(value) {
     return `$${formatNumber(num)}`;
 }
 
+// Ajout de la fonction helper pour le surlignage
+function highlightText(text, isAdmin) {
+    if (!text) return '/';
+    
+    const purrRegex = /PURR/gi;
+    if (!purrRegex.test(text)) return text;
+
+    if (isAdmin) {
+        return text.replace(purrRegex, match => `<span class="highlight-purr admin-selectable">${match}</span>`);
+    } else {
+        return text.replace(purrRegex, match => `<span class="highlight-purr">${match}</span>`);
+    }
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -819,9 +833,10 @@ function getColumnIndex(columnName) {
     return -1;
 }
 
-// Function to load data from the backend
+// Fonction pour charger les données
 async function loadData() {
     try {
+        const isAdmin = await checkAdminStatus();
         const token = localStorage.getItem('authToken');
         const headers = {
             'Content-Type': 'application/json'
@@ -864,8 +879,8 @@ async function loadData() {
                     <td>${token.name}</td>
                     <td>${token.launchDate || 'N/A'}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
-                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
+                    <td>${token.airdrop1 ? highlightText(`${token.airdrop1.percentage}% ${token.airdrop1.token}`, isAdmin) : '/'}</td>
+                    <td>${token.airdrop2 ? highlightText(`${token.airdrop2.percentage}% ${token.airdrop2.token}`, isAdmin) : '/'}</td>
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
                     <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
                     <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
@@ -875,6 +890,34 @@ async function loadData() {
                     <td>${socialLinks.telegramDiscordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
                 `;
+
+                if (isAdmin) {
+                    setTimeout(() => {
+                        const highlightedElements = listedRow.querySelectorAll('.highlight-purr');
+                        highlightedElements.forEach(el => {
+                            el.addEventListener('click', async () => {
+                                const confirmed = confirm('Voulez-vous modifier ce surlignage?');
+                                if (confirmed) {
+                                    try {
+                                        const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${token.tokenIndex}/highlight`, {
+                                            method: 'PUT',
+                                            body: JSON.stringify({
+                                                highlight: !el.classList.contains('active')
+                                            })
+                                        });
+                                        
+                                        if (response.ok) {
+                                            el.classList.toggle('active');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error updating highlight:', error);
+                                    }
+                                }
+                            });
+                        });
+                    }, 0);
+                }
+                
                 mainTableBody.appendChild(listedRow);
             }
         });
