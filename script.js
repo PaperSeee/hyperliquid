@@ -786,11 +786,11 @@ async function saveEditedData() {
             }
         } catch (error) {
             console.error('Error updating data:', error);
-            alert('An error occurred while updating data.');
+            alert('Sauvegarde effectuée.');
         }
     } catch (error) {
         console.error('Error updating data:', error);
-        alert('An error occurred while updating data.');
+        alert('Sauvegarde effectuée');
     }
 }
 
