@@ -57,25 +57,52 @@ async function updateModalView() {
     const editButton = document.getElementById('editButton');
     const socialInputs = document.querySelectorAll('.social-input input');
     const logoutButton = document.getElementById('logoutButton');
+    const loginButton = document.getElementById('loginPageButton');
+    const websiteInput = document.getElementById('website');
 
     if (isUserAdmin) {
         // Vue Admin
-        checkboxes.forEach(checkbox => checkbox.disabled = false);
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = false;
+            checkbox.style.cursor = 'pointer';
+        });
         comments.readOnly = false;
+        socialInputs.forEach(input => {
+            input.readOnly = false;
+            input.style.cursor = 'text';
+            input.style.backgroundColor = 'var(--bg-color)';
+        });
+        websiteInput.readOnly = false;
         saveButton.style.display = 'block';
         editButton.style.display = 'block';
-        socialInputs.forEach(input => input.readOnly = false);
         logoutButton.style.display = 'block';
-        document.getElementById('loginPageButton').style.display = 'none';
+        loginButton.style.display = 'none';
     } else {
         // Vue Utilisateur
-        checkboxes.forEach(checkbox => checkbox.disabled = true);
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = true;
+            checkbox.style.cursor = 'default';
+        });
         comments.readOnly = true;
+        comments.style.cursor = 'default';
+        socialInputs.forEach(input => {
+            input.readOnly = true;
+            input.style.cursor = 'default';
+            input.style.backgroundColor = 'var(--disabled-bg)';
+        });
+        websiteInput.readOnly = true;
         saveButton.style.display = 'none';
         editButton.style.display = 'none';
-        socialInputs.forEach(input => input.readOnly = true);
         logoutButton.style.display = 'none';
-        document.getElementById('loginPageButton').style.display = 'block';
+        loginButton.style.display = 'block';
+    }
+
+    if (!isUserAdmin) {
+        comments.style.backgroundColor = 'var(--disabled-bg)';
+        comments.style.opacity = '0.7';
+    } else {
+        comments.style.backgroundColor = 'var(--bg-color)';
+        comments.style.opacity = '1';
     }
 }
 

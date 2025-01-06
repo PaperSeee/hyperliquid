@@ -1208,3 +1208,35 @@ table th:nth-child(14), table td:nth-child(14) {
     background-color: var(--disabled-bg);
     cursor: not-allowed;
 }
+
+/* Styles pour les éléments désactivés */
+.checkbox-item input[disabled] {
+    opacity: 0.7;
+    cursor: default;
+}
+
+textarea[readonly],
+input[readonly] {
+    background-color: var(--disabled-bg) !important;
+    cursor: default !important;
+    opacity: 0.7;
+}
+
+/* Style du bouton Save quand désactivé */
+.save-button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--disabled-bg);
+}
+
+/* Style du bouton Edit Data */
+.edit-button {
+    display: none; /* Hidden by default */
+    opacity: 0; /* Start fully transparent */
+    transition: opacity 0.3s ease;
+}
+
+.edit-button.visible {
+    display: block;
+    opacity: 1;
+}
