@@ -432,9 +432,10 @@ tr:hover {
     gap: 2rem;
 }
 
-.filters-left {
+.left-section {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 
 .filter-button {
@@ -1102,9 +1103,9 @@ copyright {
 .nav-links {
     display: flex;
     gap: 0.8rem;
-    margin-left: auto;
-    flex-wrap: wrap;
+    margin-left: auto; /* Force à droite */
     align-items: center;
+    justify-content: flex-end; /* Aligne les éléments à droite */
 }
 
 .nav-btn {
@@ -1117,6 +1118,7 @@ copyright {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0; /* Empêche la compression des boutons */
 }
 
 .nav-btn img {
