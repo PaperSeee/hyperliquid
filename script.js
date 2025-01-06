@@ -360,19 +360,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Sauvegarder les changements
     saveButton.addEventListener('click', saveTickerData);
 
-    // Bouton temporaire pour switcher entre admin/user (à remplacer par votre système d'auth)
-    const toggleButton = document.createElement('button');
-    toggleButton.textContent = 'Toggle Admin/User';
-    toggleButton.style.position = 'fixed';
-    toggleButton.style.bottom = '20px';
-    toggleButton.style.right = '20px';
-    toggleButton.onclick = () => {
-        isAdmin = !isAdmin;
-        alert(`Mode switched to: ${isAdmin ? 'Admin' : 'User'}`);
-        updateEditButtonVisibility();
-    };
-    document.body.appendChild(toggleButton);
-
     // Gestion du thème
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');

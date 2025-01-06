@@ -48,12 +48,12 @@
 }
 
 [data-theme="dark"] th {
-    color: #4ade80;
+    color: var(--text-color);
     background: rgba(51, 65, 85, 0.4);
 }
 
 [data-theme="dark"] tr:hover {
-    background: rgba(51, 65, 85, 0.6);
+    background: rgba(51, 65, 85, 0.7);
 }
 
 [data-theme="dark"] .filter-button {
@@ -222,6 +222,10 @@ body {
     display: flex;
     align-items: center;
     gap: 2rem;
+    background: linear-gradient(to right, rgba(74, 222, 128, 0.1), transparent);
+    border-radius: 16px;
+    margin: 0.5rem auto;
+    padding: 1rem 2rem;
 }
 
 .logo {
@@ -341,34 +345,42 @@ social-banner svg {
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
     margin: 1rem 2rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 table {
     width: max-content;
     min-width: 100%;
     border-collapse: collapse;
+    border-spacing: 0;
+    border-collapse: separate;
 }
 
 th {
     background: var(--table-header-bg);
     font-weight: 600;
     text-align: left;
-    padding: 1rem;
+    padding: 1.2rem 1rem;
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     white-space: nowrap;
-    font-size: 0.9rem;
-    color: #22543D;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
 }
 
 td {
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     border-bottom: 1px solid var(--border-color);
     white-space: nowrap;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-color);
+    transition: all 0.3s ease;
 }
 
 td a {
@@ -387,8 +399,17 @@ td a:hover {
 }
 
 tr:hover {
-    background: rgba(34, 84, 61, 0.08);
+    background: rgba(34, 84, 61, 0.15);
     cursor: pointer;
+}
+
+tr:hover td {
+    background: var(--hover-bg);
+    color: #22543D;
+}
+
+[data-theme="dark"] tr:hover td {
+    color: #22c55e;
 }
 
 /* Styles pour les en-têtes de colonnes triables */
@@ -396,6 +417,7 @@ tr:hover {
     cursor: pointer;
     position: relative;
     padding-right: 20px;
+    color: var(--text-color);
 }
 
 #mainTable th::after {
@@ -643,7 +665,7 @@ copyright {
     padding: 8px 35px 8px 38px;  /* Augmenté le padding gauche pour l'icône */
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    background: var(--bg-color);
+    background: rgba(74, 222, 128, 0.05);
     color: var(--text-color);
     font-size: 0.9rem;
     transition: all 0.3s ease;
@@ -652,7 +674,7 @@ copyright {
 .search-container input:focus {
     outline: none;
     border-color: #22543D;
-    box-shadow: 0 0 0 2px rgba(34, 84, 61, 0.1);
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
 }
 
 .search-container .search-icon {
@@ -667,7 +689,9 @@ copyright {
 
 /* Unlisted Tokens Styles */
 .unlisted-tokens {
-    background: var(--card-bg);
+    background: var(--unlisted-card-bg);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     padding: 1rem;
     margin: 1rem 2rem;
@@ -677,11 +701,15 @@ copyright {
 }
 
 .unlisted-tokens h2 {
-    color: #22543D;
+    color: var(--text-color);
     font-size: 1.1rem;
     margin-bottom: 1rem;
-    border-bottom: 2px solid rgba(34, 84, 61, 0.2);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.5rem;
+}
+
+.unlisted-tokens .counter {
+    color: var(--text-color);
 }
 
 .unlisted-tokens table {
@@ -696,12 +724,13 @@ copyright {
 }
 
 .unlisted-tokens tr {
-    background: rgba(34, 84, 61, 0.08);
+    background: rgba(74, 222, 128, 0.05);
     border-radius: 6px;
     text-align: center;
     transition: all 0.3s ease;
     padding: 0.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(74, 222, 128, 0.1);
+    backdrop-filter: blur(5px);
 }
 
 .unlisted-tokens td {
@@ -718,9 +747,10 @@ copyright {
 }
 
 .unlisted-tokens tr:hover {
-    background: rgba(34, 84, 61, 0.15);
+    background: var(--unlisted-hover-bg);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    border-color: rgba(74, 222, 128, 0.3);
+    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
 }
 
 /* Counter Styles */
