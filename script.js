@@ -237,13 +237,13 @@ function formatMarketCap(value) {
     if (!value) return '/';
     const num = parseFloat(value);
     if (isNaN(num)) return value;
-    return `$${formatNumber(num)}`;
+    return `${formatNumber(num)}$`;
 }
 
 // Ajout de la fonction helper pour le surlignage
 function highlightText(text, isAdmin) {
     if (!text) return '/';
-    
+
     const purrRegex = /PURR/gi;
     if (!purrRegex.test(text)) return text;
 
@@ -267,18 +267,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const tokens = data;
-        
+
         // Trier les tokens par ordre alphabétique
         tokens.sort((a, b) => a.name.localeCompare(b.name));
-        
+
         const mainTableBody = document.querySelector('#mainTable tbody');
         const unlistedTableBody = document.querySelector('#unlistedTable tbody');
         const unlistedCount = document.getElementById('unlistedCount');
         let unlistedTokens = 0;
-        
+
         mainTableBody.innerHTML = '';
         unlistedTableBody.innerHTML = '';
-        
+
         // Index pour les tokens listés
         let listedIndex = 1;
 
@@ -300,8 +300,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
                     <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td> 
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                    <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
-                    <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
+                    <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
+                    <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
                     <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
@@ -882,8 +882,8 @@ async function loadData() {
                     <td>${token.airdrop1 ? highlightText(`${token.airdrop1.percentage}% ${token.airdrop1.token}`, isAdmin) : '/'}</td>
                     <td>${token.airdrop2 ? highlightText(`${token.airdrop2.percentage}% ${token.airdrop2.token}`, isAdmin) : '/'}</td>
                     <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                    <td>${token.markPx ? '$' + token.markPx : 'N/A'}</td>
-                    <td>${token.startPx ? '$' + token.startPx : 'N/A'}</td>
+                    <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
+                    <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
                     <td>${formatNumber(token.launchCircSupply)}</td>
                     <td>${socialLinks.twitterLink}</td>
