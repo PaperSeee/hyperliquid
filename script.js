@@ -440,7 +440,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Example usage: moveTokenToMainTable('TCKR3');
 
     // Add click handlers for all table headers
     const headers = document.querySelectorAll('#mainTable th');
