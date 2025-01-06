@@ -240,6 +240,20 @@ function formatMarketCap(value) {
     return `$${formatNumber(num)}`;
 }
 
+// Ajout de la fonction helper pour le surlignage
+function highlightText(text, isAdmin) {
+    if (!text) return '/';
+    
+    const purrRegex = /PURR/gi;
+    if (!purrRegex.test(text)) return text;
+
+    if (isAdmin) {
+        return text.replace(purrRegex, match => `<span class="highlight-purr admin-selectable">${match}</span>`);
+    } else {
+        return text.replace(purrRegex, match => `<span class="highlight-purr">${match}</span>`);
+    }
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
