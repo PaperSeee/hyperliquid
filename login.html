@@ -51,12 +51,6 @@
         .login-container button:hover {
             background: var(--hover-bg);
         }
-        .error-message {
-            color: red;
-            margin: 10px 0;
-            display: none;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -65,47 +59,35 @@
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
-            <div id="errorMsg" class="error-message"></div>
             <button type="submit">Login</button>
         </form>
     </div>
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const errorMsg = document.getElementById('errorMsg');
-            errorMsg.style.display = 'none';
-
             try {
                 const response = await fetch('https://backend-finalllll.vercel.app/api/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Access-Control-Allow-Origin': 'https://www.hypurrspot.xyz'
+                        'Content-Type': 'application/json'
                     },
                     credentials: 'include',
-                    mode: 'cors',
                     body: JSON.stringify({
                         username: document.getElementById('username').value,
                         password: document.getElementById('password').value
                     })
                 });
-
-                if (!response.ok) {
+                
+                const data = await response.json();
+                if (response.ok && data.token) {
+                    localStorage.setItem('authToken', data.token);
+                    window.location.href = '/index.html';
+                } else {
                     throw new Error('Login failed');
                 }
-
-                const data = await response.json();
-                if (data.success) {
-                    window.location.href = '/dashboard.html';
-                } else {
-                    errorMsg.textContent = 'Invalid credentials';
-                    errorMsg.style.display = 'block';
-                }
             } catch (error) {
-                errorMsg.textContent = 'Login failed. Please try again.';
-                errorMsg.style.display = 'block';
                 console.error('Login error:', error);
+                alert('Login failed');
             }
         });
     </script>
