@@ -206,15 +206,26 @@ let isAscending = true;
 
 // Ajouter cette fonction utilitaire après les variables globales
 function formatSocialLinks(twitter, telegram, discord, website) {
-    const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">@${twitter}</a>` : '/';
-    const telegramLink = telegram ? `<a href="${telegram}" target="_blank">View</a>` : '/';
-    const discordLink = discord ? `<a href="${discord}" target="_blank">View</a>` : '/';
-    const websiteLink = website ? `<a href="${website}" target="_blank">View</a>` : '/';
+    const twitterHandle = twitter ? `@${twitter}` : '/';
+    const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">${twitterHandle}</a>` : '/';
+    
+    const telegramUrl = telegram || '';
+    const discordUrl = discord || '';
+    let telegramDiscordLink = '/';
 
-    // Avoid duplicates in Telegram/Discord
-    const telegramDiscordLink = telegramLink !== '/' && discordLink !== '/' && telegramLink !== discordLink
-        ? `${telegramLink} ${discordLink}`
-        : telegramLink !== '/' ? telegramLink : discordLink;
+    if (telegramUrl && discordUrl) {
+        telegramDiscordLink = `
+            <a href="${telegramUrl}" target="_blank">${telegramUrl}</a>
+            <br>
+            <a href="${discordUrl}" target="_blank">${discordUrl}</a>
+        `;
+    } else if (telegramUrl) {
+        telegramDiscordLink = `<a href="${telegramUrl}" target="_blank">${telegramUrl}</a>`;
+    } else if (discordUrl) {
+        telegramDiscordLink = `<a href="${discordUrl}" target="_blank">${discordUrl}</a>`;
+    }
+
+    const websiteLink = website ? `<a href="${website}" target="_blank">${website}</a>` : '/';
 
     return { twitterLink, telegramDiscordLink, websiteLink };
 }
