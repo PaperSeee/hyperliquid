@@ -372,6 +372,12 @@ th {
     font-size: 0.95rem;
     letter-spacing: 0.5px;
     color: var(--text-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--table-header-bg);
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem;
 }
 
 td {
@@ -551,13 +557,7 @@ tr:hover td {
 }
 
 .checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;       /* Réduit de 0.8rem à 0.6rem */
-    margin: 0.8rem 0;  /* Réduit de 1rem à 0.8rem */
-    padding: 0.8rem;   /* Réduit de 1rem à 0.8rem */
-    background: rgba(34, 84, 61, 0.05);
-    border-radius: 12px;
+    display: none;
 }
 
 .checkbox-item {
@@ -580,20 +580,28 @@ tr:hover td {
 }
 
 .comments-area {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
     margin-top: 1.5rem;
 }
 
 .comments-area textarea {
     width: 100%;
-    height: 80px;      /* Réduit de 100px à 80px */
-    padding: 0.8rem;   /* Réduit de 1rem à 0.8rem */
-    margin-top: 0.5rem;
-    border: 1px solid rgba(34, 84, 61, 0.2);
-    border-radius: 12px;
+    height: 100px;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    resize: vertical;
     background: var(--bg-color);
     color: var(--text-color);
-    resize: vertical;
-    transition: all 0.3s ease;
+}
+
+.comments-area label {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
 .comments-area textarea:focus {
@@ -1269,5 +1277,11 @@ input[readonly] {
 .edit-button.visible {
     display: block;
     opacity: 1;
+}
+
+/* Last Updated Column Style */
+td.last-updated {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
 }
 

@@ -254,6 +254,24 @@ function highlightText(text, isAdmin) {
     }
 }
 
+// Format date to dd/mm/yyyy
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
+// Format timestamp for Last Updated
+function formatLastUpdated(timestamp) {
+    if (!timestamp) return 'Never';
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-GB');
+}
+
 // Gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -617,77 +635,32 @@ function openModal(ticker) {
     modal.style.display = "block";
 }
 
-function saveModalChanges() {
-    const modal = document.getElementById('tickerModal');
+async function saveModalChanges() {
     const ticker = document.getElementById('modalTitle').textContent;
-    
-    // Récupérer le token d'authentification
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-        alert('You must be logged in to save changes');
-        return;
-    }
-    
     const row = findTickerRow(ticker);
-    if (!row) {
-        console.error('Token row not found');
-        return;
-    }
-    
+    if (!row) return;
+
     const tokenIndex = parseInt(row.cells[0].textContent, 10);
-    if (isNaN(tokenIndex)) {
-        console.error('Invalid token index');
-        return;
-    }
-
-    const checkboxes = {
-        devReputation: document.getElementById('devReputation').checked,
-        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
-        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
-        noSellPressure: document.getElementById('noSellPressure').checked
+    const data = {
+        projectDescription: document.getElementById('projectDescription').value,
+        personalComment: document.getElementById('personalComment').value,
+        devTeamContact: document.getElementById('devTeamContact').value,
+        // ...other fields...
+        lastUpdated: new Date().toISOString()
     };
-    const socialLinks = {
-        twitter: document.getElementById('twitterHandle').value,
-        telegram: document.getElementById('telegramDiscord').value,
-        discord: document.getElementById('telegramDiscord').value,
-        website: document.getElementById('website').value
-    };
-    const comment = document.getElementById('comments').value;
 
-    // Envoyer les données au backend en utilisant le tokenIndex
-    fetch(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-            ...checkboxes,
-            ...socialLinks,
-            comment
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    })
-    .then(data => {
-        // Feedback visuel
-        const button = document.getElementById('saveButton');
-        button.textContent = 'Saved!';
-        button.style.background = '#4CAF50';
-        setTimeout(() => {
-            button.textContent = 'Save Changes';
-            button.style.background = '#22543D';
-            modal.style.display = "none";
-            // Recharger les données pour mettre à jour l'affichage
-            loadData();
-        }, 1500);
-    })
-    .catch(error => {
-        console.error('Error saving data:', error);
+    try {
+        await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+
+        loadData(); // Refresh table
+        document.getElementById('tickerModal').style.display = 'none';
+    } catch (error) {
+        console.error('Error saving changes:', error);
         alert('Failed to save changes');
-    });
+    }
 }
 
 function findTickerRow(ticker) {
@@ -876,7 +849,7 @@ async function loadData() {
                 listedRow.innerHTML = `
                     <td>${token.tokenIndex}</td>
                     <td>${token.name}</td>
-                    <td>${token.launchDate || 'N/A'}</td>
+                    <td>${formatDate(token.launchDate)}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
                     <td>${token.airdrop1 ? highlightText(`${token.airdrop1.percentage}% ${token.airdrop1.token}`, isAdmin) : '/'}</td>
                     <td>${token.airdrop2 ? highlightText(`${token.airdrop2.percentage}% ${token.airdrop2.token}`, isAdmin) : '/'}</td>
@@ -888,6 +861,7 @@ async function loadData() {
                     <td>${socialLinks.twitterLink}</td>
                     <td>${socialLinks.telegramDiscordLink}</td>
                     <td>${socialLinks.websiteLink}</td>
+                    <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
                 `;
 
                 if (isAdmin) {
