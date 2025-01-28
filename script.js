@@ -185,7 +185,7 @@ async function saveTickerData() {
             })
         });
 
-        if (!response.ok) throw new Error('Sauvegarde effectuée');
+        if (!response.ok) throw new Error('Network response was not ok');
         
         // Mettre à jour l'affichage de la dernière modification
         document.getElementById('modalLastUpdated').textContent = formatLastUpdated(new Date().toISOString());
@@ -194,16 +194,23 @@ async function saveTickerData() {
         const button = document.getElementById('saveButton');
         button.textContent = 'Saved!';
         button.style.background = '#4CAF50';
-        setTimeout(() => {
+        
+        // Fermer le modal et actualiser les données
+        setTimeout(async () => {
             button.textContent = 'Save Changes';
             button.style.background = '#22543D';
             document.getElementById('tickerModal').style.display = "none";
-            loadData();
-        }, 1500);
+            
+            // Actualiser les données immédiatement
+            await loadData();
+        }, 1000);
 
     } catch (error) {
         console.error('Error saving data:', error);
         alert('Sauvegarde effectuée');
+        
+        // Actualiser même en cas d'erreur pour assurer la cohérence
+        await loadData();
     }
 }
 
@@ -799,17 +806,24 @@ async function saveEditedData() {
             });
 
             if (response.ok) {
-                loadData();
+                // Actualiser immédiatement les données
+                await loadData();
                 alert('Data updated successfully.');
                 closeEditPanel();
             }
         } catch (error) {
             console.error('Error updating data:', error);
             alert('Sauvegarde effectuée.');
+            
+            // Actualiser même en cas d'erreur
+            await loadData();
         }
     } catch (error) {
         console.error('Error updating data:', error);
         alert('Sauvegarde effectuée');
+        
+        // Actualiser même en cas d'erreur
+        await loadData();
     }
 }
 
