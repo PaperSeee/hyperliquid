@@ -126,6 +126,7 @@ async function loadTickerData(ticker) {
             document.getElementById('website').value = tokenData.website || '';
             document.getElementById('comments').value = tokenData.comment || '';
             document.getElementById('modalLastUpdated').textContent = formatLastUpdated(tokenData.lastUpdated);
+            document.getElementById('devTeamContact').value = tokenData.devTeamContact || '';
         } else {
             console.warn('Token not found:', ticker);
         }
@@ -179,7 +180,8 @@ async function saveTickerData() {
                 ...checkboxes,
                 ...socialLinks,
                 comment,
-                lastUpdated: new Date().toISOString() // Ajouter la date de mise à jour
+                lastUpdated: new Date().toISOString(), // Ajouter la date de mise à jour
+                devTeamContact: document.getElementById('devTeamContact').value
             })
         });
 
