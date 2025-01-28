@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>XX%</td>
                     <td>XXX</td>
                     <td>XXX</td>
-                    <td>XX%</td>
+                    <td>N/A</td>
                     <td>$X.XX</td>
                     <td>$X.XX</td>
                     <td>$XM</td>
@@ -872,7 +872,7 @@ async function loadData() {
                     <td>${token.teamAllocation || 'N/A'}</td>
                     <td>${token.airdrop1 ? highlightText(`${token.airdrop1.percentage}% ${token.airdrop1.token}`, isAdmin) : '/'}</td>
                     <td>${token.airdrop2 ? highlightText(`${token.airdrop2.percentage}% ${token.airdrop2.token}`, isAdmin) : '/'}</td>
-                    <td>${token.devReputation ? 'Yes' : 'No'}</td>
+                    <td>${token.devTeamContact || 'N/A'}</td>
                     <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
                     <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
                     <td>${formatMarketCap(token.launchMarketCap)}</td>
