@@ -1349,3 +1349,18 @@ td.last-updated {
     color: var(--secondary-text);
 }
 
+/* ...existing code... */
+
+.last-updated-info {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    text-align: right;
+}
+
+[data-theme="dark"] .last-updated-info {
+    color: rgba(226, 232, 240, 0.6);
+}
+
+/* ...existing code... */
+

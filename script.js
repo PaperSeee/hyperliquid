@@ -125,6 +125,7 @@ async function loadTickerData(ticker) {
             document.getElementById('telegramDiscord').value = tokenData.discord || tokenData.telegram || '';
             document.getElementById('website').value = tokenData.website || '';
             document.getElementById('comments').value = tokenData.comment || '';
+            document.getElementById('modalLastUpdated').textContent = formatLastUpdated(tokenData.lastUpdated);
         } else {
             console.warn('Token not found:', ticker);
         }
@@ -177,12 +178,16 @@ async function saveTickerData() {
             body: JSON.stringify({
                 ...checkboxes,
                 ...socialLinks,
-                comment
+                comment,
+                lastUpdated: new Date().toISOString() // Ajouter la date de mise à jour
             })
         });
 
         if (!response.ok) throw new Error('Sauvegarde effectuée');
         
+        // Mettre à jour l'affichage de la dernière modification
+        document.getElementById('modalLastUpdated').textContent = formatLastUpdated(new Date().toISOString());
+
         // Feedback visuel
         const button = document.getElementById('saveButton');
         button.textContent = 'Saved!';
