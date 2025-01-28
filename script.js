@@ -215,7 +215,7 @@ let isAscending = true;
 function formatSocialLinks(twitter, telegram, discord, website) {
     const twitterHandle = twitter ? `@${twitter}` : '/';
     const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">${twitterHandle}</a>` : '/';
-    
+
     const telegramUrl = telegram || '';
     const discordUrl = discord || '';
     let telegramDiscordLink = '/';
@@ -765,6 +765,7 @@ async function saveEditedData() {
             'Launch Date': 'launchDate',
             'Airdrop 1': 'airdrop1',
             'Airdrop 2': 'airdrop2',
+            'Dev/Team Contact': 'devTeamContact', // Ajout du mapping correct
             'Dev Reputation': 'devReputation',
             'Spread Less Than Three': 'spreadLessThanThree',
             'Thick OB Liquidity': 'thickObLiquidity',
