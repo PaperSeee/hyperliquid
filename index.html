@@ -47,6 +47,7 @@
                     <i class="fas fa-magnifying-glass search-icon"></i>
                 </div>
                 <button id="editButton" class="edit-button" style="display: none;">Edit Data</button>
+                <button id="addTokenButton" class="add-token-button" style="display: none;">Add Token</button>
             </div>
             <div class="nav-links">
                 <a href="https://hypurrscan.io/" target="_blank" class="nav-btn">
@@ -243,6 +244,69 @@
             </div>
             <div class="modal-actions">
                 <button id="saveButton" class="save-button">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding New Token -->
+    <div id="addTokenModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Token</h2>
+            <div class="social-input">
+                <label for="newTicker">Ticker:</label>
+                <input type="text" id="newTicker" placeholder="Enter ticker">
+            </div>
+            <div class="social-input">
+                <label for="newLaunchDate">Launch Date:</label>
+                <input type="date" id="newLaunchDate">
+            </div>
+            <div class="social-input">
+                <label for="newTeamAllocation">Team Allocation:</label>
+                <input type="text" id="newTeamAllocation" placeholder="Enter team allocation">
+            </div>
+            <div class="social-input">
+                <label for="newAirdrop1">Airdrop 1:</label>
+                <input type="text" id="newAirdrop1" placeholder="Enter airdrop 1">
+            </div>
+            <div class="social-input">
+                <label for="newAirdrop2">Airdrop 2:</label>
+                <input type="text" id="newAirdrop2" placeholder="Enter airdrop 2">
+            </div>
+            <div class="social-input">
+                <label for="newDevTeamContact">Dev/Team Contact:</label>
+                <input type="text" id="newDevTeamContact" placeholder="Enter contact info">
+            </div>
+            <div class="social-input">
+                <label for="newMarketPrice">Market Price:</label>
+                <input type="text" id="newMarketPrice" placeholder="Enter market price">
+            </div>
+            <div class="social-input">
+                <label for="newLaunchPrice">Launch Price:</label>
+                <input type="text" id="newLaunchPrice" placeholder="Enter launch price">
+            </div>
+            <div class="social-input">
+                <label for="newLaunchMarketcap">Launch Marketcap:</label>
+                <input type="text" id="newLaunchMarketcap" placeholder="Enter launch marketcap">
+            </div>
+            <div class="social-input">
+                <label for="newLaunchCircSupply">Launch Circ Supply:</label>
+                <input type="text" id="newLaunchCircSupply" placeholder="Enter launch circ supply">
+            </div>
+            <div class="social-input">
+                <label for="newTwitterHandle">Twitter Handle:</label>
+                <input type="text" id="newTwitterHandle" placeholder="Enter twitter handle">
+            </div>
+            <div class="social-input">
+                <label for="newTelegramDiscord">Telegram/Discord:</label>
+                <input type="text" id="newTelegramDiscord" placeholder="Enter telegram/discord">
+            </div>
+            <div class="social-input">
+                <label for="newWebsite">Website:</label>
+                <input type="text" id="newWebsite" placeholder="Enter website">
+            </div>
+            <div class="modal-actions">
+                <button id="saveNewTokenButton" class="save-button">Save Token</button>
             </div>
         </div>
     </div>

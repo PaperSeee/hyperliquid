@@ -993,3 +993,76 @@ document.getElementById('loginButton').addEventListener('click', () => {
 });
 
 document.getElementById('logoutButton').addEventListener('click', logout);
+
+// Function to open the add token modal
+function openAddTokenModal() {
+    const modal = document.getElementById('addTokenModal');
+    modal.style.display = "block";
+}
+
+// Function to close the add token modal
+function closeAddTokenModal() {
+    const modal = document.getElementById('addTokenModal');
+    modal.style.display = "none";
+}
+
+// Function to save the new token
+async function saveNewToken() {
+    const newToken = {
+        ticker: document.getElementById('newTicker').value,
+        launchDate: document.getElementById('newLaunchDate').value,
+        teamAllocation: document.getElementById('newTeamAllocation').value,
+        airdrop1: document.getElementById('newAirdrop1').value,
+        airdrop2: document.getElementById('newAirdrop2').value,
+        devTeamContact: document.getElementById('newDevTeamContact').value,
+        marketPrice: document.getElementById('newMarketPrice').value,
+        launchPrice: document.getElementById('newLaunchPrice').value,
+        launchMarketcap: document.getElementById('newLaunchMarketcap').value,
+        launchCircSupply: document.getElementById('newLaunchCircSupply').value,
+        twitterHandle: document.getElementById('newTwitterHandle').value,
+        telegramDiscord: document.getElementById('newTelegramDiscord').value,
+        website: document.getElementById('newWebsite').value
+    };
+
+    // Add the new token to the table
+    const mainTableBody = document.querySelector('#mainTable tbody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${mainTableBody.rows.length + 1}</td>
+        <td>${newToken.ticker}</td>
+        <td>${newToken.launchDate}</td>
+        <td>${newToken.teamAllocation}</td>
+        <td>${newToken.airdrop1}</td>
+        <td>${newToken.airdrop2}</td>
+        <td>${newToken.devTeamContact}</td>
+        <td>${newToken.marketPrice}</td>
+        <td>${newToken.launchPrice}</td>
+        <td>${newToken.launchMarketcap}</td>
+        <td>${newToken.launchCircSupply}</td>
+        <td>${newToken.twitterHandle}</td>
+        <td>${newToken.telegramDiscord}</td>
+        <td>${newToken.website}</td>
+    `;
+    mainTableBody.appendChild(newRow);
+
+    // Close the modal
+    closeAddTokenModal();
+}
+
+// Event listeners for the add token button and modal
+document.getElementById('addTokenButton').addEventListener('click', openAddTokenModal);
+document.querySelector('#addTokenModal .close').addEventListener('click', closeAddTokenModal);
+document.getElementById('saveNewTokenButton').addEventListener('click', saveNewToken);
+
+// Update the visibility of the add token button based on admin status
+async function updateAddTokenButtonVisibility() {
+    const addTokenButton = document.getElementById('addTokenButton');
+    if (await checkAdminStatus()) {
+        addTokenButton.style.display = 'block';
+    } else {
+        addTokenButton.style.display = 'none';
+    }
+}
+
+// Call the function to update the add token button visibility
+updateAddTokenButtonVisibility();
