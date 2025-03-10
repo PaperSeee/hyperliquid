@@ -1272,6 +1272,8 @@ copyright {
     }
 }
 
+/* ...existing code... */
+
 table th:nth-child(13), table td:nth-child(13) {
     width: 200px; /* Adjust width as needed */
 }
@@ -1279,6 +1281,8 @@ table th:nth-child(13), table td:nth-child(13) {
 table th:nth-child(14), table td:nth-child(14) {
     width: 200px; /* Adjust width as needed */
 }
+
+/* ...existing code... */
 
 .edit-button, .logout-button {
     padding: 8px 16px;
@@ -1345,6 +1349,8 @@ td.last-updated {
     color: var(--secondary-text);
 }
 
+/* ...existing code... */
+
 .last-updated-info {
     margin-top: 0.5rem;
     font-size: 0.85rem;
@@ -1356,18 +1362,5 @@ td.last-updated {
     color: rgba(226, 232, 240, 0.6);
 }
 
-.add-token-button {
-    display: inline-block; /* Visible by default */
-    background: #22543D;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.add-token-button:hover {
-    background: #1a4231;
-}
+/* ...existing code... */
 
