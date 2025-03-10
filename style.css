@@ -1357,7 +1357,7 @@ td.last-updated {
 }
 
 .add-token-button {
-    display: none; /* Hidden by default */
+    display: inline-block; /* Visible by default */
     background: #22543D;
     color: white;
     padding: 0.5rem 1rem;
