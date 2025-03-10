@@ -1050,9 +1050,11 @@ async function saveNewToken() {
 }
 
 // Event listeners for the add token button and modal
-document.getElementById('addTokenButton').addEventListener('click', openAddTokenModal);
-document.querySelector('#addTokenModal .close').addEventListener('click', closeAddTokenModal);
-document.getElementById('saveNewTokenButton').addEventListener('click', saveNewToken);
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('addTokenButton').addEventListener('click', openAddTokenModal);
+    document.querySelector('#addTokenModal .close').addEventListener('click', closeAddTokenModal);
+    document.getElementById('saveNewTokenButton').addEventListener('click', saveNewToken);
+});
 
 // Update the visibility of the add token button based on admin status
 async function updateAddTokenButtonVisibility() {
