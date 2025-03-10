@@ -532,6 +532,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Vérifiez l'état de l'authentification et mettez à jour l'interface
     await updateModalView();
     await updateEditButtonVisibility();
+
+    // Set up the add token button event listeners
+    const addTokenButton = document.getElementById('addTokenButton');
+    const addTokenModal = document.getElementById('addTokenModal');
+    const addTokenCloseButton = document.querySelector('#addTokenModal .close');
+    const saveNewTokenButton = document.getElementById('saveNewTokenButton');
+    
+    if (addTokenButton) {
+        addTokenButton.addEventListener('click', () => {
+            console.log('Add token button clicked');
+            openAddTokenModal();
+        });
+    } else {
+        console.error('Add token button not found in DOM');
+    }
+    
+    if (addTokenCloseButton) {
+        addTokenCloseButton.addEventListener('click', closeAddTokenModal);
+    } else {
+        console.error('Add token modal close button not found in DOM');
+    }
+    
+    if (saveNewTokenButton) {
+        saveNewTokenButton.addEventListener('click', saveNewToken);
+    } else {
+        console.error('Save new token button not found in DOM');
+    }
 });
 
 // Ajouter ceci dans la fonction d'initialisation ou au début du fichier
@@ -996,18 +1023,28 @@ document.getElementById('logoutButton').addEventListener('click', logout);
 
 // Function to open the add token modal
 function openAddTokenModal() {
+    console.log('Opening add token modal');
     const modal = document.getElementById('addTokenModal');
-    modal.style.display = "block";
+    if (modal) {
+        modal.style.display = "block";
+    } else {
+        console.error('Add token modal not found in DOM');
+    }
 }
 
 // Function to close the add token modal
 function closeAddTokenModal() {
     const modal = document.getElementById('addTokenModal');
-    modal.style.display = "none";
+    if (modal) {
+        modal.style.display = "none";
+    } else {
+        console.error('Add token modal not found in DOM');
+    }
 }
 
 // Function to save the new token
 async function saveNewToken() {
+    console.log('Saving new token');
     const newToken = {
         ticker: document.getElementById('newTicker').value,
         launchDate: document.getElementById('newLaunchDate').value,
@@ -1048,13 +1085,6 @@ async function saveNewToken() {
     // Close the modal
     closeAddTokenModal();
 }
-
-// Event listeners for the add token button and modal
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('addTokenButton').addEventListener('click', openAddTokenModal);
-    document.querySelector('#addTokenModal .close').addEventListener('click', closeAddTokenModal);
-    document.getElementById('saveNewTokenButton').addEventListener('click', saveNewToken);
-});
 
 // Update the visibility of the add token button based on admin status
 async function updateAddTokenButtonVisibility() {
