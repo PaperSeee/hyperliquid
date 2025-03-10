@@ -1364,3 +1364,30 @@ td.last-updated {
 
 /* ...existing code... */
 
+.add-token-button {
+    display: none; /* Hidden by default */
+    background: #22543D;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.add-token-button:hover {
+    background: #1a4231;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 84, 61, 0.2);
+}
+
+[data-theme="dark"] .add-token-button {
+    background: #4ade80;
+    color: #0f172a;
+}
+
+[data-theme="dark"] .add-token-button:hover {
+    background: #22c55e;
+}
+

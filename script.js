@@ -532,6 +532,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Vérifiez l'état de l'authentification et mettez à jour l'interface
     await updateModalView();
     await updateEditButtonVisibility();
+    
+    // Add Token button setup
+    const addTokenButton = document.getElementById('addTokenButton');
+    const addTokenModal = document.getElementById('addTokenModal');
+    const addTokenCloseButton = document.querySelector('#addTokenModal .close');
+    const saveNewTokenButton = document.getElementById('saveNewTokenButton');
+    
+    if (addTokenButton) {
+        addTokenButton.addEventListener('click', openAddTokenModal);
+    } else {
+        console.error('Add Token button not found');
+    }
+    
+    if (addTokenCloseButton) {
+        addTokenCloseButton.addEventListener('click', closeAddTokenModal);
+    } else {
+        console.error('Add Token modal close button not found');
+    }
+    
+    if (saveNewTokenButton) {
+        saveNewTokenButton.addEventListener('click', saveNewToken);
+    } else {
+        console.error('Save New Token button not found');
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+        if (event.target === addTokenModal) {
+            closeAddTokenModal();
+        }
+    });
+    
+    // Update admin buttons visibility
+    await updateAdminButtonsVisibility();
 });
 
 // Ajouter ceci dans la fonction d'initialisation ou au début du fichier
@@ -709,12 +743,7 @@ function toggleSocialLinks() {
 
 // Function to update the visibility of the Edit Data button
 async function updateEditButtonVisibility() {
-    const editButton = document.getElementById('editButton');
-    if (await checkAdminStatus()) {
-        editButton.style.display = 'block';
-    } else {
-        editButton.style.display = 'none';
-    }
+    await updateAdminButtonsVisibility();
 }
 
 // Function to open the edit panel
@@ -993,3 +1022,117 @@ document.getElementById('loginButton').addEventListener('click', () => {
 });
 
 document.getElementById('logoutButton').addEventListener('click', logout);
+
+// Function to open the add token modal
+function openAddTokenModal() {
+    console.log('Opening add token modal');
+    const modal = document.getElementById('addTokenModal');
+    if (modal) {
+        // Reset form fields
+        document.getElementById('newTicker').value = '';
+        document.getElementById('newLaunchDate').value = '';
+        document.getElementById('newTeamAllocation').value = '';
+        document.getElementById('newAirdrop1').value = '';
+        document.getElementById('newAirdrop2').value = '';
+        document.getElementById('newDevTeamContact').value = '';
+        document.getElementById('newMarketPrice').value = '';
+        document.getElementById('newLaunchPrice').value = '';
+        document.getElementById('newLaunchMarketcap').value = '';
+        document.getElementById('newLaunchCircSupply').value = '';
+        document.getElementById('newTwitterHandle').value = '';
+        document.getElementById('newTelegramDiscord').value = '';
+        document.getElementById('newWebsite').value = '';
+        
+        modal.style.display = "block";
+    } else {
+        console.error('Add token modal not found in DOM');
+    }
+}
+
+// Function to close the add token modal
+function closeAddTokenModal() {
+    const modal = document.getElementById('addTokenModal');
+    if (modal) {
+        modal.style.display = "none";
+    } else {
+        console.error('Add token modal not found in DOM');
+    }
+}
+
+// Function to save the new token
+async function saveNewToken() {
+    console.log('Saving new token');
+    
+    try {
+        const isAdmin = await checkAdminStatus();
+        if (!isAdmin) {
+            alert('You must be an admin to add tokens');
+            return;
+        }
+        
+        const newToken = {
+            name: document.getElementById('newTicker').value,
+            launchDate: document.getElementById('newLaunchDate').value,
+            teamAllocation: document.getElementById('newTeamAllocation').value,
+            airdrop1: document.getElementById('newAirdrop1').value ? {
+                percentage: document.getElementById('newAirdrop1').value.split('%')[0],
+                token: document.getElementById('newAirdrop1').value.split(' ')[1] || ''
+            } : null,
+            airdrop2: document.getElementById('newAirdrop2').value ? {
+                percentage: document.getElementById('newAirdrop2').value.split('%')[0],
+                token: document.getElementById('newAirdrop2').value.split(' ')[1] || ''
+            } : null,
+            devTeamContact: document.getElementById('newDevTeamContact').value,
+            markPx: document.getElementById('newMarketPrice').value.replace('$', ''),
+            startPx: document.getElementById('newLaunchPrice').value.replace('$', ''),
+            launchMarketCap: document.getElementById('newLaunchMarketcap').value.replace('$', ''),
+            launchCircSupply: document.getElementById('newLaunchCircSupply').value,
+            twitter: document.getElementById('newTwitterHandle').value.replace('@', ''),
+            telegram: document.getElementById('newTelegramDiscord').value,
+            website: document.getElementById('newWebsite').value
+        };
+
+        // Validate required fields
+        if (!newToken.name) {
+            alert('Ticker name is required');
+            return;
+        }
+
+        // Send the data to the server
+        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens', {
+            method: 'POST',
+            body: JSON.stringify(newToken)
+        });
+
+        if (response.ok) {
+            // Add the new token to the table locally
+            await loadData(); // Refresh data from server
+            
+            // Close the modal
+            closeAddTokenModal();
+            
+            // Show success message
+            alert('Token added successfully');
+        } else {
+            throw new Error('Failed to add token');
+        }
+    } catch (error) {
+        console.error('Error saving new token:', error);
+        alert('An error occurred while adding the token');
+    }
+}
+
+// Function to update the visibility of admin buttons
+async function updateAdminButtonsVisibility() {
+    const isAdmin = await checkAdminStatus();
+    const editButton = document.getElementById('editButton');
+    const addTokenButton = document.getElementById('addTokenButton');
+    
+    if (isAdmin) {
+        editButton.style.display = 'block';
+        addTokenButton.style.display = 'block';
+    } else {
+        editButton.style.display = 'none';
+        addTokenButton.style.display = 'none';
+    }
+}
