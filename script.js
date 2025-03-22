@@ -38,7 +38,7 @@ async function fetchWithAuth(url, options = {}) {
 // Remplacez votre fonction checkAdminStatus existante
 async function checkAdminStatus() {
     try {
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/check-auth');
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/check-auth');
         return response.ok;
     } catch (error) {
         console.error('Error checking admin status:', error);
@@ -109,7 +109,7 @@ async function updateModalView() {
 // Fonction pour charger les données
 async function loadTickerData(ticker) {
     try {
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens');
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
         const data = await response.json();
         console.log('Data received from API:', data);
         
@@ -174,7 +174,7 @@ async function saveTickerData() {
         };
         const comment = document.getElementById('comments').value;
 
-        const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             body: JSON.stringify({
                 ...checkboxes,
@@ -301,7 +301,7 @@ function formatLastUpdated(timestamp) {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Charger les données depuis l'API backend
-        const response = await fetch('https://backend-finalllll.vercel.app/api/tokens');
+        const response = await fetch('https://backend-finalsure.vercel.app/api/tokens');
         const data = await response.json();
         console.log('Data received from API:', data); // Log the data received from the API
 
@@ -709,7 +709,7 @@ async function saveModalChanges() {
     };
 
     try {
-        await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+        await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             body: JSON.stringify(data)
         });
@@ -829,7 +829,7 @@ async function saveEditedData() {
 
         // Send request to server to update data
         try {
-            const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${tokenIndex}`, {
+            const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
                 method: 'PUT',
                 body: JSON.stringify(data)
             });
@@ -880,7 +880,7 @@ async function loadData() {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens');
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
         const tokens = await response.json();
         
         if (!Array.isArray(tokens)) {
@@ -934,7 +934,7 @@ async function loadData() {
                                 const confirmed = confirm('Voulez-vous modifier ce surlignage?');
                                 if (confirmed) {
                                     try {
-                                        const response = await fetchWithAuth(`https://backend-finalllll.vercel.app/api/tokens/${token.tokenIndex}/highlight`, {
+                                        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${token.tokenIndex}/highlight`, {
                                             method: 'PUT',
                                             body: JSON.stringify({
                                                 highlight: !el.classList.contains('active')
@@ -969,7 +969,7 @@ document.addEventListener('DOMContentLoaded', loadData);
 // Function to handle user login
 async function login(username, password) {
     try {
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/login', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/login', {
             method: 'POST',
             body: JSON.stringify({ username, password })
         });
@@ -989,7 +989,7 @@ async function login(username, password) {
 // Function to handle user logout
 async function logout() {
     try {
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/logout', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/logout', {
             method: 'POST'
         });
 
@@ -1007,7 +1007,7 @@ async function logout() {
 // Function to check if the user is authenticated
 async function checkAuth() {
     try {
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/check-auth');
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/check-auth');
         return response.ok;
     } catch {
         return false;
@@ -1099,7 +1099,7 @@ async function saveNewToken() {
         }
 
         // Send the data to the server
-        const response = await fetchWithAuth('https://backend-finalllll.vercel.app/api/tokens', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens', {
             method: 'POST',
             body: JSON.stringify(newToken)
         });
