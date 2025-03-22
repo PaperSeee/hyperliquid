@@ -26,7 +26,7 @@
     --unlisted-text: #4ade80;
 }
 
-/* Ajout de styles spécifiques pour le mode sombre */
+/* Dark mode specific styles */
 [data-theme="dark"] .social-banner {
     background: rgba(51, 65, 85, 0.3);
     border-color: rgba(71, 85, 105, 0.4);
@@ -133,13 +133,11 @@
     color: #4ade80;
 }
 
-/* Modification du logo en mode sombre */
 [data-theme="dark"] .logo img {
     filter: brightness(1) invert(1);
     transition: filter 0.3s ease;
 }
 
-/* Améliorations pour les unlisted tokens */
 [data-theme="dark"] .unlisted-tokens {
     background: var(--unlisted-card-bg);
     border: 1px solid rgba(74, 222, 128, 0.2);
@@ -168,7 +166,6 @@
     box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
 }
 
-/* Ajout de styles spécifiques pour le mode sombre des labels des champs sociaux dans le modal */
 [data-theme="dark"] .social-links-area {
     background: rgba(51, 65, 85, 0.3);
 }
@@ -217,7 +214,6 @@ body {
 
 .header-content {
     max-width: 1800px;
-    margin: 0 auto;
     padding: 0 2rem;
     display: flex;
     align-items: center;
@@ -255,15 +251,6 @@ body {
     transition: color 0.3s ease;
 }
 
-/* Mode sombre */
-[data-theme="dark"] .logo img {
-    filter: brightness(1) invert(1);
-}
-
-[data-theme="dark"] .logo-text {
-    color: var(--text-color);
-}
-
 /* Social Banner */
 .social-banner {
     flex-shrink: 0;
@@ -290,18 +277,11 @@ body {
 .social-banner a i, 
 .social-banner a svg {
     font-size: 1.1rem;
-    border-radius: 25px;
+    color: #22543D;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.social-banner a i, 
-.social-banner a svg {
-    font-size: 1.1rem;
-    color: #22543D;
 }
 
 .social-banner svg path {
@@ -313,7 +293,7 @@ body {
     transform: translateY(-2px);
 }
 
-social-banner svg {
+.social-banner svg {
     vertical-align: middle;
 }
 
@@ -340,7 +320,6 @@ social-banner svg {
 /* Table Styles */
 .table-container {
     overflow-x: auto;
-    width: 100%;
     padding: 1rem;
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
@@ -354,8 +333,6 @@ social-banner svg {
 table {
     width: max-content;
     min-width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
     border-collapse: separate;
 }
 
@@ -366,18 +343,12 @@ th {
     padding: 1.2rem 1rem;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
     border-bottom: 2px solid var(--border-color);
     white-space: nowrap;
     font-size: 0.95rem;
     letter-spacing: 0.5px;
     color: var(--text-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--table-header-bg);
-    border-bottom: 2px solid var(--border-color);
-    padding: 1rem;
 }
 
 td {
@@ -466,12 +437,11 @@ td a:hover {
 }
 
 tr:hover {
-    background: rgba(34, 84, 61, 0.15);
+    background: var(--hover-bg);
     cursor: pointer;
 }
 
 tr:hover td {
-    background: var(--hover-bg);
     color: #22543D;
 }
 
@@ -562,15 +532,15 @@ tr:hover td {
 .modal-content {
     position: relative;
     background: var(--bg-color);
-    margin: 1.5% auto;  /* Réduit de 2% à 1.5% */
-    padding: 1rem;      /* Réduit de 1.2rem à 1rem */
+    margin: 1.5% auto;
+    padding: 1rem;
     border: 1px solid var(--border-color);
-    width: 85%;        /* Réduit de 90% à 85% */
-    max-width: 450px;  /* Réduit de 500px à 450px */
+    width: 85%;
+    max-width: 450px;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    max-height: 85vh;  /* Ajouté pour limiter la hauteur */
-    overflow-y: auto;  /* Ajouté pour permettre le défilement */
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 @keyframes modalAppear {
@@ -582,16 +552,16 @@ tr:hover td {
 
 .modal-content h2 {
     color: #22543D;
-    font-size: 1.2rem;    /* Réduit de 1.3rem à 1.2rem */
-    margin-bottom: 0.8rem; /* Réduit de 1rem à 0.8rem */
-    padding-bottom: 0.6rem;/* Réduit de 0.8rem à 0.6rem */
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.6rem;
     border-bottom: 2px solid rgba(34, 84, 61, 0.1);
 }
 
 .modal-content h3 {
     color: #22543D;
-    font-size: 1rem;    /* Réduit de 1.1rem à 1rem */
-    margin-bottom: 0.8rem; /* Réduit de 1rem à 0.8rem */
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .close {
@@ -623,8 +593,8 @@ tr:hover td {
 .checkbox-item {
     display: flex;
     align-items: center;
-    gap: 0.6rem;       /* Réduit de 0.8rem à 0.6rem */
-    padding: 0.4rem;   /* Réduit de 0.5rem à 0.4rem */
+    gap: 0.6rem;
+    padding: 0.4rem;
     transition: all 0.3s ease;
 }
 
@@ -643,13 +613,13 @@ tr:hover td {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
-    margin-top: 0.8rem;  /* Réduit de 1.5rem à 0.8rem */
+    margin-top: 0.8rem;
 }
 
 .comments-area textarea {
     width: 100%;
-    height: 80px;       /* Réduit de 100px à 80px */
-    padding: 0.6rem;    /* Réduit de 0.8rem à 0.6rem */
+    height: 80px;
+    padding: 0.6rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     resize: vertical;
@@ -671,8 +641,8 @@ tr:hover td {
 }
 
 .save-button {
-    margin-top: 0.6rem;  /* Réduit de 0.8rem à 0.6rem */
-    padding: 0.5rem 1rem;/* Réduit padding */
+    margin-top: 0.6rem;
+    padding: 0.5rem 1rem;
     background: #22543D;
     color: white;
     border: none;
@@ -682,8 +652,8 @@ tr:hover td {
     font-size: 1rem;
     transition: all 0.3s ease;
     width: 100%;
-    position: sticky;    /* Ajouté pour garder le bouton visible */
-    bottom: 0;          /* Ajouté pour garder le bouton visible */
+    position: sticky;
+    bottom: 0;
     background: var(--bg-color);
     z-index: 1;
 }
@@ -729,12 +699,11 @@ copyright {
     position: relative;
     width: 300px;
     min-width: 200px;
-    /* Supprimé: margin-left: auto; */
 }
 
 .search-container input {
     width: 100%;
-    padding: 8px 35px 8px 38px;  /* Augmenté le padding gauche pour l'icône */
+    padding: 8px 35px 8px 38px;
     border: 1px solid var(--border-color);
     border-radius: 20px;
     background: rgba(74, 222, 128, 0.05);
@@ -751,7 +720,7 @@ copyright {
 
 .search-container .search-icon {
     position: absolute;
-    left: 12px;  /* Changé de right à left */
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: #22543D;
@@ -767,8 +736,7 @@ copyright {
     border-radius: 12px;
     padding: 1rem;
     margin: 1rem 2rem;
-    width: calc(100% - 4rem); /* Modifié: prend toute la largeur moins les marges */
-    max-width: none; /* Supprimé la limite de largeur */
+    width: calc(100% - 4rem);
     transition: all 0.3s ease;
 }
 
@@ -781,7 +749,7 @@ copyright {
 }
 
 .unlisted-tokens .counter {
-    color: var(--text-color);
+    color: var (--text-color);
 }
 
 .unlisted-tokens table {
@@ -791,8 +759,8 @@ copyright {
 
 .unlisted-tokens tbody {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Ajusté la taille minimale */
-    gap: 1rem; /* Augmenté l'espacement */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
 }
 
 .unlisted-tokens tr {
@@ -806,9 +774,9 @@ copyright {
 }
 
 .unlisted-tokens td {
-    padding: 0.75rem; /* Augmenté le padding */
+    padding: 0.75rem;
     border: none;
-    font-size: 0.9rem; /* Augmenté la taille de la police */
+    font-size: 0.9rem;
     font-weight: 500;
     color: #22543D;
     transition: color 0.3s ease;
@@ -834,16 +802,14 @@ copyright {
 
 /* Social Links Styles */
 .social-links-area {
-    margin: 0.8rem 0;    /* Réduit de 1.2rem à 0.8rem */
-    padding: 0.8rem;   /* Réduit de 1rem à 0.8rem */
+    padding: 0.8rem;
     background: rgba(34, 84, 61, 0.05);
-    padding: 1.5rem;
     border-radius: 12px;
     margin: 1.5rem 0;
 }
 
 .social-input {
-    margin: 0.6rem 0;  /* Réduit de 0.8rem à 0.6rem */
+    margin: 0.6rem 0;
     display: flex;
     align-items: center;
 }
@@ -856,7 +822,7 @@ copyright {
 
 .social-input input {
     flex: 1;
-    padding: 0.6rem;   /* Réduit de 0.8rem à 0.6rem */
+    padding: 0.6rem;
     border: 1px solid rgba(34, 84, 61, 0.2);
     border-radius: 8px;
     background: var(--bg-color);
@@ -934,13 +900,13 @@ copyright {
     }
 
     .search-container {
-        order: 1; /* Changé: de 3 à 1 */
+        order: 1;
         width: 100%;
         margin: 0.5rem 0;
     }
 
     .social-banner {
-        margin-left: auto; /* Ajouté */
+        margin-left: auto;
     }
 
     .filters {
@@ -1055,14 +1021,14 @@ copyright {
     }
 }
 
-/* Ajout pour le mode sombre */
+/* Dark mode for social links header */
 [data-theme="dark"] .social-links-header {
     background: rgba(51, 65, 85, 0.3);
 }
 
 /* Edit Data Button and Panel */
 .edit-button {
-    display: none; /* Hidden by default */
+    display: none;
     background: #22543D;
     color: white;
     padding: 0.5rem 1rem;
@@ -1077,7 +1043,7 @@ copyright {
 }
 
 .edit-panel {
-    display: block; /* Changed from 'none' */
+    display: none;
     position: fixed;
     top: 0;
     right: 0;
@@ -1113,13 +1079,13 @@ copyright {
 
 .edit-panel .panel-actions {
     display: flex;
-    flex-direction: column; /* Change to column layout */
-    gap: 0.5rem; /* Adjust gap for vertical layout */
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .edit-panel .save-button,
 .edit-panel .cancel-button {
-    width: 100%; /* Take full width */
+    width: 100%;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 8px;
@@ -1172,21 +1138,21 @@ copyright {
 }
 
 /* Table Column Widths */
-#mainTable th:nth-child(1),  /* Ticker N° */
+#mainTable th:nth-child(1),
 #mainTable td:nth-child(1) {
     width: 40px;
     min-width: 40px;
     text-align: center;
 }
 
-#mainTable th:nth-child(7),  /* Dev/Team */
+#mainTable th:nth-child(7),
 #mainTable td:nth-child(7) {
     width: 60px;
     min-width: 60px;
     text-align: center;
 }
 
-#mainTable th:nth-child(12),  /* Twitter Handle */
+#mainTable th:nth-child(12),
 #mainTable td:nth-child(12) {
     width: 100px;
     min-width: 100px;
@@ -1205,9 +1171,9 @@ copyright {
 .nav-links {
     display: flex;
     gap: 0.8rem;
-    margin-left: auto; /* Force à droite */
+    margin-left: auto;
     align-items: center;
-    justify-content: flex-end; /* Aligne les éléments à droite */
+    justify-content: flex-end;
 }
 
 .nav-btn {
@@ -1220,7 +1186,7 @@ copyright {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0; /* Empêche la compression des boutons */
+    flex-shrink: 0;
 }
 
 .nav-btn img {
@@ -1272,17 +1238,13 @@ copyright {
     }
 }
 
-/* ...existing code... */
-
 table th:nth-child(13), table td:nth-child(13) {
-    width: 200px; /* Adjust width as needed */
+    width: 200px;
 }
 
 table th:nth-child(14), table td:nth-child(14) {
-    width: 200px; /* Adjust width as needed */
+    width: 200px;
 }
-
-/* ...existing code... */
 
 .edit-button, .logout-button {
     padding: 8px 16px;
@@ -1331,10 +1293,9 @@ input[readonly] {
     background-color: var(--disabled-bg);
 }
 
-/* Style du bouton Edit Data */
 .edit-button {
-    display: none; /* Hidden by default */
-    opacity: 0; /* Start fully transparent */
+    display: none;
+    opacity: 0;
     transition: opacity 0.3s ease;
 }
 
@@ -1343,13 +1304,10 @@ input[readonly] {
     opacity: 1;
 }
 
-/* Last Updated Column Style */
 td.last-updated {
     font-size: 0.9rem;
     color: var(--secondary-text);
 }
-
-/* ...existing code... */
 
 .last-updated-info {
     margin-top: 0.5rem;
@@ -1362,10 +1320,8 @@ td.last-updated {
     color: rgba(226, 232, 240, 0.6);
 }
 
-/* ...existing code... */
-
 .add-token-button {
-    display: none; /* Hidden by default */
+    display: none;
     background: #22543D;
     color: white;
     padding: 0.5rem 1rem;

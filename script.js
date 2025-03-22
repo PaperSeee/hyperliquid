@@ -326,8 +326,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         let listedIndex = 1;
 
         tokens.forEach(token => {
-            // Si le token n'a pas de launchCircSupply (pas défini ou non initialisé)
-            if (!token.launchCircSupply) {
+            // Check if token has no Market Price - new condition for unlisted tokens
+            if (!token.markPx) {
                 const unlistedRow = document.createElement('tr');
                 unlistedRow.innerHTML = `<td>${token.name}</td>`;
                 unlistedTableBody.appendChild(unlistedRow);
@@ -456,28 +456,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     const unlistedTable = document.getElementById('unlistedTable').getElementsByTagName('tbody')[0];
 
     function moveTokenToMainTable(ticker) {
-        const rows = unlistedTable.getElementsByTagName('tr');
-        for (let i = 0; i < rows.length; i++) {
-            if (rows[i].getElementsByTagName('td')[0].innerText === ticker) {
-                const newRow = mainTable.insertRow();
-                // Add cells to the new row as needed
+        // Get the token data from the unlisted section
+        const rows = document.querySelectorAll('#unlistedTable tbody tr');
+        for (let row of rows) {
+            if (row.cells[0].textContent === ticker) {
+                // Create a new token with Market Price
+                const newTokenData = {
+                    name: ticker,
+                    markPx: "0.01", // Default market price
+                    tokenIndex: document.querySelectorAll('#mainTable tbody tr').length + 1 // Assign next number
+                };
+                
+                // Use the new token in the main table
+                const mainTableBody = document.querySelector('#mainTable tbody');
+                const newRow = document.createElement('tr');
+                const socialLinks = formatSocialLinks("", "", "", "");
+                
                 newRow.innerHTML = `
-                    <td>${mainTable.rows.length}</td>
-                    <td>${ticker}</td>
-                    <td>2024-XX-XX</td>
-                    <td>XX%</td>
-                    <td>XXX</td>
-                    <td>XXX</td>
+                    <td>${newTokenData.tokenIndex}</td>
+                    <td>${newTokenData.name}</td>
                     <td>N/A</td>
-                    <td>$X.XX</td>
-                    <td>$X.XX</td>
-                    <td>$XM</td>
-                    <td>XM</td>
-                    <td>@${ticker.toLowerCase()}</td>
-                    <td>discord.gg/${ticker.toLowerCase()}</td>
-                    <td>www.${ticker.toLowerCase()}.com</td>
+                    <td>N/A</td>
+                    <td>/</td>
+                    <td>/</td>
+                    <td>N/A</td>
+                    <td>${newTokenData.markPx}$</td>
+                    <td>N/A</td>
+                    <td>/</td>
+                    <td></td>
+                    <td>${socialLinks.twitterLink}</td>
+                    <td>${socialLinks.telegramDiscordLink}</td>
+                    <td>${socialLinks.websiteLink}</td>
+                    <td class="last-updated">${formatLastUpdated(new Date().toISOString())}</td>
                 `;
-                unlistedTable.deleteRow(i);
+                
+                mainTableBody.appendChild(newRow);
+                
+                // Remove from unlisted
+                row.remove();
+                
+                // Update the count
+                const unlistedCount = document.getElementById('unlistedCount');
+                const currentCount = parseInt(unlistedCount.textContent.match(/\d+/)[0], 10);
+                unlistedCount.textContent = `(${currentCount - 1})`;
+                
                 break;
             }
         }
@@ -907,7 +929,8 @@ async function loadData() {
         });
 
         uniqueTokens.forEach((token, index) => {
-            if (!token.launchCircSupply) {
+            // Check if token has no Market Price - this is the new condition for unlisted tokens
+            if (!token.markPx) {
                 const unlistedRow = document.createElement('tr');
                 unlistedRow.innerHTML = `<td>${token.name}</td>`;
                 unlistedTableBody.appendChild(unlistedRow);
