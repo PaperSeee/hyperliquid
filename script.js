@@ -38,8 +38,11 @@ async function fetchWithAuth(url, options = {}) {
 // Remplacez votre fonction checkAdminStatus existante
 async function checkAdminStatus() {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/check-auth');
-        return response.ok;
+        // Mise à jour pour utiliser le endpoint d'API correct
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/check-admin');
+        const data = await response.json();
+        console.log('Admin check response:', data);
+        return data.isAdmin === true;
     } catch (error) {
         console.error('Error checking admin status:', error);
         return false;
@@ -973,10 +976,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     sortTable(0); // Sort by the first column (Ticker N°) in ascending order by default
 });
 
-// Function to handle user login
+// Function to handle user login - mise à jour pour utiliser le bon endpoint
 async function login(username, password) {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/login', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/login', {
             method: 'POST',
             body: JSON.stringify({ username, password })
         });
@@ -993,10 +996,10 @@ async function login(username, password) {
     }
 }
 
-// Function to handle user logout
+// Function to handle user logout - mise à jour pour utiliser le bon endpoint
 async function logout() {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/logout', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/logout', {
             method: 'POST'
         });
 
@@ -1011,10 +1014,10 @@ async function logout() {
     }
 }
 
-// Function to check if the user is authenticated
+// Function to check if the user is authenticated - mise à jour pour utiliser le bon endpoint
 async function checkAuth() {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/check-auth');
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/check-auth');
         return response.ok;
     } catch {
         return false;
