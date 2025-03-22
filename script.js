@@ -311,9 +311,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const tokens = data;
 
-        // Trier les tokens par ordre alphabétique
-        tokens.sort((a, b) => a.name.localeCompare(b.name));
-
         const mainTableBody = document.querySelector('#mainTable tbody');
         const unlistedTableBody = document.querySelector('#unlistedTable tbody');
         const unlistedCount = document.getElementById('unlistedCount');
@@ -899,6 +896,13 @@ async function loadData() {
             index === self.findIndex(t => t.name === token.name)
         );
 
+        // Sort tokens by tokenIndex in ascending order
+        uniqueTokens.sort((a, b) => {
+            const aIndex = parseInt(a.tokenIndex, 10);
+            const bIndex = parseInt(b.tokenIndex, 10);
+            return aIndex - bIndex;
+        });
+
         uniqueTokens.forEach((token, index) => {
             if (!token.launchCircSupply) {
                 const unlistedRow = document.createElement('tr');
@@ -963,8 +967,11 @@ async function loadData() {
     }
 }
 
-// Load data on page load
-document.addEventListener('DOMContentLoaded', loadData);
+// Load data on page load and sort by tokenIndex in ascending order
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadData();
+    sortTable(0); // Sort by the first column (Ticker N°) in ascending order by default
+});
 
 // Function to handle user login
 async function login(username, password) {
