@@ -21,9 +21,6 @@
     --table-header-bg: rgba(51, 65, 85, 0.4);
     --hover-bg: rgba(51, 65, 85, 0.5);
     --filter-bg: rgba(15, 23, 42, 0.95);
-    --unlisted-card-bg: rgba(51, 65, 85, 0.4);
-    --unlisted-hover-bg: rgba(74, 222, 128, 0.1);
-    --unlisted-text: #4ade80;
 }
 
 /* Dark mode specific styles */
@@ -138,33 +135,7 @@
     transition: filter 0.3s ease;
 }
 
-[data-theme="dark"] .unlisted-tokens {
-    background: var(--unlisted-card-bg);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="dark"] .unlisted-tokens h2 {
-    color: #4ade80;
-    border-bottom-color: rgba(74, 222, 128, 0.2);
-}
-
-[data-theme="dark"] .unlisted-tokens tr {
-    background: rgba(74, 222, 128, 0.05);
-    border: 1px solid rgba(74, 222, 128, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-[data-theme="dark"] .unlisted-tokens td {
-    color: var(--unlisted-text);
-}
-
-[data-theme="dark"] .unlisted-tokens tr:hover {
-    background: var(--unlisted-hover-bg);
-    transform: translateY(-2px);
-    border-color: rgba(74, 222, 128, 0.3);
-    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
-}
+/* Remove all unlisted-tokens styles */
 
 [data-theme="dark"] .social-links-area {
     background: rgba(51, 65, 85, 0.3);
@@ -728,71 +699,6 @@ copyright {
     font-size: 1rem;
 }
 
-/* Unlisted Tokens Styles */
-.unlisted-tokens {
-    background: var(--unlisted-card-bg);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    padding: 1rem;
-    margin: 1rem 2rem;
-    width: calc(100% - 4rem);
-    transition: all 0.3s ease;
-}
-
-.unlisted-tokens h2 {
-    color: var(--text-color);
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.5rem;
-}
-
-.unlisted-tokens .counter {
-    color: var (--text-color);
-}
-
-.unlisted-tokens table {
-    width: 100%;
-    min-width: auto;
-}
-
-.unlisted-tokens tbody {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1rem;
-}
-
-.unlisted-tokens tr {
-    background: rgba(74, 222, 128, 0.05);
-    border-radius: 6px;
-    text-align: center;
-    transition: all 0.3s ease;
-    padding: 0.5rem;
-    border: 1px solid rgba(74, 222, 128, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-.unlisted-tokens td {
-    padding: 0.75rem;
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #22543D;
-    transition: color 0.3s ease;
-}
-
-.unlisted-tokens thead {
-    display: none;
-}
-
-.unlisted-tokens tr:hover {
-    background: var(--unlisted-hover-bg);
-    transform: translateY(-2px);
-    border-color: rgba(74, 222, 128, 0.3);
-    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
-}
-
 /* Counter Styles */
 .counter {
     font-size: 0.9rem;
@@ -886,11 +792,6 @@ copyright {
     .filters-container {
         padding: 1rem;
     }
-
-    .unlisted-tokens {
-        margin: 1rem;
-        width: calc(100% - 2rem);
-    }
 }
 
 @media screen and (max-width: 968px) {
@@ -975,10 +876,6 @@ copyright {
     .filter-button {
         width: 100%;
         justify-content: center;
-    }
-
-    .unlisted-tokens tbody {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
 
     .modal-content {

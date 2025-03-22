@@ -315,24 +315,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const tokens = data;
 
         const mainTableBody = document.querySelector('#mainTable tbody');
-        const unlistedTableBody = document.querySelector('#unlistedTable tbody');
-        const unlistedCount = document.getElementById('unlistedCount');
-        let unlistedTokens = 0;
-
         mainTableBody.innerHTML = '';
-        unlistedTableBody.innerHTML = '';
 
         // Index pour les tokens listés
         let listedIndex = 1;
 
         tokens.forEach(token => {
-            // Check if token has no Market Price - new condition for unlisted tokens
-            if (!token.markPx) {
-                const unlistedRow = document.createElement('tr');
-                unlistedRow.innerHTML = `<td>${token.name}</td>`;
-                unlistedTableBody.appendChild(unlistedRow);
-                unlistedTokens++;
-            } else {
+            // Only include tokens with markPx value
+            if (token.markPx) {
                 const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
@@ -357,16 +347,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // Mettre à jour le compteur
-        unlistedCount.textContent = `(${unlistedTokens})`;
-
     } catch (error) {
         console.error('Error loading data:', error);
     }
 
     const modal = document.getElementById('tickerModal');
     const mainTableBody = document.querySelector('#mainTable tbody');
-    const unlistedTableBody = document.querySelector('#unlistedTable tbody');
     const span = document.getElementsByClassName('close')[0];
     const saveButton = document.getElementById('saveButton');
 
@@ -379,31 +365,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Ouvrir le modal pour les tokens non listés
-    unlistedTableBody.addEventListener('click', (e) => {
-        const row = e.target.closest('tr');
-        if (row) {
-            const ticker = row.cells[0].textContent; // Pour les unlisted tokens, le ticker est dans la première colonne
-            openModalWithData(ticker, false);
-        }
-    });
-
     // Ajouter cette nouvelle fonction pour gérer l'ouverture du modal
     function openModalWithData(ticker, isListed) {
         document.getElementById('modalTitle').textContent = ticker;
-        if (isListed) {
-            loadTickerData(ticker);
-        } else {
-            // Réinitialiser les champs pour un nouveau token non listé
-            document.getElementById('devReputation').checked = false;
-            document.getElementById('spreadLessThanThree').checked = false;
-            document.getElementById('thickObLiquidity').checked = false;
-            document.getElementById('noSellPressure').checked = false;
-            document.getElementById('twitterHandle').value = '';
-            document.getElementById('telegramDiscord').value = '';
-            document.getElementById('website').value = '';
-            document.getElementById('comments').value = '';
-        }
+        loadTickerData(ticker);
         updateModalView();
         modal.style.display = "block";
     }
@@ -453,58 +418,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     const mainTable = document.getElementById('mainTable').getElementsByTagName('tbody')[0];
-    const unlistedTable = document.getElementById('unlistedTable').getElementsByTagName('tbody')[0];
-
-    function moveTokenToMainTable(ticker) {
-        // Get the token data from the unlisted section
-        const rows = document.querySelectorAll('#unlistedTable tbody tr');
-        for (let row of rows) {
-            if (row.cells[0].textContent === ticker) {
-                // Create a new token with Market Price
-                const newTokenData = {
-                    name: ticker,
-                    markPx: "0.01", // Default market price
-                    tokenIndex: document.querySelectorAll('#mainTable tbody tr').length + 1 // Assign next number
-                };
-                
-                // Use the new token in the main table
-                const mainTableBody = document.querySelector('#mainTable tbody');
-                const newRow = document.createElement('tr');
-                const socialLinks = formatSocialLinks("", "", "", "");
-                
-                newRow.innerHTML = `
-                    <td>${newTokenData.tokenIndex}</td>
-                    <td>${newTokenData.name}</td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                    <td>/</td>
-                    <td>/</td>
-                    <td>N/A</td>
-                    <td>${newTokenData.markPx}$</td>
-                    <td>N/A</td>
-                    <td>/</td>
-                    <td></td>
-                    <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.telegramDiscordLink}</td>
-                    <td>${socialLinks.websiteLink}</td>
-                    <td class="last-updated">${formatLastUpdated(new Date().toISOString())}</td>
-                `;
-                
-                mainTableBody.appendChild(newRow);
-                
-                // Remove from unlisted
-                row.remove();
-                
-                // Update the count
-                const unlistedCount = document.getElementById('unlistedCount');
-                const currentCount = parseInt(unlistedCount.textContent.match(/\d+/)[0], 10);
-                unlistedCount.textContent = `(${currentCount - 1})`;
-                
-                break;
-            }
-        }
-    }
-
 
     // Add click handlers for all table headers
     const headers = document.querySelectorAll('#mainTable th');
@@ -910,11 +823,7 @@ async function loadData() {
         }
 
         const mainTableBody = document.querySelector('#mainTable tbody');
-        const unlistedTableBody = document.querySelector('#unlistedTable tbody');
-        let unlistedTokens = 0;
-
         mainTableBody.innerHTML = '';
-        unlistedTableBody.innerHTML = '';
 
         // Filter out duplicate tickers
         const uniqueTokens = tokens.filter((token, index, self) =>
@@ -929,13 +838,8 @@ async function loadData() {
         });
 
         uniqueTokens.forEach((token, index) => {
-            // Check if token has no Market Price - this is the new condition for unlisted tokens
-            if (!token.markPx) {
-                const unlistedRow = document.createElement('tr');
-                unlistedRow.innerHTML = `<td>${token.name}</td>`;
-                unlistedTableBody.appendChild(unlistedRow);
-                unlistedTokens++;
-            } else {
+            // Only include tokens with markPx value
+            if (token.markPx) {
                 const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
                 const listedRow = document.createElement('tr');
                 listedRow.innerHTML = `
@@ -986,8 +890,6 @@ async function loadData() {
                 mainTableBody.appendChild(listedRow);
             }
         });
-
-        document.getElementById('unlistedCount').textContent = `(${unlistedTokens})`;
     } catch (error) {
         console.error('Error loading data:', error);
     }
