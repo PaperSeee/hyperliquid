@@ -917,8 +917,8 @@ async function login(username, password) {
             isAdmin = true;
             
             // Update UI to show admin features immediately
-            await updateAdminButtonsVisibility();
-            await updateModalView();
+            updateAdminButtonsVisibility();
+            updateModalView();
             
             alert('Login successful!');
             
@@ -1095,13 +1095,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Update UI elements based on auth status
     await updateAdminButtonsVisibility();
-    await updateModalView();
     
     // Then load data
     await loadData();
     
-    // Sort table by default
     sortTable(0);
     
-    // ...existing code...
 });
