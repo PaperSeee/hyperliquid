@@ -912,8 +912,23 @@ async function login(username, password) {
         const data = await response.json();
         if (data.token) {
             localStorage.setItem('authToken', data.token);
+            
+            // Set admin flag if login is successful
+            isAdmin = true;
+            
+            // Update UI to show admin features immediately
+            await updateAdminButtonsVisibility();
+            await updateModalView();
+            
             alert('Login successful!');
-            window.location.href = '/index.html';
+            
+            // Redirect back to the main page with admin view
+            if (window.location.pathname.includes('login.html')) {
+                window.location.href = '/index.html';
+            } else {
+                // If already on index page, just refresh data
+                await loadData();
+            }
         }
     } catch (error) {
         console.error('Error during login:', error);
@@ -1071,3 +1086,22 @@ async function updateAdminButtonsVisibility() {
         addTokenButton.style.display = 'none';
     }
 }
+
+// Modify the DOMContentLoaded event to check auth status at load time
+document.addEventListener('DOMContentLoaded', async () => {
+    // Check authentication status first
+    isAdmin = await checkAdminStatus();
+    console.log('Initial admin status check:', isAdmin);
+    
+    // Update UI elements based on auth status
+    await updateAdminButtonsVisibility();
+    await updateModalView();
+    
+    // Then load data
+    await loadData();
+    
+    // Sort table by default
+    sortTable(0);
+    
+    // ...existing code...
+});
