@@ -314,8 +314,22 @@ function logout() {
 
 // Save token changes from modal
 async function saveTokenChanges() {
+    // Double-check admin status for security
     if (!isAdmin()) {
         alert('You must be an admin to save changes');
+        // Reset UI to read-only state
+        const inputs = document.querySelectorAll('#tickerModal input, #tickerModal textarea');
+        inputs.forEach(input => {
+            input.setAttribute('readonly', 'readonly');
+            input.setAttribute('disabled', 'disabled');
+            input.style.backgroundColor = 'var(--disabled-bg)';
+            input.style.cursor = 'not-allowed';
+        });
+        // Hide save button
+        const saveButton = document.getElementById('saveButton');
+        if (saveButton) {
+            saveButton.style.display = 'none';
+        }
         return;
     }
     
@@ -513,7 +527,9 @@ async function openTokenModal(ticker) {
     document.getElementById('tickerModal').style.display = 'block';
     
     // Afficher explicitement la grille de cases à cocher
-    document.querySelector('.checkbox-grid').style.display = 'grid';
+    if (document.querySelector('.checkbox-grid')) {
+        document.querySelector('.checkbox-grid').style.display = 'grid';
+    }
     
     // Load token data and wait for it to complete
     await loadTokenData(ticker);
@@ -522,27 +538,41 @@ async function openTokenModal(ticker) {
     const isUserAdmin = isAdmin();
     console.log("Admin status when opening modal:", isUserAdmin);
     
-    // Enable/disable inputs and controls
+    // Enable/disable inputs and controls - Force with both disabled and readonly attributes
     document.querySelectorAll('#tickerModal input, #tickerModal textarea').forEach(input => {
-        input.readOnly = !isUserAdmin;
-        input.disabled = !isUserAdmin;
-        input.style.backgroundColor = isUserAdmin ? 'var(--bg-color)' : 'var(--disabled-bg)';
-        input.style.cursor = isUserAdmin ? 'text' : 'default';
+        if (!isUserAdmin) {
+            input.setAttribute('readonly', 'readonly');
+            input.setAttribute('disabled', 'disabled');
+            input.style.backgroundColor = 'var(--disabled-bg)';
+            input.style.cursor = 'not-allowed';
+            input.style.opacity = '0.7';
+        } else {
+            input.removeAttribute('readonly');
+            input.removeAttribute('disabled');
+            input.style.backgroundColor = 'var(--bg-color)';
+            input.style.cursor = 'text';
+            input.style.opacity = '1';
+        }
     });
     
+    // Apply the same to checkbox inputs if they exist
     document.querySelectorAll('#tickerModal .checkbox-item input').forEach(cb => {
-        cb.disabled = !isUserAdmin;
-        cb.style.cursor = isUserAdmin ? 'pointer' : 'default';
+        if (!isUserAdmin) {
+            cb.setAttribute('disabled', 'disabled');
+            cb.style.cursor = 'not-allowed';
+        } else {
+            cb.removeAttribute('disabled');
+            cb.style.cursor = 'pointer';
+        }
     });
     
     // Show/hide save button de manière explicite
     const saveButton = document.getElementById('saveButton');
     if (saveButton) {
-        // Réinitialiser complètement le style
-        saveButton.style = '';
-        saveButton.style.display = isUserAdmin ? 'block' : 'none';
-        // Forcer le style du bouton pour s'assurer qu'il est visible
-        if (isUserAdmin) {
+        if (!isUserAdmin) {
+            saveButton.style.display = 'none';
+        } else {
+            saveButton.style.display = 'block';
             saveButton.style.backgroundColor = '#22543D';
             saveButton.style.color = 'white';
             saveButton.style.margin = '0.6rem 0 0 0';
