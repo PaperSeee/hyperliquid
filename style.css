@@ -65,12 +65,12 @@
 
 [data-theme="dark"] .modal-content {
     background: #1e293b;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .modal-content h2 {
     color: #4ade80;
-    border-bottom-color: rgba(74, 222, 128, 0.2);
+    border-bottom-color: rgba(74, 222, 128, 0.25);
 }
 
 [data-theme="dark"] .modal-content h3 {
@@ -138,7 +138,7 @@
 /* Remove all unlisted-tokens styles */
 
 [data-theme="dark"] .social-links-area {
-    background: rgba(51, 65, 85, 0.3);
+    background: rgba(51, 65, 85, 0.4);
 }
 
 [data-theme="dark"] .social-input label {
@@ -503,15 +503,18 @@ tr:hover td {
 .modal-content {
     position: relative;
     background: var(--bg-color);
-    margin: 1.5% auto;
-    padding: 1rem;
+    margin: 2% auto;
+    padding: 1.5rem;
     border: 1px solid var(--border-color);
     width: 85%;
-    max-width: 450px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     max-height: 85vh;
     overflow-y: auto;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 @keyframes modalAppear {
@@ -523,16 +526,18 @@ tr:hover td {
 
 .modal-content h2 {
     color: #22543D;
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 2px solid rgba(34, 84, 61, 0.1);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid rgba(34, 84, 61, 0.15);
+    text-align: center;
 }
 
 .modal-content h3 {
     color: #22543D;
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-bottom: 0.8rem;
+    font-weight: 600;
 }
 
 .close {
@@ -583,19 +588,24 @@ tr:hover td {
 .comments-area {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-top: 0.8rem;
+    gap: 1.2rem;
+    margin-top: 1rem;
+    background: rgba(34, 84, 61, 0.04);
+    padding: 1rem;
+    border-radius: 12px;
 }
 
 .comments-area textarea {
     width: 100%;
-    height: 80px;
-    padding: 0.6rem;
+    height: 90px;
+    padding: 0.8rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     resize: vertical;
     background: var(--bg-color);
     color: var(--text-color);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 .comments-area label {
@@ -608,7 +618,8 @@ tr:hover td {
 .comments-area textarea:focus {
     outline: none;
     border-color: #22543D;
-    box-shadow: 0 0 0 3px rgba(34, 84, 61, 0.1);
+    box-shadow: 0 0 0 3px rgba(34, 84, 61, 0.15);
+    transform: translateY(-1px);
 }
 
 .save-button {
@@ -708,10 +719,11 @@ copyright {
 
 /* Social Links Styles */
 .social-links-area {
-    padding: 0.8rem;
-    background: rgba(34, 84, 61, 0.05);
+    padding: 1rem;
+    background: rgba(34, 84, 61, 0.07);
     border-radius: 12px;
     margin: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .social-input {
@@ -1242,5 +1254,48 @@ td.last-updated {
 
 [data-theme="dark"] .add-token-button:hover {
     background: #22c55e;
+}
+
+/* Ajouter ces règles à la fin du fichier */
+#saveButton {
+    display: block;
+    background: #22543D;
+    color: white;
+    margin-top: 1.2rem;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(34, 84, 61, 0.15);
+}
+
+[data-theme="dark"] #saveButton {
+    background: #4ade80;
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.2);
+}
+
+#saveButton:hover {
+    background: #1a4231;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(34, 84, 61, 0.25);
+}
+
+[data-theme="dark"] #saveButton:hover {
+    background: #22c55e;
+}
+
+/* Règles spécifiques pour s'assurer que les champs du modal sont éditables */
+#tickerModal input:not([disabled]),
+#tickerModal textarea:not([disabled]) {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    cursor: text;
 }
 

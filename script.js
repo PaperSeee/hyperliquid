@@ -49,9 +49,12 @@ function formatMarketCap(value) {
     return `${formatNumber(num)}$`;
 }
 
+// Améliorer formatDate pour gérer "NA" ou "N/A"
 function formatDate(dateString) {
-    if (!dateString) return 'N/A';
+    if (!dateString || dateString === 'NA' || dateString === 'N/A') return 'N/A';
     const date = new Date(dateString);
+    // Vérifier si la date est valide
+    if (isNaN(date.getTime())) return 'N/A';
     return date.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
@@ -113,31 +116,36 @@ async function loadData() {
             return aIndex - bIndex;
         });
 
-        // Populate table with tokens that have markPx value
-        tokens.forEach(token => {
-            if (token.markPx) {
-                const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${token.tokenIndex}</td>
-                    <td>${token.name}</td>
-                    <td>${formatDate(token.launchDate)}</td>
-                    <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
-                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
-                    <td>${token.devTeamContact || 'N/A'}</td>
-                    <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
-                    <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
-                    <td>${formatMarketCap(token.launchMarketCap)}</td>
-                    <td>${formatNumber(token.launchCircSupply)}</td>
-                    <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.telegramDiscordLink}</td>
-                    <td>${socialLinks.websiteLink}</td>
-                    <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
-                `;
-                
-                mainTableBody.appendChild(row);
-            }
+        // Filter tokens that have markPx value
+        const visibleTokens = tokens.filter(token => token.markPx);
+        
+        // Populate table with sequential numbering
+        visibleTokens.forEach((token, index) => {
+            const sequentialIndex = index + 1; // Use sequential numbering from 1
+            const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${sequentialIndex}</td>
+                <td>${token.name}</td>
+                <td>${formatDate(token.launchDate)}</td>
+                <td>${token.teamAllocation || 'N/A'}</td>
+                <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
+                <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
+                <td>${token.devTeamContact || 'N/A'}</td>
+                <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
+                <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
+                <td>${formatMarketCap(token.launchMarketCap)}</td>
+                <td>${formatNumber(token.launchCircSupply)}</td>
+                <td>${socialLinks.twitterLink}</td>
+                <td>${socialLinks.telegramDiscordLink}</td>
+                <td>${socialLinks.websiteLink}</td>
+                <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
+            `;
+            
+            // Store the original token index as a data attribute for use when saving
+            row.dataset.tokenIndex = token.tokenIndex;
+            
+            mainTableBody.appendChild(row);
         });
 
         // Update admin UI after loading data
@@ -173,14 +181,10 @@ async function loadTokenData(ticker) {
         
         if (!token) {
             console.warn(`Token not found: ${ticker}`);
-            return;
+            return null;
         }
         
-        // Populate modal fields
-        document.getElementById('devReputation').checked = token.devReputation || false;
-        document.getElementById('spreadLessThanThree').checked = token.spreadLessThanThree || false;
-        document.getElementById('thickObLiquidity').checked = token.thickObLiquidity || false;
-        document.getElementById('noSellPressure').checked = token.noSellPressure || false;
+        // Suppression des références aux checkbox retirées
         
         document.getElementById('twitterHandle').value = token.twitter || '';
         document.getElementById('telegramDiscord').value = token.telegram || token.discord || '';
@@ -197,8 +201,11 @@ async function loadTokenData(ticker) {
         
         document.getElementById('devTeamContact').value = token.devTeamContact || '';
         document.getElementById('modalLastUpdated').textContent = formatLastUpdated(token.lastUpdated);
+        
+        return token;
     } catch (error) {
         console.error('Error loading token data:', error);
+        return null;
     }
 }
 
@@ -228,16 +235,13 @@ function updateAdminUI() {
         }
     }
     
-    if (!document.getElementById('logoutButton') && adminStatus) {
-        const leftSection = document.querySelector('.left-section');
-        if (leftSection) {
-            const logoutButton = document.createElement('button');
-            logoutButton.id = 'logoutButton';
-            logoutButton.className = 'edit-button';
-            logoutButton.textContent = 'Logout';
-            logoutButton.addEventListener('click', logout);
-            leftSection.appendChild(logoutButton);
-        }
+    // Don't create a new logout button, just make sure the existing one has an event listener
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        // Remove any existing listeners to avoid duplicates
+        const newLogoutButton = logoutButton.cloneNode(true);
+        logoutButton.parentNode.replaceChild(newLogoutButton, logoutButton);
+        newLogoutButton.addEventListener('click', logout);
     }
 }
 
@@ -292,13 +296,11 @@ async function saveTokenChanges() {
         return;
     }
     
-    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    // Use the original token index from the data attribute
+    const tokenIndex = row.dataset.tokenIndex || row.cells[0].textContent;
     
     const data = {
-        devReputation: document.getElementById('devReputation').checked,
-        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
-        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
-        noSellPressure: document.getElementById('noSellPressure').checked,
+        // Suppression des références aux checkbox retirées
         twitter: document.getElementById('twitterHandle').value,
         telegram: document.getElementById('telegramDiscord').value,
         discord: document.getElementById('telegramDiscord').value,
@@ -381,6 +383,7 @@ function closeEditPanel() {
     }, 300);
 }
 
+// Modification de saveEditedData pour accepter NA pour les dates
 async function saveEditedData() {
     if (!isAdmin()) {
         alert('Admin access required');
@@ -391,7 +394,7 @@ async function saveEditedData() {
     const column = document.getElementById('editColumn').value;
     const newValue = document.getElementById('editValue').value;
     
-    if (!ticker || !column || !newValue) {
+    if (!ticker || !column || newValue === undefined) {
         alert('Please fill in all fields');
         return;
     }
@@ -402,7 +405,8 @@ async function saveEditedData() {
         return;
     }
     
-    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    // Use the original token index from the data attribute
+    const tokenIndex = row.dataset.tokenIndex || row.cells[0].textContent;
     
     // Map column names to field names
     const columnToField = {
@@ -431,8 +435,17 @@ async function saveEditedData() {
         lastUpdated: new Date().toISOString()
     };
     
+    // Special handling for launchDate
+    if (field === 'launchDate') {
+        // Si NA ou N/A ou vide, on enregistre "NA"
+        if (newValue === 'NA' || newValue === 'N/A' || newValue === '') {
+            data[field] = 'NA';
+        } else {
+            data[field] = newValue;
+        }
+    }
     // Special handling for airdrop fields
-    if (field === 'airdrop1' || field === 'airdrop2') {
+    else if (field === 'airdrop1' || field === 'airdrop2') {
         const parts = newValue.split(' ');
         let percentage = parts[0].replace('%', '');
         const token = parts.slice(1).join(' ');
@@ -461,16 +474,23 @@ async function saveEditedData() {
     }
 }
 
-// Token modal functions
-function openTokenModal(ticker) {
+// Token modal functions - Correction pour s'assurer que les champs sont modifiables
+async function openTokenModal(ticker) {
     // Set modal title
     document.getElementById('modalTitle').textContent = ticker;
     
-    // Load token data
-    loadTokenData(ticker);
+    // Display modal first to montrer un indicateur de chargement si nécessaire
+    document.getElementById('tickerModal').style.display = 'block';
     
-    // Set fields based on admin status
+    // Afficher explicitement la grille de cases à cocher
+    document.querySelector('.checkbox-grid').style.display = 'grid';
+    
+    // Load token data and wait for it to complete
+    await loadTokenData(ticker);
+    
+    // Set fields based on admin status AFTER data is loaded
     const isUserAdmin = isAdmin();
+    console.log("Admin status when opening modal:", isUserAdmin);
     
     // Enable/disable inputs and controls
     document.querySelectorAll('#tickerModal input, #tickerModal textarea').forEach(input => {
@@ -485,14 +505,34 @@ function openTokenModal(ticker) {
         cb.style.cursor = isUserAdmin ? 'pointer' : 'default';
     });
     
-    // Show/hide save button
+    // Show/hide save button de manière explicite
     const saveButton = document.getElementById('saveButton');
     if (saveButton) {
+        // Réinitialiser complètement le style
+        saveButton.style = '';
         saveButton.style.display = isUserAdmin ? 'block' : 'none';
+        // Forcer le style du bouton pour s'assurer qu'il est visible
+        if (isUserAdmin) {
+            saveButton.style.backgroundColor = '#22543D';
+            saveButton.style.color = 'white';
+            saveButton.style.margin = '0.6rem 0 0 0';
+            saveButton.style.padding = '0.5rem 1rem';
+            saveButton.style.border = 'none';
+            saveButton.style.borderRadius = '8px';
+        }
     }
     
-    // Display modal
-    document.getElementById('tickerModal').style.display = 'block';
+    // Activer l'expansion des sections sociales pour faciliter l'édition
+    const socialContent = document.querySelector('.social-links-content');
+    if (socialContent) {
+        socialContent.classList.add('active');
+    }
+    
+    // S'assurer que l'icône est rotée correctement
+    const toggleIcon = document.querySelector('.toggle-icon');
+    if (toggleIcon) {
+        toggleIcon.classList.add('active');
+    }
 }
 
 // Toggle social links section in modal
@@ -631,6 +671,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const saveEditButton = document.getElementById('saveEditButton');
         const saveButton = document.getElementById('saveButton');
         const modalCloseButton = document.querySelector('#tickerModal .close');
+        const logoutButton = document.getElementById('logoutButton');
         
         if (editButton) {
             editButton.addEventListener('click', openEditPanel);
@@ -652,6 +693,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             modalCloseButton.addEventListener('click', () => {
                 document.getElementById('tickerModal').style.display = 'none';
             });
+        }
+        
+        // Ensure logout button has event listener
+        if (logoutButton) {
+            logoutButton.addEventListener('click', logout);
         }
         
         // Close modal when clicking outside
