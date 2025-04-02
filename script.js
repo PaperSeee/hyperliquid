@@ -116,12 +116,13 @@ async function loadData() {
             return aIndex - bIndex;
         });
 
-        // Filter tokens that have markPx value
-        const visibleTokens = tokens.filter(token => token.markPx);
+        // Separate tokens into listed and unlisted
+        const listedTokens = tokens.filter(token => token.markPx && (parseFloat(token.launchCircSupply) !== 0));
+        const unlistedTokens = tokens.filter(token => parseFloat(token.launchCircSupply) === 0 || token.launchCircSupply === "0.0");
         
-        // Populate table with sequential numbering
-        visibleTokens.forEach((token, index) => {
-            const sequentialIndex = index + 1; // Use sequential numbering from 1
+        // Populate Listed Tokens table
+        listedTokens.forEach((token, index) => {
+            const sequentialIndex = index + 1;
             const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -142,11 +143,12 @@ async function loadData() {
                 <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
             `;
             
-            // Store the original token index as a data attribute for use when saving
             row.dataset.tokenIndex = token.tokenIndex;
-            
             mainTableBody.appendChild(row);
         });
+        
+        // Populate Unlisted Tokens section
+        populateUnlistedTokens(unlistedTokens);
 
         // Update admin UI after loading data
         updateAdminUI();
@@ -156,6 +158,34 @@ async function loadData() {
         console.error('Error loading data:', error);
         return [];
     }
+}
+
+// Populate unlisted tokens section
+function populateUnlistedTokens(tokens) {
+    const container = document.getElementById('unlistedTokensContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // If no unlisted tokens, show a message
+    if (tokens.length === 0) {
+        container.innerHTML = '<p>No unlisted tokens found</p>';
+        return;
+    }
+    
+    // Create card for each unlisted token
+    tokens.forEach(token => {
+        const card = document.createElement('div');
+        card.className = 'token-card';
+        card.innerHTML = `<span class="token-name">${token.name}</span>`;
+        
+        // Make cards clickable to open token modal
+        card.addEventListener('click', () => {
+            openTokenModal(token.name);
+        });
+        
+        container.appendChild(card);
+    });
 }
 
 // Find token row by name
