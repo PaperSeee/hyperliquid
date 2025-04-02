@@ -144,29 +144,45 @@
     </main>
 
     <div id="editPanel" class="edit-panel">
-        <h2>Edit Data</h2>
-        <select id="editTicker">
-            <option value="">Select Ticker</option>
-        </select>
-        <select id="editColumn">
-            <option value="">Select Column</option>
-            <option value="Launch Date">Launch Date (DD-MM-YYYY or N/A)</option>
-            <option value="Team Allocation">Team Allocation</option>
-            <option value="Airdrop 1">Airdrop 1</option>
-            <option value="Airdrop 2">Airdrop 2</option>
-            <option value="Dev/Team Contact">Dev/Team Contact</option>
-            <option value="Auction Price">Auction Price</option>
-            <option value="Launch Price">Launch Price</option>
-            <option value="Launch Marketcap">Launch Marketcap</option>
-            <option value="Launch Circ Supply">Launch Circ Supply</option>
-            <option value="Twitter Handle">Twitter Handle</option>
-            <option value="Telegram/Discord">Telegram/Discord</option>
-            <option value="Website">Website</option>
-        </select>
-        <input type="text" id="editValue" placeholder="New Value">
+        <div class="edit-panel-header">
+            <h2><i class="fas fa-edit"></i> Edit Data</h2>
+        </div>
+        <div class="edit-panel-content">
+            <div class="form-group">
+                <label for="editTicker">Select Token</label>
+                <select id="editTicker">
+                    <option value="">Select Ticker</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="editColumn">Select Field</label>
+                <select id="editColumn">
+                    <option value="">Select Column</option>
+                    <option value="Launch Date">Launch Date (DD-MM-YYYY or N/A)</option>
+                    <option value="Team Allocation">Team Allocation</option>
+                    <option value="Airdrop 1">Airdrop 1</option>
+                    <option value="Airdrop 2">Airdrop 2</option>
+                    <option value="Dev/Team Contact">Dev/Team Contact</option>
+                    <option value="Auction Price">Auction Price</option>
+                    <option value="Launch Price">Launch Price</option>
+                    <option value="Launch Marketcap">Launch Marketcap</option>
+                    <option value="Launch Circ Supply">Launch Circ Supply</option>
+                    <option value="Twitter Handle">Twitter Handle</option>
+                    <option value="Telegram/Discord">Telegram/Discord</option>
+                    <option value="Website">Website</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="editValue">New Value</label>
+                <input type="text" id="editValue" placeholder="Enter new value">
+            </div>
+        </div>
+        
         <div class="panel-actions">
-            <button id="saveEditButton" class="save-button">Save</button>
-            <button id="cancelButton" class="cancel-button">Cancel</button>
+            <button id="saveEditButton" class="save-button"><i class="fas fa-save"></i> Save Changes</button>
+            <button id="cancelButton" class="cancel-button"><i class="fas fa-times"></i> Cancel</button>
         </div>
     </div>
 

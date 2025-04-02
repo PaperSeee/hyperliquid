@@ -1367,3 +1367,208 @@ td.last-updated {
     }
 }
 
+/* Edit Data Button and Panel - Enhanced */
+.edit-button {
+    display: none;
+    background: #22543D;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button:hover {
+    background: #1a4231;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.edit-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100%;
+    background: var(--bg-color);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
+}
+
+.edit-panel.active {
+    transform: translateX(0);
+}
+
+.edit-panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(to right, rgba(34, 84, 61, 0.05), rgba(34, 84, 61, 0.1));
+}
+
+[data-theme="dark"] .edit-panel-header {
+    background: linear-gradient(to right, rgba(74, 222, 128, 0.05), rgba(74, 222, 128, 0.1));
+}
+
+.edit-panel-header h2 {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.edit-panel-header h2 i {
+    color: #22543D;
+    font-size: 1.2rem;
+}
+
+[data-theme="dark"] .edit-panel-header h2 i {
+    color: #4ade80;
+}
+
+.edit-panel-content {
+    padding: 1.5rem;
+}
+
+.edit-panel .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.edit-panel label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.edit-panel select,
+.edit-panel input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2322543D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+[data-theme="dark"] .edit-panel select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.edit-panel input {
+    background-image: none;
+    padding-right: 1rem;
+}
+
+.edit-panel select:focus,
+.edit-panel input:focus {
+    outline: none;
+    border-color: #22543D;
+    box-shadow: 0 0 0 3px rgba(34, 84, 61, 0.15);
+}
+
+[data-theme="dark"] .edit-panel select:focus,
+[data-theme="dark"] .edit-panel input:focus {
+    border-color: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+}
+
+.edit-panel .panel-actions {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    border-top: 1px solid var(--border-color);
+    background: linear-gradient(to right, rgba(34, 84, 61, 0.02), rgba(34, 84, 61, 0.05));
+}
+
+[data-theme="dark"] .edit-panel .panel-actions {
+    background: linear-gradient(to right, rgba(51, 65, 85, 0.3), rgba(51, 65, 85, 0.4));
+}
+
+.edit-panel .save-button,
+.edit-panel .cancel-button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.edit-panel .save-button i,
+.edit-panel .cancel-button i {
+    font-size: 0.9rem;
+}
+
+.edit-panel .save-button {
+    background: #22543D;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-panel .save-button:hover {
+    background: #1a4231;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.edit-panel .cancel-button {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+
+.edit-panel .cancel-button:hover {
+    background: #d1d5db;
+    transform: translateY(-2px);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .edit-panel {
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .edit-panel .save-button {
+    background: #4ade80;
+    color: #0f172a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .edit-panel .save-button:hover {
+    background: #22c55e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .edit-panel .cancel-button {
+    background: rgba(51, 65, 85, 0.5);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .edit-panel .cancel-button:hover {
+    background: rgba(51, 65, 85, 0.7);
+}
+
