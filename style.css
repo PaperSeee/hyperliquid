@@ -9,6 +9,7 @@
     --table-header-bg: rgba(34, 84, 61, 0.1);
     --hover-bg: rgba(34, 84, 61, 0.1);
     --filter-bg: rgba(255, 255, 255, 0.95);
+    --disabled-bg: rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="dark"] {
@@ -21,6 +22,7 @@
     --table-header-bg: rgba(51, 65, 85, 0.4);
     --hover-bg: rgba(51, 65, 85, 0.5);
     --filter-bg: rgba(15, 23, 42, 0.95);
+    --disabled-bg: rgba(51, 65, 85, 0.2);
 }
 
 /* Dark mode specific styles */
