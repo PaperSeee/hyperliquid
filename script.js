@@ -214,10 +214,17 @@ async function loadTokenData(ticker) {
             return null;
         }
         
-        // Suppression des références aux checkbox retirées
-        
         document.getElementById('twitterHandle').value = token.twitter || '';
-        document.getElementById('telegramDiscord').value = token.telegram || token.discord || '';
+        
+        // Choose either telegram or discord, preferring telegram if both exist
+        let socialLink = '';
+        if (token.telegram) {
+            socialLink = token.telegram;
+        } else if (token.discord) {
+            socialLink = token.discord;
+        }
+        document.getElementById('telegramDiscord').value = socialLink;
+        
         document.getElementById('website').value = token.website || '';
         document.getElementById('comments').value = token.comment || '';
         
@@ -343,11 +350,24 @@ async function saveTokenChanges() {
     // Use the original token index from the data attribute
     const tokenIndex = row.dataset.tokenIndex || row.cells[0].textContent;
     
+    // Get the value from the telegramDiscord field
+    const telegramDiscordValue = document.getElementById('telegramDiscord').value;
+    
+    // Determine if it's a Discord or Telegram link
+    let telegramValue = '';
+    let discordValue = '';
+    
+    if (telegramDiscordValue.includes('discord') || telegramDiscordValue.includes('discord.gg')) {
+        discordValue = telegramDiscordValue;
+    } else {
+        // Default to Telegram for all other links
+        telegramValue = telegramDiscordValue;
+    }
+    
     const data = {
-        // Suppression des références aux checkbox retirées
         twitter: document.getElementById('twitterHandle').value,
-        telegram: document.getElementById('telegramDiscord').value,
-        discord: document.getElementById('telegramDiscord').value,
+        telegram: telegramValue,
+        discord: discordValue,
         website: document.getElementById('website').value,
         comment: document.getElementById('comments').value,
         devTeamContact: document.getElementById('devTeamContact').value,
