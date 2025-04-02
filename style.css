@@ -806,12 +806,20 @@ copyright {
     .filters-container {
         padding: 1rem;
     }
+    
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
+    }
 }
 
 @media screen and (max-width: 968px) {
     .header-content {
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
     }
 
     .search-container {
@@ -827,11 +835,12 @@ copyright {
     .filters {
         flex-direction: column;
         align-items: stretch;
-        gap: 1rem;
+        gap: 0.8rem;
     }
 
-    .filters-left {
+    .left-section {
         flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .checkbox-grid {
@@ -840,8 +849,35 @@ copyright {
 
     .modal-content {
         width: 95%;
-        margin: 2% auto;
-        padding: 1.5rem;
+        margin: 5% auto;
+        padding: 1.2rem;
+        max-height: 90vh;
+    }
+    
+    /* Edit panel improvements for tablets */
+    .edit-panel {
+        width: 320px;
+    }
+    
+    .edit-panel-content {
+        padding: 1.2rem;
+    }
+    
+    /* Adjust modal content spacing */
+    .modal-content h2 {
+        font-size: 1.2rem;
+        padding-bottom: 0.6rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .social-links-area {
+        padding: 0.8rem;
+        margin: 1rem 0;
+    }
+    
+    .comments-area {
+        padding: 0.8rem;
+        gap: 1rem;
     }
 }
 
@@ -852,6 +888,8 @@ copyright {
 
     .table-container {
         margin: 0.5rem;
+        padding: 0.8rem;
+        border-radius: 12px;
     }
 
     table {
@@ -859,7 +897,7 @@ copyright {
     }
 
     th, td {
-        padding: 0.5rem;
+        padding: 0.5rem 0.6rem;
     }
 
     .social-input {
@@ -875,30 +913,209 @@ copyright {
     .social-input input {
         width: 100%;
     }
+    
+    /* Improve buttons on mobile */
+    .edit-button, .logout-button, #loginPageButton {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
+    
+    /* Navigation buttons */
+    .nav-btn {
+        padding: 0.3rem;
+    }
+    
+    .nav-btn img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Adjust edit panel for better mobile experience */
+    .edit-panel {
+        width: 85%;
+    }
+    
+    .edit-panel-header {
+        padding: 1.2rem;
+    }
+    
+    .edit-panel-content {
+        padding: 1rem;
+    }
+    
+    .edit-panel .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .token-cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
+    
+    .unlisted-tokens-container {
+        margin: 0.5rem 1rem 1rem;
+        padding: 0.8rem;
+    }
+    
+    /* Make header more compact */
+    .header-content {
+        padding: 0.6rem 1rem;
+    }
+    
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    /* Adjust modal for mobile screens */
+    .modal-content {
+        padding: 1rem;
+        margin: 5% auto;
+    }
+    
+    .close {
+        right: 0.8rem;
+        top: 0.8rem;
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Save button in modal */
+    #saveButton {
+        margin-top: 1rem;
+        padding: 0.6rem 0.8rem;
+    }
 }
 
 @media screen and (max-width: 480px) {
     .logo img {
         height: 28px;
     }
+    
+    .logo-text {
+        font-size: 1.2rem;
+    }
 
     .theme-toggle {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
     }
 
     .filter-button {
         width: 100%;
         justify-content: center;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
     }
 
     .modal-content {
-        padding: 1rem;
+        padding: 0.8rem;
+        width: 98%;
+        margin: 2% auto;
+        border-radius: 16px;
     }
 
     .close {
-        right: 1rem;
-        top: 1rem;
+        right: 0.6rem;
+        top: 0.6rem;
+        width: 26px;
+        height: 26px;
+        font-size: 1.2rem;
+    }
+    
+    /* Adjust form elements for small screens */
+    .social-input {
+        margin: 0.4rem 0;
+    }
+    
+    .social-input input {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .comments-area textarea {
+        padding: 0.6rem;
+        height: 80px;
+    }
+    
+    /* Make edit panel wider on small devices */
+    .edit-panel {
+        width: 100%;
+    }
+    
+    /* Further optimize the table for tiny screens */
+    th, td {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Reduce font size of modal title */
+    .modal-content h2 {
+        font-size: 1.1rem;
+    }
+    
+    .modal-content h3 {
+        font-size: 1rem;
+    }
+    
+    /* Make search input more compact */
+    .search-container input {
+        padding: 6px 30px 6px 32px;
+        font-size: 0.85rem;
+    }
+    
+    /* Optimize token cards for small screens */
+    .token-cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .token-card {
+        padding: 0.4rem 0.2rem;
+    }
+    
+    .token-card .token-name {
+        font-size: 0.75rem;
+    }
+}
+
+/* Add support for very small screens */
+@media screen and (max-width: 360px) {
+    .logo-text {
+        font-size: 1.1rem;
+    }
+    
+    .search-container {
+        width: 100%;
+    }
+    
+    .search-container input {
+        padding: 5px 25px 5px 28px;
+        font-size: 0.8rem;
+    }
+    
+    .search-container .search-icon {
+        left: 10px;
+        font-size: 0.9rem;
+    }
+    
+    /* Further optimize buttons and inputs */
+    .edit-button, .logout-button, #loginPageButton {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .nav-btn {
+        padding: 0.2rem;
+    }
+    
+    .nav-btn img {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Simplify modal */
+    .modal-content {
+        padding: 0.6rem;
     }
 }
 
@@ -1570,5 +1787,10 @@ td.last-updated {
 
 [data-theme="dark"] .edit-panel .cancel-button:hover {
     background: rgba(51, 65, 85, 0.7);
+}
+
+/* Enhanced Edit Panel for Mobile */
+.edit-panel {
+    overscroll-behavior: contain; /* Prevent scroll chaining on mobile */
 }
 
