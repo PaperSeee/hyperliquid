@@ -1,13 +1,9 @@
-// script.js
+// Basic utility and formatting functions
 
-// Simulation d'un système d'authentification
-let isAdmin = false; // À remplacer par votre véritable système d'auth
-
-// Ajoutez cette fonction utilitaire au début du fichier
+// Authentication utility - adds auth token to requests when available
 async function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('authToken');
     const defaultOptions = {
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})
@@ -25,9 +21,6 @@ async function fetchWithAuth(url, options = {}) {
 
     try {
         const response = await fetch(url, mergedOptions);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
         return response;
     } catch (error) {
         console.error('Fetch error:', error);
@@ -35,193 +28,43 @@ async function fetchWithAuth(url, options = {}) {
     }
 }
 
-// Remplacez votre fonction checkAdminStatus existante
-async function checkAdminStatus() {
-    try {
-        // Mise à jour pour utiliser le endpoint d'API correct
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/check-admin');
-        const data = await response.json();
-        console.log('Admin check response:', data);
-        return data.isAdmin === true;
-    } catch (error) {
-        console.error('Error checking admin status:', error);
-        return false;
-    }
+// Check if current user is admin
+function isAdmin() {
+    return localStorage.getItem('authToken') !== null;
 }
 
-// Fonction pour mettre à jour l'affichage du modal selon le rôle
-async function updateModalView() {
-    const isUserAdmin = await checkAdminStatus();
-    console.log('UpdateModalView - Is admin:', isUserAdmin); // Debug log
-
-    const checkboxes = document.querySelectorAll('.checkbox-item input');
-    const comments = document.getElementById('comments');
-    const saveButton = document.getElementById('saveButton');
-    const editButton = document.getElementById('editButton');
-    const socialInputs = document.querySelectorAll('.social-input input');
-    const logoutButton = document.getElementById('logoutButton');
-    const loginButton = document.getElementById('loginPageButton');
-    const websiteInput = document.getElementById('website');
-
-    if (isUserAdmin) {
-        // Vue Admin
-        checkboxes.forEach(checkbox => {
-            checkbox.disabled = false;
-            checkbox.style.cursor = 'pointer';
-        });
-        comments.readOnly = false;
-        socialInputs.forEach(input => {
-            input.readOnly = false;
-            input.style.cursor = 'text';
-            input.style.backgroundColor = 'var(--bg-color)';
-        });
-        websiteInput.readOnly = false;
-        saveButton.style.display = 'block';
-        editButton.style.display = 'block';
-        logoutButton.style.display = 'block';
-        loginButton.style.display = 'none';
-    } else {
-        // Vue Utilisateur
-        checkboxes.forEach(checkbox => {
-            checkbox.disabled = true;
-            checkbox.style.cursor = 'default';
-        });
-        comments.readOnly = true;
-        comments.style.cursor = 'default';
-        socialInputs.forEach(input => {
-            input.readOnly = true;
-            input.style.cursor = 'default';
-            input.style.backgroundColor = 'var(--disabled-bg)';
-        });
-        websiteInput.readOnly = true;
-        saveButton.style.display = 'none';
-        editButton.style.display = 'none';
-        logoutButton.style.display = 'none';
-        loginButton.style.display = 'block';
-    }
-
-    if (!isUserAdmin) {
-        comments.style.backgroundColor = 'var(--disabled-bg)';
-        comments.style.opacity = '0.7';
-    } else {
-        comments.style.backgroundColor = 'var(--bg-color)';
-        comments.style.opacity = '1';
-    }
+// Format functions for display
+function formatNumber(number) {
+    if (!number) return '';
+    const num = parseFloat(number).toFixed(2);
+    const [whole, decimal] = num.toString().split('.');
+    const formatted = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return `${formatted},${decimal}`;
 }
 
-// Fonction pour charger les données
-async function loadTickerData(ticker) {
-    try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
-        const data = await response.json();
-        console.log('Data received from API:', data);
-        
-        const tokenData = data.find(t => t.name === ticker); // Changé 'token' en 'tokenData'
-
-        if (tokenData) { // Changé 'token' en 'tokenData'
-            document.getElementById('devReputation').checked = tokenData.devReputation || false;
-            document.getElementById('spreadLessThanThree').checked = tokenData.spreadLessThanThree || false;
-            document.getElementById('thickObLiquidity').checked = tokenData.thickObLiquidity || false;
-            document.getElementById('noSellPressure').checked = tokenData.noSellPressure || false;
-            
-            document.getElementById('twitterHandle').value = tokenData.twitter || '';
-            document.getElementById('telegramDiscord').value = tokenData.discord || tokenData.telegram || '';
-            document.getElementById('website').value = tokenData.website || '';
-            document.getElementById('comments').value = tokenData.comment || '';
-            document.getElementById('modalLastUpdated').textContent = formatLastUpdated(tokenData.lastUpdated);
-            document.getElementById('devTeamContact').value = tokenData.devTeamContact || '';
-        } else {
-            console.warn('Token not found:', ticker);
-        }
-    } catch (error) {
-        console.error('Error loading token data:', error);
-    }
+function formatMarketCap(value) {
+    if (!value) return '/';
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    return `${formatNumber(num)}$`;
 }
 
-// Fonction pour sauvegarder les données (admin uniquement)
-async function saveTickerData() {
-    try {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            alert('You must be logged in to save changes');
-            return;
-        }
-
-        const isAdmin = await checkAdminStatus();
-        console.log('Is admin when saving:', isAdmin); // Debug log
-        
-        if (!isAdmin) {
-            alert('You must be an admin to save changes');
-            return;
-        }
-
-        const ticker = document.getElementById('modalTitle').textContent;
-        const row = findTickerRow(ticker);
-        if (!row) {
-            console.error('Token row not found');
-            return;
-        }
-        const tokenIndex = parseInt(row.cells[0].textContent, 10);
-
-        const checkboxes = {
-            devReputation: document.getElementById('devReputation').checked,
-            spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
-            thickObLiquidity: document.getElementById('thickObLiquidity').checked,
-            noSellPressure: document.getElementById('noSellPressure').checked
-        };
-        const socialLinks = {
-            twitter: document.getElementById('twitterHandle').value,
-            telegram: document.getElementById('telegramDiscord').value,
-            discord: document.getElementById('telegramDiscord').value,
-            website: document.getElementById('website').value
-        };
-        const comment = document.getElementById('comments').value;
-
-        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                ...checkboxes,
-                ...socialLinks,
-                comment,
-                lastUpdated: new Date().toISOString(), // Ajouter la date de mise à jour
-                devTeamContact: document.getElementById('devTeamContact').value
-            })
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-        
-        // Mettre à jour l'affichage de la dernière modification
-        document.getElementById('modalLastUpdated').textContent = formatLastUpdated(new Date().toISOString());
-
-        // Feedback visuel
-        const button = document.getElementById('saveButton');
-        button.textContent = 'Saved!';
-        button.style.background = '#4CAF50';
-        
-        // Fermer le modal et actualiser les données
-        setTimeout(async () => {
-            button.textContent = 'Save Changes';
-            button.style.background = '#22543D';
-            document.getElementById('tickerModal').style.display = "none";
-            
-            // Actualiser les données immédiatement
-            await loadData();
-        }, 1000);
-
-    } catch (error) {
-        console.error('Error saving data:', error);
-        alert('Sauvegarde effectuée');
-        
-        // Actualiser même en cas d'erreur pour assurer la cohérence
-        await loadData();
-    }
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
 }
 
-// Ajoutez ces variables globales au début du fichier
-let currentSortColumn = null;
-let isAscending = true;
+function formatLastUpdated(timestamp) {
+    if (!timestamp) return 'Never';
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-GB');
+}
 
-// Ajouter cette fonction utilitaire après les variables globales
 function formatSocialLinks(twitter, telegram, discord, website) {
     const twitterHandle = twitter ? `@${twitter}` : '/';
     const twitterLink = twitter ? `<a href="https://twitter.com/${twitter}" target="_blank">${twitterHandle}</a>` : '/';
@@ -247,577 +90,15 @@ function formatSocialLinks(twitter, telegram, discord, website) {
     return { twitterLink, telegramDiscordLink, websiteLink };
 }
 
-// Modifier la fonction formatNumber
-function formatNumber(number) {
-    if (!number) return '';
-    // Convertir en nombre et fixer 2 décimales
-    const num = parseFloat(number).toFixed(2);
-    // Séparer la partie entière et décimale
-    const [whole, decimal] = num.toString().split('.');
-    // Formater la partie entière avec des espaces tous les 3 chiffres
-    const formatted = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    // Retourner le nombre formaté avec une virgule pour les décimales
-    return `${formatted},${decimal}`;
-}
+// Core data functions
 
-// Ajouter cette fonction pour formater les valeurs de marketcap
-function formatMarketCap(value) {
-    if (!value) return '/';
-    const num = parseFloat(value);
-    if (isNaN(num)) return value;
-    return `${formatNumber(num)}$`;
-}
-
-// Ajout de la fonction helper pour le surlignage
-function highlightText(text, isAdmin) {
-    if (!text) return '/';
-
-    const purrRegex = /PURR/gi;
-    if (!purrRegex.test(text)) return text;
-
-    if (isAdmin) {
-        return text.replace(purrRegex, match => `<span class="highlight-purr admin-selectable">${match}</span>`);
-    } else {
-        return text.replace(purrRegex, match => `<span class="highlight-purr">${match}</span>`);
-    }
-}
-
-// Format date to dd/mm/yyyy
-function formatDate(dateString) {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-}
-
-// Format timestamp for Last Updated
-function formatLastUpdated(timestamp) {
-    if (!timestamp) return 'Never';
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-GB');
-}
-
-// Gestionnaires d'événements
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Charger les données depuis l'API backend
-        const response = await fetch('https://backend-finalsure.vercel.app/api/tokens');
-        const data = await response.json();
-        console.log('Data received from API:', data); // Log the data received from the API
-
-        if (!Array.isArray(data)) {
-            throw new TypeError('Expected an array of tokens');
-        }
-
-        const tokens = data;
-
-        const mainTableBody = document.querySelector('#mainTable tbody');
-        mainTableBody.innerHTML = '';
-
-        // Index pour les tokens listés
-        let listedIndex = 1;
-
-        tokens.forEach(token => {
-            // Only include tokens with markPx value
-            if (token.markPx) {
-                const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
-                const listedRow = document.createElement('tr');
-                listedRow.innerHTML = `
-                    <td>${token.tokenIndex}</td>
-                    <td>${token.name}</td>
-                    <td>${token.launchDate || 'N/A'}</td>
-                    <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
-                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td> 
-                    <td>${token.devReputation ? 'Yes' : 'No'}</td>
-                    <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
-                    <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
-                    <td>${formatMarketCap(token.launchMarketCap)}</td>
-                    <td>${formatNumber(token.launchCircSupply)}</td>
-                    <td>${socialLinks.twitterLink}</td>
-                    <td>${socialLinks.telegramDiscordLink}</td>
-                    <td>${socialLinks.websiteLink}</td>
-                `;
-
-                console.log(token.airdrop1);
-                mainTableBody.appendChild(listedRow);
-            }
-        });
-
-    } catch (error) {
-        console.error('Error loading data:', error);
-    }
-
-    const modal = document.getElementById('tickerModal');
-    const mainTableBody = document.querySelector('#mainTable tbody');
-    const span = document.getElementsByClassName('close')[0];
-    const saveButton = document.getElementById('saveButton');
-
-    // Ouvrir le modal pour les tokens listés
-    mainTableBody.addEventListener('click', (e) => {
-        const row = e.target.closest('tr');
-        if (row) {
-            const ticker = row.cells[1].textContent;
-            openModalWithData(ticker, true);
-        }
-    });
-
-    // Ajouter cette nouvelle fonction pour gérer l'ouverture du modal
-    function openModalWithData(ticker, isListed) {
-        document.getElementById('modalTitle').textContent = ticker;
-        loadTickerData(ticker);
-        updateModalView();
-        modal.style.display = "block";
-    }
-
-    // Fermer le modal
-    span.onclick = () => modal.style.display = "none";
-    window.onclick = (event) => {
-        if (event.target == modal) modal.style.display = "none";
-    }
-
-    // Sauvegarder les changements
-    saveButton.addEventListener('click', saveTickerData);
-
-    // Gestion du thème
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('i');
-    
-    // Charger le thème sauvegardé
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-
-    // Gestionnaire du bouton de thème
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        document.body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-
-    function updateThemeIcon(theme) {
-        themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-    }
-
-    // Fonction de recherche
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
-
-    const mainTable = document.getElementById('mainTable').getElementsByTagName('tbody')[0];
-
-    // Add click handlers for all table headers
-    const headers = document.querySelectorAll('#mainTable th');
-    headers.forEach((header, index) => {
-        header.style.cursor = 'pointer';
-        header.addEventListener('click', () => sortTable(index));
-    });
-
-    // Update Edit Data button visibility
-    updateEditButtonVisibility();
-
-    // Edit Data button click event
-    const editButton = document.getElementById('editButton');
-    editButton.addEventListener('click', openEditPanel);
-
-    // Cancel button click event
-    const cancelButton = document.getElementById('cancelButton');
-    cancelButton.addEventListener('click', closeEditPanel);
-
-    // Save button click event
-    const saveEditButton = document.getElementById('saveEditButton');
-    saveEditButton.addEventListener('click', saveEditedData);
-
-    // Edit Data button functionality
-    const editPanel = document.getElementById('editPanel');
-    const editTicker = document.getElementById('editTicker');
-
-    // Populate ticker dropdown with existing tickers
-    const populateTickerDropdown = () => {
-        const tickers = Array.from(document.querySelectorAll('#mainTable tbody tr')).map(row => row.cells[1].textContent);
-        editTicker.innerHTML = '<option value="">Select Ticker</option>' + 
-            tickers.map(ticker => `<option value="${ticker}">${ticker}</option>`).join('');
-    };
-
-    // Initialize edit functionality
-    editButton.addEventListener('click', () => {
-        populateTickerDropdown();
-        openEditPanel();
-    });
-
-    cancelButton.addEventListener('click', closeEditPanel);
-    saveEditButton.addEventListener('click', saveEditedData);
-
-    // Update initial button visibility
-    updateEditButtonVisibility();
-
-    // Vérifiez l'état de l'authentification et mettez à jour l'interface
-    await updateModalView();
-    await updateEditButtonVisibility();
-    
-    // Add Token button setup
-    const addTokenButton = document.getElementById('addTokenButton');
-    const addTokenModal = document.getElementById('addTokenModal');
-    const addTokenCloseButton = document.querySelector('#addTokenModal .close');
-    const saveNewTokenButton = document.getElementById('saveNewTokenButton');
-    
-    if (addTokenButton) {
-        addTokenButton.addEventListener('click', openAddTokenModal);
-    } else {
-        console.error('Add Token button not found');
-    }
-    
-    if (addTokenCloseButton) {
-        addTokenCloseButton.addEventListener('click', closeAddTokenModal);
-    } else {
-        console.error('Add Token modal close button not found');
-    }
-    
-    if (saveNewTokenButton) {
-        saveNewTokenButton.addEventListener('click', saveNewToken);
-    } else {
-        console.error('Save New Token button not found');
-    }
-    
-    // Close modal when clicking outside
-    window.addEventListener('click', (event) => {
-        if (event.target === addTokenModal) {
-            closeAddTokenModal();
-        }
-    });
-    
-    // Update admin buttons visibility
-    await updateAdminButtonsVisibility();
-});
-
-// Ajouter ceci dans la fonction d'initialisation ou au début du fichier
-document.querySelectorAll('#mainTable th').forEach(headerCell => {
-    headerCell.addEventListener('click', () => {
-        const table = headerCell.closest('table');
-        const index = Array.from(headerCell.parentElement.children).indexOf(headerCell);
-        const sortState = headerCell.getAttribute('data-sort') || 'default';
-        
-        // Réinitialiser tous les autres en-têtes
-        headerCell.parentElement.querySelectorAll('th').forEach(th => {
-            if (th !== headerCell) {
-                th.setAttribute('data-sort', 'default');
-                th.classList.remove('sort-asc', 'sort-desc');
-            }
-        });
-
-        // Changer l'état de tri
-        let newSortState;
-        if (sortState === 'default') {
-            newSortState = 'asc';
-        } else if (sortState === 'asc') {
-            newSortState = 'desc';
-        } else {
-            newSortState = 'default';
-        }
-        
-        headerCell.setAttribute('data-sort', newSortState);
-        headerCell.classList.remove('sort-asc', 'sort-desc');
-        if (newSortState !== 'default') {
-            headerCell.classList.add(`sort-${newSortState}`);
-        }
-
-        // Trier le tableau
-        const rows = Array.from(table.querySelectorAll('tbody tr'));
-        const originalOrder = rows.map((row, idx) => ({ row, index: idx }));
-
-        if (newSortState === 'default') {
-            // Restaurer l'ordre original
-            rows.sort((a, b) => {
-                const indexA = originalOrder.find(item => item.row === a).index;
-                const indexB = originalOrder.find(item => item.row === b).index;
-                return indexA - indexB;
-            });
-        } else {
-            rows.sort((a, b) => {
-                let valueA = a.cells[index].textContent;
-                let valueB = b.cells[index].textContent;
-
-                // Conversion pour les nombres et les dates
-                if (!isNaN(valueA) && !isNaN(valueB)) {
-                    valueA = parseFloat(valueA);
-                    valueB = parseFloat(valueB);
-                } else if (valueA.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                    valueA = new Date(valueA);
-                    valueB = new Date(valueB);
-                }
-
-                if (newSortState === 'asc') {
-                    return valueA > valueB ? 1 : -1;
-                } else {
-                    return valueA < valueB ? 1 : -1;
-                }
-            });
-        }
-
-        // Réinsérer les lignes triées
-        const tbody = table.querySelector('tbody');
-        rows.forEach(row => tbody.appendChild(row));
-    });
-});
-
-// Fonction de tri
-function sortTable(columnIndex) {
-    const table = document.getElementById('mainTable');
-    const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
-
-    // Change sort direction if clicking the same column
-    if (currentSortColumn === columnIndex) {
-        isAscending = !isAscending;
-    } else {
-        isAscending = true;
-        currentSortColumn = columnIndex;
-    }
-
-    rows.sort((a, b) => {
-        let aValue = a.cells[columnIndex].textContent.trim();
-        let bValue = b.cells[columnIndex].textContent.trim();
-
-        // Convert to numbers if possible
-        if (aValue.startsWith('$')) {
-            aValue = parseFloat(aValue.replace('$', '').replace(/[MB]/g, '')) || 0;
-            bValue = parseFloat(bValue.replace('$', '').replace(/[MB]/g, '')) || 0;
-        } else if (!isNaN(aValue)) {
-            aValue = parseFloat(aValue) || 0;
-            bValue = parseFloat(bValue) || 0;
-        }
-
-        if (aValue < bValue) return isAscending ? -1 : 1;
-        if (aValue > bValue) return isAscending ? 1 : -1;
-        return 0;
-    });
-
-    // Clear and refill tbody
-    tbody.innerHTML = '';
-    rows.forEach((row, index) => {
-        row.cells[0].textContent = index + 1;
-        tbody.appendChild(row);
-    });
-}
-
-function openModal(ticker) {
-    const modal = document.getElementById('tickerModal');
-    const modalTitle = document.getElementById('modalTitle');
-    modalTitle.textContent = ticker;
-    
-    // Trouver la ligne du ticker dans le tableau
-    const row = findTickerRow(ticker);
-    if (row) {
-        document.getElementById('twitterHandle').value = row.cells[11].textContent;
-        document.getElementById('telegramDiscord').value = row.cells[12].textContent;
-        document.getElementById('website').value = row.cells[13].textContent;
-    }
-    
-    modal.style.display = "block";
-}
-
-async function saveModalChanges() {
-    const ticker = document.getElementById('modalTitle').textContent;
-    const row = findTickerRow(ticker);
-    if (!row) return;
-
-    const tokenIndex = parseInt(row.cells[0].textContent, 10);
-    const data = {
-        projectDescription: document.getElementById('projectDescription').value,
-        personalComment: document.getElementById('personalComment').value,
-        devTeamContact: document.getElementById('devTeamContact').value,
-        // ...other fields...
-        lastUpdated: new Date().toISOString()
-    };
-
-    try {
-        await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
-            method: 'PUT',
-            body: JSON.stringify(data)
-        });
-
-        loadData(); // Refresh table
-        document.getElementById('tickerModal').style.display = 'none';
-    } catch (error) {
-        console.error('Error saving changes:', error);
-        alert('Failed to save changes');
-    }
-}
-
-function findTickerRow(ticker) {
-    const table = document.getElementById('mainTable');
-    const rows = table.getElementsByTagName('tr');
-    for (let row of rows) {
-        if (row.cells[1].textContent === ticker) {
-            return row;
-        }
-    }
-    return null;
-}
-
-function toggleSocialLinks() {
-    const content = document.querySelector('.social-links-content');
-    const icon = document.querySelector('.toggle-icon');
-    
-    content.classList.toggle('active');
-    icon.classList.toggle('active');
-}
-
-// Function to update the visibility of the Edit Data button
-async function updateEditButtonVisibility() {
-    await updateAdminButtonsVisibility();
-}
-
-// Function to open the edit panel
-function openEditPanel() {
-    const editPanel = document.getElementById('editPanel');
-    editPanel.style.display = 'block'; // Make sure panel is visible
-    setTimeout(() => { // Add slight delay to ensure display: block is applied
-        editPanel.classList.add('active');
-    }, 10);
-}
-
-// Function to close the edit panel
-function closeEditPanel() {
-    const editPanel = document.getElementById('editPanel');
-    editPanel.classList.remove('active');
-    setTimeout(() => { // Hide panel after transition
-        editPanel.style.display = 'none';
-    }, 300); // Match transition duration
-}
-
-// Function to save the edited data
-async function saveEditedData() {
-    try {
-        const isAdmin = await checkAdminStatus();
-        if (!isAdmin) {
-            alert('You must be an admin to edit data');
-            return;
-        }
-
-        const ticker = document.getElementById('editTicker').value;
-        const column = document.getElementById('editColumn').value;
-        const newValue = document.getElementById('editValue').value;
-
-        // Validate inputs
-        if (!ticker || !column || !newValue) {
-            alert('Please fill in all fields.');
-            return;
-        }
-
-        // Find the token index
-        const tokenRow = findTickerRow(ticker);
-        if (!tokenRow) {
-            alert('Ticker not found.');
-            return;
-        }
-        const tokenIndex = parseInt(tokenRow.cells[0].textContent, 10);
-        if (isNaN(tokenIndex)) {
-            alert('Invalid token index');
-            return;
-        }
-
-        // Map column names to token fields
-        const columnMapping = {
-            'Team Allocation': 'teamAllocation',
-            'Launch Date': 'launchDate',
-            'Airdrop 1': 'airdrop1',
-            'Airdrop 2': 'airdrop2',
-            'Dev/Team Contact': 'devTeamContact', // Ajout du mapping correct
-            'Dev Reputation': 'devReputation',
-            'Spread Less Than Three': 'spreadLessThanThree',
-            'Thick OB Liquidity': 'thickObLiquidity',
-            'No Sell Pressure': 'noSellPressure',
-            'Twitter': 'twitter',
-            'Telegram': 'telegram',
-            'Discord': 'discord',
-            'Website': 'website',
-            'Comment': 'comment'
-        };
-
-        const field = columnMapping[column];
-        if (!field) {
-            alert('Invalid column name.');
-            return;
-        }
-
-        // Prepare the data to be sent
-        const data = {};
-        if (['devReputation', 'spreadLessThanThree', 'thickObLiquidity', 'noSellPressure'].includes(field)) {
-            data[field] = newValue.toLowerCase() === 'true';
-        } else {
-            data[field] = newValue;
-        }
-
-        // Send request to server to update data
-        try {
-            const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
-                method: 'PUT',
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                // Actualiser immédiatement les données
-                await loadData();
-                alert('Data updated successfully.');
-                closeEditPanel();
-            }
-        } catch (error) {
-            console.error('Error updating data:', error);
-            alert('Sauvegarde effectuée.');
-            
-            // Actualiser même en cas d'erreur
-            await loadData();
-        }
-    } catch (error) {
-        console.error('Error updating data:', error);
-        alert('Sauvegarde effectuée');
-        
-        // Actualiser même en cas d'erreur
-        await loadData();
-    }
-}
-
-// Function to get the column index based on the column name
-function getColumnIndex(columnName) {
-    const headers = document.querySelectorAll('#mainTable th');
-    for (let i = 0; i < headers.length; i++) {
-        if (headers[i].textContent === columnName) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-// Fonction pour charger les données
+// Load all tokens data
 async function loadData() {
     try {
-        const isAdmin = await checkAdminStatus();
-        const token = localStorage.getItem('authToken');
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
         const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
-        const tokens = await response.json();
+        if (!response.ok) throw new Error('Failed to fetch tokens');
         
+        const tokens = await response.json();
         if (!Array.isArray(tokens)) {
             throw new TypeError('Expected an array of tokens');
         }
@@ -825,30 +106,25 @@ async function loadData() {
         const mainTableBody = document.querySelector('#mainTable tbody');
         mainTableBody.innerHTML = '';
 
-        // Filter out duplicate tickers
-        const uniqueTokens = tokens.filter((token, index, self) =>
-            index === self.findIndex(t => t.name === token.name)
-        );
-
-        // Sort tokens by tokenIndex in ascending order
-        uniqueTokens.sort((a, b) => {
-            const aIndex = parseInt(a.tokenIndex, 10);
-            const bIndex = parseInt(b.tokenIndex, 10);
+        // Sort tokens by index
+        tokens.sort((a, b) => {
+            const aIndex = parseInt(a.tokenIndex, 10) || 0;
+            const bIndex = parseInt(b.tokenIndex, 10) || 0;
             return aIndex - bIndex;
         });
 
-        uniqueTokens.forEach((token, index) => {
-            // Only include tokens with markPx value
+        // Populate table with tokens that have markPx value
+        tokens.forEach(token => {
             if (token.markPx) {
                 const socialLinks = formatSocialLinks(token.twitter, token.telegram, token.discord, token.website);
-                const listedRow = document.createElement('tr');
-                listedRow.innerHTML = `
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${token.tokenIndex}</td>
                     <td>${token.name}</td>
                     <td>${formatDate(token.launchDate)}</td>
                     <td>${token.teamAllocation || 'N/A'}</td>
-                    <td>${token.airdrop1 ? highlightText(`${token.airdrop1.percentage}% ${token.airdrop1.token}`, isAdmin) : '/'}</td>
-                    <td>${token.airdrop2 ? highlightText(`${token.airdrop2.percentage}% ${token.airdrop2.token}`, isAdmin) : '/'}</td>
+                    <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
+                    <td>${token.airdrop2 ? `${token.airdrop2.percentage}% ${token.airdrop2.token}` : '/'}</td>
                     <td>${token.devTeamContact || 'N/A'}</td>
                     <td>${token.markPx ? token.markPx + '$' : 'N/A'}</td>
                     <td>${token.startPx ? token.startPx + '$' : 'N/A'}</td>
@@ -859,246 +135,534 @@ async function loadData() {
                     <td>${socialLinks.websiteLink}</td>
                     <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
                 `;
-
-                if (isAdmin) {
-                    setTimeout(() => {
-                        const highlightedElements = listedRow.querySelectorAll('.highlight-purr');
-                        highlightedElements.forEach(el => {
-                            el.addEventListener('click', async () => {
-                                const confirmed = confirm('Voulez-vous modifier ce surlignage?');
-                                if (confirmed) {
-                                    try {
-                                        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${token.tokenIndex}/highlight`, {
-                                            method: 'PUT',
-                                            body: JSON.stringify({
-                                                highlight: !el.classList.contains('active')
-                                            })
-                                        });
-                                        
-                                        if (response.ok) {
-                                            el.classList.toggle('active');
-                                        }
-                                    } catch (error) {
-                                        console.error('Error updating highlight:', error);
-                                    }
-                                }
-                            });
-                        });
-                    }, 0);
-                }
                 
-                mainTableBody.appendChild(listedRow);
+                mainTableBody.appendChild(row);
             }
         });
+
+        // Update admin UI after loading data
+        updateAdminUI();
+        
+        return tokens;
     } catch (error) {
         console.error('Error loading data:', error);
+        return [];
     }
 }
 
-// Load data on page load and sort by tokenIndex in ascending order
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadData();
-    sortTable(0); // Sort by the first column (Ticker N°) in ascending order by default
-});
+// Find token row by name
+function findTokenRow(ticker) {
+    const table = document.getElementById('mainTable');
+    const rows = table.getElementsByTagName('tr');
+    for (let i = 1; i < rows.length; i++) { // Start at 1 to skip header row
+        if (rows[i].cells && rows[i].cells[1] && rows[i].cells[1].textContent === ticker) {
+            return rows[i];
+        }
+    }
+    return null;
+}
 
-// Function to handle user login - mise à jour pour utiliser le bon endpoint
-async function login(username, password) {
+// Load specific token data for modal
+async function loadTokenData(ticker) {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ username, password })
-        });
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
+        if (!response.ok) throw new Error('Failed to fetch tokens');
+        
+        const tokens = await response.json();
+        const token = tokens.find(t => t.name === ticker);
+        
+        if (!token) {
+            console.warn(`Token not found: ${ticker}`);
+            return;
+        }
+        
+        // Populate modal fields
+        document.getElementById('devReputation').checked = token.devReputation || false;
+        document.getElementById('spreadLessThanThree').checked = token.spreadLessThanThree || false;
+        document.getElementById('thickObLiquidity').checked = token.thickObLiquidity || false;
+        document.getElementById('noSellPressure').checked = token.noSellPressure || false;
+        
+        document.getElementById('twitterHandle').value = token.twitter || '';
+        document.getElementById('telegramDiscord').value = token.telegram || token.discord || '';
+        document.getElementById('website').value = token.website || '';
+        document.getElementById('comments').value = token.comment || '';
+        
+        if (document.getElementById('projectDescription')) {
+            document.getElementById('projectDescription').value = token.projectDescription || '';
+        }
+        
+        if (document.getElementById('personalComment')) {
+            document.getElementById('personalComment').value = token.personalComment || '';
+        }
+        
+        document.getElementById('devTeamContact').value = token.devTeamContact || '';
+        document.getElementById('modalLastUpdated').textContent = formatLastUpdated(token.lastUpdated);
+    } catch (error) {
+        console.error('Error loading token data:', error);
+    }
+}
 
-        const data = await response.json();
-        if (data.token) {
-            localStorage.setItem('authToken', data.token);
+// Admin-specific functions
+
+// Update UI based on admin status
+function updateAdminUI() {
+    const adminStatus = isAdmin();
+    
+    // Show/hide admin-only elements
+    document.querySelectorAll('.admin-only').forEach(el => {
+        el.style.display = adminStatus ? 'block' : 'none';
+    });
+    
+    // Add login/logout button to page if not already present
+    if (!document.getElementById('loginPageButton') && !adminStatus) {
+        const leftSection = document.querySelector('.left-section');
+        if (leftSection) {
+            const loginButton = document.createElement('button');
+            loginButton.id = 'loginPageButton';
+            loginButton.className = 'edit-button';
+            loginButton.textContent = 'Admin Login';
+            loginButton.addEventListener('click', () => {
+                window.location.href = '/login.html';
+            });
+            leftSection.appendChild(loginButton);
+        }
+    }
+    
+    if (!document.getElementById('logoutButton') && adminStatus) {
+        const leftSection = document.querySelector('.left-section');
+        if (leftSection) {
+            const logoutButton = document.createElement('button');
+            logoutButton.id = 'logoutButton';
+            logoutButton.className = 'edit-button';
+            logoutButton.textContent = 'Logout';
+            logoutButton.addEventListener('click', logout);
+            leftSection.appendChild(logoutButton);
+        }
+    }
+}
+
+// Handle login from login page
+function setupLoginHandler() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             
-            // Set admin flag if login is successful
-            isAdmin = true;
-            
-            // Update UI to show admin features immediately
-            updateAdminButtonsVisibility();
-            updateModalView();
-            
-            alert('Login successful!');
-            
-            // Redirect back to the main page with admin view
-            if (window.location.pathname.includes('login.html')) {
-                window.location.href = '/index.html';
-            } else {
-                // If already on index page, just refresh data
-                await loadData();
+            try {
+                const response = await fetch('https://backend-finalsure.vercel.app/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                if (response.ok && data.token) {
+                    localStorage.setItem('authToken', data.token);
+                    window.location.href = '/index.html';
+                } else {
+                    alert('Login failed: ' + (data.message || 'Invalid credentials'));
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Error connecting to server');
             }
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        alert('Login failed');
-    }
-}
-
-// Function to handle user logout - mise à jour pour utiliser le bon endpoint
-async function logout() {
-    try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/logout', {
-            method: 'POST'
         });
-
-        if (response.ok) {
-            localStorage.removeItem('authToken');
-            await updateModalView();
-            await updateEditButtonVisibility();
-            window.location.href = '/login.html';
-        }
-    } catch (error) {
-        console.error('Error during logout:', error);
     }
 }
 
-// Function to check if the user is authenticated - mise à jour pour utiliser le bon endpoint
-async function checkAuth() {
-    try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/auth/check-auth');
-        return response.ok;
-    } catch {
-        return false;
-    }
+// Logout function
+function logout() {
+    localStorage.removeItem('authToken');
+    window.location.href = '/login.html';
 }
 
-// Add event listeners for login and logout buttons
-document.getElementById('loginButton').addEventListener('click', () => {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    login(username, password);
-});
-
-document.getElementById('logoutButton').addEventListener('click', logout);
-
-// Function to open the add token modal
-function openAddTokenModal() {
-    console.log('Opening add token modal');
-    const modal = document.getElementById('addTokenModal');
-    if (modal) {
-        // Reset form fields
-        document.getElementById('newTicker').value = '';
-        document.getElementById('newLaunchDate').value = '';
-        document.getElementById('newTeamAllocation').value = '';
-        document.getElementById('newAirdrop1').value = '';
-        document.getElementById('newAirdrop2').value = '';
-        document.getElementById('newDevTeamContact').value = '';
-        document.getElementById('newMarketPrice').value = '';
-        document.getElementById('newLaunchPrice').value = '';
-        document.getElementById('newLaunchMarketcap').value = '';
-        document.getElementById('newLaunchCircSupply').value = '';
-        document.getElementById('newTwitterHandle').value = '';
-        document.getElementById('newTelegramDiscord').value = '';
-        document.getElementById('newWebsite').value = '';
-        
-        modal.style.display = "block";
-    } else {
-        console.error('Add token modal not found in DOM');
+// Save token changes from modal
+async function saveTokenChanges() {
+    if (!isAdmin()) {
+        alert('You must be an admin to save changes');
+        return;
     }
-}
-
-// Function to close the add token modal
-function closeAddTokenModal() {
-    const modal = document.getElementById('addTokenModal');
-    if (modal) {
-        modal.style.display = "none";
-    } else {
-        console.error('Add token modal not found in DOM');
+    
+    const ticker = document.getElementById('modalTitle').textContent;
+    const row = findTokenRow(ticker);
+    if (!row) {
+        alert('Token not found');
+        return;
     }
-}
-
-// Function to save the new token
-async function saveNewToken() {
-    console.log('Saving new token');
+    
+    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    
+    const data = {
+        devReputation: document.getElementById('devReputation').checked,
+        spreadLessThanThree: document.getElementById('spreadLessThanThree').checked,
+        thickObLiquidity: document.getElementById('thickObLiquidity').checked,
+        noSellPressure: document.getElementById('noSellPressure').checked,
+        twitter: document.getElementById('twitterHandle').value,
+        telegram: document.getElementById('telegramDiscord').value,
+        discord: document.getElementById('telegramDiscord').value,
+        website: document.getElementById('website').value,
+        comment: document.getElementById('comments').value,
+        devTeamContact: document.getElementById('devTeamContact').value,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    if (document.getElementById('projectDescription')) {
+        data.projectDescription = document.getElementById('projectDescription').value;
+    }
+    
+    if (document.getElementById('personalComment')) {
+        data.personalComment = document.getElementById('personalComment').value;
+    }
     
     try {
-        const isAdmin = await checkAdminStatus();
-        if (!isAdmin) {
-            alert('You must be an admin to add tokens');
-            return;
+        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to update token');
         }
         
-        const newToken = {
-            name: document.getElementById('newTicker').value,
-            launchDate: document.getElementById('newLaunchDate').value,
-            teamAllocation: document.getElementById('newTeamAllocation').value,
-            airdrop1: document.getElementById('newAirdrop1').value ? {
-                percentage: document.getElementById('newAirdrop1').value.split('%')[0],
-                token: document.getElementById('newAirdrop1').value.split(' ')[1] || ''
-            } : null,
-            airdrop2: document.getElementById('newAirdrop2').value ? {
-                percentage: document.getElementById('newAirdrop2').value.split('%')[0],
-                token: document.getElementById('newAirdrop2').value.split(' ')[1] || ''
-            } : null,
-            devTeamContact: document.getElementById('newDevTeamContact').value,
-            markPx: document.getElementById('newMarketPrice').value.replace('$', ''),
-            startPx: document.getElementById('newLaunchPrice').value.replace('$', ''),
-            launchMarketCap: document.getElementById('newLaunchMarketcap').value.replace('$', ''),
-            launchCircSupply: document.getElementById('newLaunchCircSupply').value,
-            twitter: document.getElementById('newTwitterHandle').value.replace('@', ''),
-            telegram: document.getElementById('newTelegramDiscord').value,
-            website: document.getElementById('newWebsite').value
-        };
-
-        // Validate required fields
-        if (!newToken.name) {
-            alert('Ticker name is required');
-            return;
-        }
-
-        // Send the data to the server
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens', {
-            method: 'POST',
-            body: JSON.stringify(newToken)
-        });
-
-        if (response.ok) {
-            // Add the new token to the table locally
-            await loadData(); // Refresh data from server
+        // Update last updated display
+        document.getElementById('modalLastUpdated').textContent = formatLastUpdated(data.lastUpdated);
+        
+        // Visual feedback
+        const saveButton = document.getElementById('saveButton');
+        saveButton.textContent = 'Saved!';
+        saveButton.style.backgroundColor = '#4CAF50';
+        
+        // Reset and close
+        setTimeout(() => {
+            saveButton.textContent = 'Save Changes';
+            saveButton.style.backgroundColor = '';
+            document.getElementById('tickerModal').style.display = 'none';
             
-            // Close the modal
-            closeAddTokenModal();
-            
-            // Show success message
-            alert('Token added successfully');
-        } else {
-            throw new Error('Failed to add token');
-        }
+            // Reload data
+            loadData();
+        }, 1500);
+        
     } catch (error) {
-        console.error('Error saving new token:', error);
-        alert('An error occurred while adding the token');
+        console.error('Error saving changes:', error);
+        alert('Error saving changes');
     }
 }
 
-// Function to update the visibility of admin buttons
-async function updateAdminButtonsVisibility() {
-    const isAdmin = await checkAdminStatus();
-    const editButton = document.getElementById('editButton');
-    const addTokenButton = document.getElementById('addTokenButton');
+// Edit panel functions
+function openEditPanel() {
+    if (!isAdmin()) {
+        alert('Admin access required');
+        return;
+    }
     
-    if (isAdmin) {
-        editButton.style.display = 'block';
-        addTokenButton.style.display = 'block';
+    // Populate ticker dropdown
+    const tickers = Array.from(document.querySelectorAll('#mainTable tbody tr'))
+        .map(row => row.cells[1].textContent);
+    
+    const editTicker = document.getElementById('editTicker');
+    editTicker.innerHTML = '<option value="">Select Ticker</option>' + 
+        tickers.map(ticker => `<option value="${ticker}">${ticker}</option>`).join('');
+    
+    // Show panel
+    const editPanel = document.getElementById('editPanel');
+    editPanel.style.display = 'block';
+    setTimeout(() => {
+        editPanel.classList.add('active');
+    }, 10);
+}
+
+function closeEditPanel() {
+    const editPanel = document.getElementById('editPanel');
+    editPanel.classList.remove('active');
+    setTimeout(() => {
+        editPanel.style.display = 'none';
+    }, 300);
+}
+
+async function saveEditedData() {
+    if (!isAdmin()) {
+        alert('Admin access required');
+        return;
+    }
+    
+    const ticker = document.getElementById('editTicker').value;
+    const column = document.getElementById('editColumn').value;
+    const newValue = document.getElementById('editValue').value;
+    
+    if (!ticker || !column || !newValue) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    const row = findTokenRow(ticker);
+    if (!row) {
+        alert('Ticker not found');
+        return;
+    }
+    
+    const tokenIndex = parseInt(row.cells[0].textContent, 10);
+    
+    // Map column names to field names
+    const columnToField = {
+        'Launch Date': 'launchDate',
+        'Team Allocation': 'teamAllocation',
+        'Airdrop 1': 'airdrop1',
+        'Airdrop 2': 'airdrop2',
+        'Dev/Team Contact': 'devTeamContact',
+        'Auction Price': 'auctionPx',
+        'Launch Price': 'startPx',
+        'Launch Marketcap': 'launchMarketCap',
+        'Launch Circ Supply': 'launchCircSupply',
+        'Twitter Handle': 'twitter',
+        'Telegram/Discord': 'telegram',
+        'Website': 'website'
+    };
+    
+    const field = columnToField[column];
+    if (!field) {
+        alert('Invalid column selection');
+        return;
+    }
+    
+    // Format data appropriately
+    const data = {
+        lastUpdated: new Date().toISOString()
+    };
+    
+    // Special handling for airdrop fields
+    if (field === 'airdrop1' || field === 'airdrop2') {
+        const parts = newValue.split(' ');
+        let percentage = parts[0].replace('%', '');
+        const token = parts.slice(1).join(' ');
+        data[field] = { percentage, token };
     } else {
-        editButton.style.display = 'none';
-        addTokenButton.style.display = 'none';
+        data[field] = newValue;
+    }
+    
+    try {
+        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to update token');
+        }
+        
+        alert('Data updated successfully');
+        closeEditPanel();
+        loadData(); // Reload the table
+        
+    } catch (error) {
+        console.error('Error updating token:', error);
+        alert('Error updating data');
     }
 }
 
-// Modify the DOMContentLoaded event to check auth status at load time
+// Token modal functions
+function openTokenModal(ticker) {
+    // Set modal title
+    document.getElementById('modalTitle').textContent = ticker;
+    
+    // Load token data
+    loadTokenData(ticker);
+    
+    // Set fields based on admin status
+    const isUserAdmin = isAdmin();
+    
+    // Enable/disable inputs and controls
+    document.querySelectorAll('#tickerModal input, #tickerModal textarea').forEach(input => {
+        input.readOnly = !isUserAdmin;
+        input.disabled = !isUserAdmin;
+        input.style.backgroundColor = isUserAdmin ? 'var(--bg-color)' : 'var(--disabled-bg)';
+        input.style.cursor = isUserAdmin ? 'text' : 'default';
+    });
+    
+    document.querySelectorAll('#tickerModal .checkbox-item input').forEach(cb => {
+        cb.disabled = !isUserAdmin;
+        cb.style.cursor = isUserAdmin ? 'pointer' : 'default';
+    });
+    
+    // Show/hide save button
+    const saveButton = document.getElementById('saveButton');
+    if (saveButton) {
+        saveButton.style.display = isUserAdmin ? 'block' : 'none';
+    }
+    
+    // Display modal
+    document.getElementById('tickerModal').style.display = 'block';
+}
+
+// Toggle social links section in modal
+function toggleSocialLinks() {
+    const content = document.querySelector('.social-links-content');
+    const icon = document.querySelector('.toggle-icon');
+    
+    if (content) {
+        content.classList.toggle('active');
+    }
+    
+    if (icon) {
+        icon.classList.toggle('active');
+    }
+}
+
+// Sort table functionality
+let currentSortColumn = 0;
+let isAscending = true;
+
+function sortTable(columnIndex) {
+    const table = document.getElementById('mainTable');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Update sort direction
+    if (currentSortColumn === columnIndex) {
+        isAscending = !isAscending;
+    } else {
+        isAscending = true;
+        currentSortColumn = columnIndex;
+    }
+    
+    // Clear all sort indicators
+    document.querySelectorAll('#mainTable th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    // Add indicator to current sort column
+    const header = table.querySelector(`th:nth-child(${columnIndex + 1})`);
+    header.classList.add(isAscending ? 'sort-asc' : 'sort-desc');
+    
+    // Sort rows
+    rows.sort((a, b) => {
+        let aValue = a.cells[columnIndex].textContent.trim();
+        let bValue = b.cells[columnIndex].textContent.trim();
+        
+        // Handle different data types
+        if (aValue.includes('$')) {
+            aValue = parseFloat(aValue.replace(/[^\d.-]/g, '')) || 0;
+            bValue = parseFloat(bValue.replace(/[^\d.-]/g, '')) || 0;
+        } else if (!isNaN(parseFloat(aValue))) {
+            aValue = parseFloat(aValue) || 0;
+            bValue = parseFloat(bValue) || 0;
+        }
+        
+        // Compare values
+        if (aValue < bValue) return isAscending ? -1 : 1;
+        if (aValue > bValue) return isAscending ? 1 : -1;
+        return 0;
+    });
+    
+    // Replace rows in tbody
+    tbody.innerHTML = '';
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+// Theme toggling
+function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+    
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    
+    const icon = themeToggle.querySelector('i');
+    if (icon) {
+        icon.className = savedTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (icon) {
+            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    });
+}
+
+// Initialize everything
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check authentication status first
-    isAdmin = await checkAdminStatus();
-    console.log('Initial admin status check:', isAdmin);
+    // Initialize theme
+    initTheme();
     
-    // Update UI elements based on auth status
-    await updateAdminButtonsVisibility();
+    // Set up login form if on login page
+    setupLoginHandler();
     
-    // Then load data
-    await loadData();
+    // Check if user is on main page
+    if (document.getElementById('mainTable')) {
+        // Load data and populate table
+        await loadData();
+        
+        // Set up table sorting
+        document.querySelectorAll('#mainTable th').forEach((header, index) => {
+            header.addEventListener('click', () => sortTable(index));
+        });
+        
+        // Set up row click to open modal
+        document.querySelector('#mainTable tbody').addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            if (row) {
+                const ticker = row.cells[1].textContent;
+                openTokenModal(ticker);
+            }
+        });
+        
+        // Set up search functionality
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                document.querySelectorAll('#mainTable tbody tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+        
+        // Set up admin controls
+        const editButton = document.getElementById('editButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const saveEditButton = document.getElementById('saveEditButton');
+        const saveButton = document.getElementById('saveButton');
+        const modalCloseButton = document.querySelector('#tickerModal .close');
+        
+        if (editButton) {
+            editButton.addEventListener('click', openEditPanel);
+        }
+        
+        if (cancelButton) {
+            cancelButton.addEventListener('click', closeEditPanel);
+        }
+        
+        if (saveEditButton) {
+            saveEditButton.addEventListener('click', saveEditedData);
+        }
+        
+        if (saveButton) {
+            saveButton.addEventListener('click', saveTokenChanges);
+        }
+        
+        if (modalCloseButton) {
+            modalCloseButton.addEventListener('click', () => {
+                document.getElementById('tickerModal').style.display = 'none';
+            });
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('tickerModal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
     
-    sortTable(0);
-    
+    // Update admin UI
+    updateAdminUI();
 });

@@ -1,92 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Inter', -apple-system, sans-serif;
-        }
-        .login-container {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        .login-container h2 {
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-        }
-        .login-container input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-size: 1rem;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--text-color);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-        .login-container button:hover {
-            background: var(--hover-bg);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+    .login-container {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-container h2 {
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+    }
+    .login-container input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-size: 1rem;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--text-color);
+      color: var(--bg-color);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    .login-container button:hover {
+      background: var(--hover-bg);
+    }
+    .back-to-site {
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .back-to-site a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    .back-to-site a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Admin Login</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+  <div class="login-container">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="back-to-site">
+      <a href="index.html">Back to main site</a>
     </div>
-    <script>document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('https://backend-finalsure.vercel.app/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: document.getElementById('username').value,
-                    password: document.getElementById('password').value // Mot de passe en clair
-                })
-            });
-            
-            const data = await response.json();
-            if (response.ok && data.token) {
-                localStorage.setItem('authToken', data.token);
-                window.location.href = '/index.html';
-            } else {
-                alert('Identifiants incorrects');
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            alert('Erreur de connexion au serveur');
-        }
-    });</script>
+  </div>
+  
+  <script src="script.js"></script>
 </body>
 </html>
