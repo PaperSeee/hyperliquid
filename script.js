@@ -280,6 +280,15 @@ function updateAdminUI() {
         logoutButton.parentNode.replaceChild(newLogoutButton, logoutButton);
         newLogoutButton.addEventListener('click', logout);
     }
+    
+    // Gestion du bouton de rafraîchissement
+    const refreshButton = document.getElementById('refreshButton');
+    if (refreshButton) {
+        // Remove any existing listeners to avoid duplicates
+        const newRefreshButton = refreshButton.cloneNode(true);
+        refreshButton.parentNode.replaceChild(newRefreshButton, refreshButton);
+        newRefreshButton.addEventListener('click', refreshData);
+    }
 }
 
 // Handle login from login page
@@ -706,6 +715,80 @@ function initTheme() {
     });
 }
 
+// Fonctions pour le rafraîchissement des données
+async function refreshData() {
+    // Vérification de l'authentification
+    if (!isAdmin()) {
+        showNotification('Admin access required', 'error');
+        return;
+    }
+    
+    // Récupérer le bouton et son icône
+    const refreshButton = document.getElementById('refreshButton');
+    const refreshIcon = refreshButton.querySelector('i');
+    
+    try {
+        // Mettre à jour l'interface pour indiquer le chargement
+        refreshButton.disabled = true;
+        refreshIcon.classList.add('spinning');
+        
+        // Afficher notification de début de mise à jour
+        showNotification('Refreshing data...', 'info');
+        
+        // Appeler l'API pour déclencher la mise à jour
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/update', {
+            method: 'POST'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to update data');
+        }
+        
+        // Mise à jour réussie
+        showNotification('Data updated successfully!', 'success');
+        
+        // Recharger les données pour mettre à jour l'interface
+        await loadData();
+        
+    } catch (error) {
+        console.error('Error refreshing data:', error);
+        showNotification('Error refreshing data. Please try again.', 'error');
+    } finally {
+        // Rétablir l'état du bouton
+        refreshButton.disabled = false;
+        refreshIcon.classList.remove('spinning');
+    }
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    const messageElement = document.getElementById('notificationMessage');
+    
+    // Définir le message et le type
+    messageElement.textContent = message;
+    
+    // Retirer toutes les classes de type
+    notification.classList.remove('success', 'error', 'info');
+    
+    // Ajouter la classe correspondant au type
+    notification.classList.add(type);
+    
+    // Afficher la notification
+    notification.classList.add('show');
+    
+    // Masquer automatiquement après 5 secondes
+    setTimeout(() => {
+        hideNotification();
+    }, 5000);
+}
+
+// Fonction pour masquer la notification
+function hideNotification() {
+    const notification = document.getElementById('notification');
+    notification.classList.remove('show');
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize theme
@@ -752,6 +835,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const saveButton = document.getElementById('saveButton');
         const modalCloseButton = document.querySelector('#tickerModal .close');
         const logoutButton = document.getElementById('logoutButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const closeNotificationButton = document.getElementById('closeNotification');
         
         if (editButton) {
             editButton.addEventListener('click', openEditPanel);
@@ -778,6 +863,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Ensure logout button has event listener
         if (logoutButton) {
             logoutButton.addEventListener('click', logout);
+        }
+        
+        // Ensure refresh button has event listener
+        if (refreshButton) {
+            refreshButton.addEventListener('click', refreshData);
+        }
+        
+        // Gestion du bouton de fermeture des notifications
+        if (closeNotificationButton) {
+            closeNotificationButton.addEventListener('click', hideNotification);
         }
         
         // Close modal when clicking outside
