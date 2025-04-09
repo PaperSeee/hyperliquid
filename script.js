@@ -120,29 +120,45 @@ async function loadData() {
             return aIndex - bIndex;
         });
 
-        // AMÉLIORATION: Utilisation d'une approche plus directe pour filtrer les tokens
-        // Un token est listé s'il a une propriété markPx avec une valeur
-        const listedTokens = tokens.filter(token => token.markPx !== undefined && token.markPx !== null);
+        // ÉTAPE 1: Filtrer tous les tokens valides (avec au moins un nom ou un tokenId)
+        const validTokens = tokens.filter(token => 
+            token && typeof token === 'object' && (token.name || token.tokenId)
+        );
         
-        // CORRECTION: Un token est non listé si markPx est undefined, null ou vide
-        const unlistedTokens = tokens.filter(token => token.markPx === undefined || token.markPx === null || token.markPx === '');
+        const invalidTokens = tokens.filter(token => 
+            !token || typeof token !== 'object' || (!token.name && !token.tokenId)
+        );
+        
+        console.log(`Tokens valides: ${validTokens.length}, Tokens invalides: ${invalidTokens.length}`);
+        
+        if (invalidTokens.length > 0) {
+            console.log("Tokens invalides (premier exemple):", invalidTokens[0]);
+        }
+        
+        // ÉTAPE 2: Séparer les tokens valides en listés et non listés
+        const listedTokens = validTokens.filter(token => 
+            token.markPx !== undefined && 
+            token.markPx !== null && 
+            token.markPx !== ''
+        );
+        
+        const unlistedTokens = validTokens.filter(token => 
+            token.markPx === undefined || 
+            token.markPx === null || 
+            token.markPx === ''
+        );
         
         // Logging détaillé pour diagnostic
         console.log(`Tokens listés (avec markPx): ${listedTokens.length}`);
         console.log(`Tokens non listés (sans markPx): ${unlistedTokens.length}`);
-        console.log(`Vérification: listés + non listés = ${listedTokens.length + unlistedTokens.length} (total: ${tokens.length})`);
+        console.log(`Vérification: listés + non listés = ${listedTokens.length + unlistedTokens.length} (total valides: ${validTokens.length})`);
         
         // Log des propriétés des tokens non listés pour diagnostic
         if (unlistedTokens.length > 0) {
             console.log('Premier token non listé - propriétés:', Object.keys(unlistedTokens[0]));
-            console.log('Exemples de tokens non listés:', unlistedTokens.slice(0, 5).map(t => t.name || t.tokenId || 'Sans nom'));
-        } else {
-            // Si aucun token non listé, examinons le problème plus en détail
-            console.log('DEBUG - Aucun token non listé trouvé. Vérification manuelle des tokens:');
-            tokens.forEach((token, idx) => {
-                if (idx < 20) { // Limitons aux 20 premiers pour ne pas surcharger la console
-                    console.log(`Token #${idx}: name=${token.name}, markPx=${token.markPx}, tokenId=${token.tokenId}`);
-                }
+            console.log('Exemples de tokens non listés:');
+            unlistedTokens.slice(0, 5).forEach((token, idx) => {
+                console.log(`  ${idx+1}. ${token.name || token.tokenId || 'Inconnu'} - Raison: ${!token.markPx ? 'Pas de markPx' : 'markPx vide'}`);
             });
         }
         
@@ -174,8 +190,7 @@ async function loadData() {
             mainTableBody.appendChild(row);
         });
         
-        // Utilisation d'une approche plus directe pour les tokens non listés
-        // En envoyant tous les tokens qui n'ont pas été affichés dans la table principale
+        // Envoyer les tokens non listés validés à la fonction d'affichage
         renderUnlistedTokens(unlistedTokens);
 
         // Update admin UI after loading data
@@ -189,7 +204,7 @@ async function loadData() {
     }
 }
 
-// Nouvelle fonction d'affichage des tokens non listés plus robuste
+// Fonction d'affichage des tokens non listés améliorée
 function renderUnlistedTokens(tokens) {
     const container = document.getElementById('unlistedTokensContainer');
     if (!container) {
@@ -213,23 +228,37 @@ function renderUnlistedTokens(tokens) {
     const cardsContainer = document.createElement('div');
     cardsContainer.className = 'token-cards-grid';
     
-    // Créer les cartes pour chaque token non listé, avec meilleure vérification des données
+    // Créer les cartes pour chaque token non listé
     tokens.forEach(token => {
-        if (!token) return;
+        // Vérification de validité du token
+        if (!token || typeof token !== 'object') {
+            console.warn("Token invalide ignoré:", token);
+            return;
+        }
         
-        // Log plus détaillé pour comprendre la structure des tokens
-        console.log(`Construction de carte pour token:`, token);
+        // Récupération du nom avec fallback
+        const tokenName = token.name || token.tokenId || '';
+        if (!tokenName) {
+            console.warn("Token sans nom ignoré");
+            return;
+        }
         
-        // Récupération du nom avec fallback plus robuste
-        const tokenName = token.name || token.tokenId || 'Unknown-' + Math.random().toString(36).substring(2, 8);
-        
+        // Création de la carte
         const card = document.createElement('div');
         card.className = 'token-card';
-        card.innerHTML = `<span class="token-name">${tokenName}</span>`;
         
-        // Stocker l'ID du token pour référence future - avec meilleurs fallbacks
+        // Ajouter un badge "Coming Soon"
+        card.innerHTML = `
+            <span class="token-name">${tokenName}</span>
+            <span class="coming-soon-badge">Coming Soon</span>
+        `;
+        
+        // Stocker l'ID du token pour référence future
         card.dataset.tokenId = token.tokenId || '';
         card.dataset.tokenIndex = token.index || token.tokenIndex || '';
+        
+        // Ajouter une classe spéciale pour les tokens non listés
+        card.classList.add('unlisted-token');
         
         // Rendre les cartes cliquables pour ouvrir le modal
         card.addEventListener('click', () => {
@@ -237,9 +266,15 @@ function renderUnlistedTokens(tokens) {
         });
         
         cardsContainer.appendChild(card);
+        
+        // Log pour confirmer l'ajout du token
+        console.log(`Carte créée pour token non listé: ${tokenName}`);
     });
     
     container.appendChild(cardsContainer);
+    
+    // Résumé final
+    console.log(`Rendu terminé: ${tokens.length} tokens non listés affichés`);
 }
 
 // Find token row by name

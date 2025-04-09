@@ -2328,3 +2328,68 @@ td.last-updated {
     }
 }
 
+/* Styles améliorés pour les tokens non listés */
+.unlisted-token {
+    position: relative;
+    overflow: hidden;
+    border: 1px dashed var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.unlisted-token:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    border-bottom-left-radius: 6px;
+    font-weight: 600;
+    opacity: 0.9;
+    transform: translateY(-30%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.unlisted-token:hover .coming-soon-badge {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ajustements pour la carte de token non listée */
+.token-card {
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.token-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    text-align: center;
+    word-break: break-word;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Ajustements responsifs pour les tokens non listés */
+@media screen and (max-width: 768px) {
+    .coming-soon-badge {
+        font-size: 0.55rem;
+        padding: 1px 4px;
+    }
+}
+
