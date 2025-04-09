@@ -2249,3 +2249,82 @@ td.last-updated {
     font-style: italic;
 }
 
+/* Amélioration de l'affichage des tokens non listés */
+.token-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 0.75rem;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.token-card {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+}
+
+.token-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.token-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    word-break: break-word;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.token-count {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    font-style: italic;
+}
+
+/* Responsive adjustments for unlisted tokens grid */
+@media screen and (max-width: 768px) {
+    .token-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 0.6rem;
+    }
+    
+    .token-card {
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .token-name {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .token-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .token-card {
+        padding: 0.4rem 0.2rem;
+    }
+    
+    .token-name {
+        font-size: 0.75rem;
+    }
+}
+

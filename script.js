@@ -111,24 +111,27 @@ async function loadData() {
         const mainTableBody = document.querySelector('#mainTable tbody');
         mainTableBody.innerHTML = '';
 
-        // Sort tokens by index
+        // Sort tokens by index if available
         tokens.sort((a, b) => {
-            const aIndex = parseInt(a.tokenIndex, 10) || 0;
-            const bIndex = parseInt(b.tokenIndex, 10) || 0;
+            const aIndex = parseInt(a.index || a.tokenIndex || 0, 10);
+            const bIndex = parseInt(b.index || b.tokenIndex || 0, 10);
             return aIndex - bIndex;
         });
 
-        // SIMPLIFICATION: Un token est considéré comme "listé" UNIQUEMENT s'il a un markPx (prix de marché)
+        // NOUVELLE LOGIQUE: Un token est considéré comme "listé" UNIQUEMENT s'il a un markPx (prix de marché)
         const listedTokens = tokens.filter(token => token.markPx);
         
-        // SIMPLIFICATION: Tous les autres tokens sont considérés comme "non listés"
+        // NOUVELLE LOGIQUE: Tout token qui n'a pas markPx est considéré comme "non listé"
         const unlistedTokens = tokens.filter(token => !token.markPx);
         
         console.log(`Tokens listés: ${listedTokens.length}`);
         console.log(`Tokens non listés: ${unlistedTokens.length}`);
         
-        // Log des noms des tokens non listés pour vérification
-        console.log('Exemples de tokens non listés:', unlistedTokens.slice(0, 20).map(t => t.name));
+        // Log pour debug
+        if (unlistedTokens.length > 0) {
+            console.log('Premier token non listé:', unlistedTokens[0]);
+            console.log('Noms des tokens non listés:', unlistedTokens.map(t => t.name).slice(0, 20));
+        }
         
         // Populate Listed Tokens table
         listedTokens.forEach((token, index) => {
@@ -137,7 +140,7 @@ async function loadData() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${sequentialIndex}</td>
-                <td>${token.name}</td>
+                <td>${token.name || 'N/A'}</td>
                 <td>${formatDate(token.launchDate)}</td>
                 <td>${token.teamAllocation || 'N/A'}</td>
                 <td>${token.airdrop1 ? `${token.airdrop1.percentage}% ${token.airdrop1.token}` : '/'}</td>
@@ -153,12 +156,13 @@ async function loadData() {
                 <td class="last-updated">${formatLastUpdated(token.lastUpdated)}</td>
             `;
             
-            row.dataset.tokenIndex = token.tokenIndex;
+            // Stocker l'index complet pour les références futures
+            row.dataset.tokenIndex = token.tokenIndex || token.index || index;
             mainTableBody.appendChild(row);
         });
         
-        // Recréation complète de l'affichage des tokens non listés
-        displayUnlistedTokens(unlistedTokens);
+        // Afficher les tokens non listés avec une fonction robuste
+        renderUnlistedTokens(unlistedTokens);
 
         // Update admin UI after loading data
         updateAdminUI();
@@ -170,8 +174,8 @@ async function loadData() {
     }
 }
 
-// Fonction complètement recréée pour afficher les tokens non listés
-function displayUnlistedTokens(tokens) {
+// Nouvelle fonction d'affichage des tokens non listés plus robuste
+function renderUnlistedTokens(tokens) {
     const container = document.getElementById('unlistedTokensContainer');
     if (!container) {
         console.error("Container for unlisted tokens not found");
@@ -190,21 +194,35 @@ function displayUnlistedTokens(tokens) {
     // Afficher le nombre total de tokens non listés
     container.innerHTML = `<p class="token-count">${tokens.length} unlisted tokens found</p>`;
     
-    // Créer les cartes pour chaque token non listé
+    // Créer un conteneur pour les cartes
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'token-cards-grid';
+    
+    // Créer les cartes pour chaque token non listé, en gérant les structures potentiellement différentes
     tokens.forEach(token => {
-        if (!token || !token.name) return; // Ignorer les tokens sans nom
+        // Vérification de validité du token
+        if (!token || typeof token !== 'object') return;
+        
+        // Récupération du nom avec fallback
+        const tokenName = token.name || token.tokenId || 'Unknown Token';
         
         const card = document.createElement('div');
         card.className = 'token-card';
-        card.innerHTML = `<span class="token-name">${token.name}</span>`;
+        card.innerHTML = `<span class="token-name">${tokenName}</span>`;
         
-        // Rendre les cartes cliquables pour ouvrir le modal du token
+        // Stocker l'ID du token pour référence future
+        card.dataset.tokenId = token.tokenId || '';
+        card.dataset.tokenIndex = token.index || '';
+        
+        // Rendre les cartes cliquables pour ouvrir le modal avec des informations détaillées
         card.addEventListener('click', () => {
-            openTokenModal(token.name);
+            openTokenModal(tokenName);
         });
         
-        container.appendChild(card);
+        cardsContainer.appendChild(card);
     });
+    
+    container.appendChild(cardsContainer);
 }
 
 // Find token row by name
@@ -219,7 +237,7 @@ function findTokenRow(ticker) {
     return null;
 }
 
-// Load specific token data for modal
+// Adaptation de loadTokenData pour les tokens non listés
 async function loadTokenData(ticker) {
     try {
         const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
@@ -233,6 +251,7 @@ async function loadTokenData(ticker) {
             return null;
         }
         
+        // Remplir les champs avec les données disponibles ou vides
         document.getElementById('twitterHandle').value = token.twitter || '';
         
         // Choose either telegram or discord, preferring telegram if both exist
@@ -567,7 +586,7 @@ async function saveEditedData() {
     }
 }
 
-// Token modal functions - Correction pour s'assurer que les champs sont modifiables
+// Token modal functions - Adaptation pour les tokens sans markPx
 async function openTokenModal(ticker) {
     // Set modal title
     document.getElementById('modalTitle').textContent = ticker;
@@ -581,7 +600,13 @@ async function openTokenModal(ticker) {
     }
     
     // Load token data and wait for it to complete
-    await loadTokenData(ticker);
+    const token = await loadTokenData(ticker);
+    
+    // Si c'est un token non listé avec peu de données, gérer spécialement
+    const isMinimalToken = token && !token.markPx;
+    if (isMinimalToken) {
+        console.log("Token minimal détecté:", ticker);
+    }
     
     // Set fields based on admin status AFTER data is loaded
     const isUserAdmin = isAdmin();
