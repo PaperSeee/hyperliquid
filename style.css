@@ -2393,3 +2393,100 @@ td.last-updated {
     }
 }
 
+/* Unlisted Tokens Table Styles */
+#unlistedTokensTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#unlistedTokensTable th,
+#unlistedTokensTable td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#unlistedTokensTable th {
+    background: var(--table-header-bg);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+#unlistedTokensTable tr {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#unlistedTokensTable tr:hover {
+    background: var(--hover-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-badge.coming-soon {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+[data-theme="dark"] .status-badge.coming-soon {
+    background-color: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+/* Table Wrapper for responsive tables */
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* No unlisted message styling */
+#noUnlistedMessage {
+    text-align: center;
+    font-style: italic;
+    color: var(--secondary-text);
+    padding: 1rem 0;
+}
+
+/* Responsive adjustments for unlisted tokens table */
+@media screen and (max-width: 768px) {
+    #unlistedTokensTable th,
+    #unlistedTokensTable td {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #unlistedTokensTable th,
+    #unlistedTokensTable td {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    
+    .status-badge {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.65rem;
+    }
+}
+

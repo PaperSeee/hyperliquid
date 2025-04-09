@@ -138,8 +138,21 @@
         
         <div class="unlisted-tokens-container">
             <h2>Unlisted Tokens</h2>
-            <div class="token-cards-container" id="unlistedTokensContainer">
-                <!-- Token cards will be dynamically generated here -->
+            <div class="table-wrapper">
+                <table id="unlistedTokensTable">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Token Name</th>
+                            <th>Token ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Unlisted tokens will be dynamically generated here -->
+                    </tbody>
+                </table>
+                <p id="noUnlistedMessage" style="display: none;">No unlisted tokens found</p>
             </div>
         </div>
     </main>
