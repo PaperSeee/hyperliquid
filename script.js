@@ -117,8 +117,18 @@ async function loadData() {
         });
 
         // Separate tokens into listed and unlisted
-        const listedTokens = tokens.filter(token => token.markPx && (parseFloat(token.launchCircSupply) !== 0));
-        const unlistedTokens = tokens.filter(token => parseFloat(token.launchCircSupply) === 0 || token.launchCircSupply === "0.0");
+        // Modification: Un token est considéré comme "non listé" s'il n'a pas de markPx OU si son launchCircSupply est 0
+        const listedTokens = tokens.filter(token => 
+            token.markPx && 
+            parseFloat(token.launchCircSupply) !== 0 && 
+            token.launchCircSupply !== "0.0"
+        );
+        
+        const unlistedTokens = tokens.filter(token => 
+            !token.markPx || 
+            parseFloat(token.launchCircSupply) === 0 || 
+            token.launchCircSupply === "0.0"
+        );
         
         // Populate Listed Tokens table
         listedTokens.forEach((token, index) => {
