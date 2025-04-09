@@ -106,6 +106,8 @@ async function loadData() {
             throw new TypeError('Expected an array of tokens');
         }
 
+        console.log(`Total tokens récupérés: ${tokens.length}`);
+        
         const mainTableBody = document.querySelector('#mainTable tbody');
         mainTableBody.innerHTML = '';
 
@@ -117,18 +119,26 @@ async function loadData() {
         });
 
         // Separate tokens into listed and unlisted
-        // Modification: Un token est considéré comme "non listé" s'il n'a pas de markPx OU si son launchCircSupply est 0
+        // Un token est considéré comme "listé" uniquement s'il a un markPx (prix de marché)
+        // ET si son launchCircSupply est différent de 0
         const listedTokens = tokens.filter(token => 
             token.markPx && 
-            parseFloat(token.launchCircSupply) !== 0 && 
+            parseFloat(token.launchCircSupply || '0') !== 0 && 
             token.launchCircSupply !== "0.0"
         );
         
+        // Tous les autres tokens sont considérés comme "non listés"
         const unlistedTokens = tokens.filter(token => 
             !token.markPx || 
-            parseFloat(token.launchCircSupply) === 0 || 
+            parseFloat(token.launchCircSupply || '0') === 0 || 
             token.launchCircSupply === "0.0"
         );
+        
+        console.log(`Tokens listés: ${listedTokens.length}`);
+        console.log(`Tokens non listés: ${unlistedTokens.length}`);
+        
+        // Log des noms de quelques tokens non listés pour vérification
+        console.log('Exemples de tokens non listés:', unlistedTokens.slice(0, 10).map(t => t.name));
         
         // Populate Listed Tokens table
         listedTokens.forEach((token, index) => {
@@ -157,7 +167,7 @@ async function loadData() {
             mainTableBody.appendChild(row);
         });
         
-        // Populate Unlisted Tokens section
+        // Ensure all tokens are properly displayed in the unlisted section
         populateUnlistedTokens(unlistedTokens);
 
         // Update admin UI after loading data
@@ -183,8 +193,13 @@ function populateUnlistedTokens(tokens) {
         return;
     }
     
-    // Create card for each unlisted token
+    // Ajouter une information sur le nombre total de tokens non listés
+    container.innerHTML = `<p class="token-count">${tokens.length} unlisted tokens found</p>`;
+    
+    // Create card for each unlisted token, assurons-nous que tous sont affichés
     tokens.forEach(token => {
+        if (!token.name) return; // Skip tokens without a name
+        
         const card = document.createElement('div');
         card.className = 'token-card';
         card.innerHTML = `<span class="token-name">${token.name}</span>`;
