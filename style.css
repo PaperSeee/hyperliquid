@@ -2139,3 +2139,105 @@ td.last-updated {
     background: rgba(74, 222, 128, 0.4);
 }
 
+/* Styles pour le bouton de rafraîchissement */
+#refreshButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#refreshButton:hover {
+    background-color: #1a4231;
+}
+
+/* Animation de rotation pour l'icône de rafraîchissement */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#refreshButton i.spinning {
+    animation: spin 1s linear infinite;
+}
+
+/* Styles pour le système de notification */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.info {
+    background-color: #2196F3;
+}
+
+#closeNotification {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+}
+
+#closeNotification:hover {
+    opacity: 0.8;
+}
+
+/* Ajustements pour le mode sombre */
+[data-theme="dark"] .notification {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .notification.success {
+    background-color: #43a047;
+}
+
+[data-theme="dark"] .notification.error {
+    background-color: #d32f2f;
+}
+
+[data-theme="dark"] .notification.info {
+    background-color: #1976d2;
+}
+
+/* Styles responsifs pour les notifications */
+@media screen and (max-width: 600px) {
+    .notification {
+        left: 20px;
+        right: 20px;
+        min-width: auto;
+        max-width: none;
+    }
+}
+

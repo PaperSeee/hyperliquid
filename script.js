@@ -284,10 +284,11 @@ function updateAdminUI() {
     // Gestion du bouton de rafraîchissement
     const refreshButton = document.getElementById('refreshButton');
     if (refreshButton) {
-        // Remove any existing listeners to avoid duplicates
-        const newRefreshButton = refreshButton.cloneNode(true);
-        refreshButton.parentNode.replaceChild(newRefreshButton, refreshButton);
-        newRefreshButton.addEventListener('click', refreshData);
+        if (adminStatus) {
+            refreshButton.style.display = 'block';
+        } else {
+            refreshButton.style.display = 'none';
+        }
     }
 }
 
@@ -736,7 +737,7 @@ async function refreshData() {
         showNotification('Refreshing data...', 'info');
         
         // Appeler l'API pour déclencher la mise à jour
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/update', {
+        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens/refresh', {
             method: 'POST'
         });
         
