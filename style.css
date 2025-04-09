@@ -2241,3 +2241,11 @@ td.last-updated {
     }
 }
 
+/* Style pour l'information de comptage des tokens non listés */
+.token-count {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    font-style: italic;
+}
+
