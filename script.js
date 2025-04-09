@@ -118,27 +118,17 @@ async function loadData() {
             return aIndex - bIndex;
         });
 
-        // Separate tokens into listed and unlisted
-        // Un token est considéré comme "listé" uniquement s'il a un markPx (prix de marché)
-        // ET si son launchCircSupply est différent de 0
-        const listedTokens = tokens.filter(token => 
-            token.markPx && 
-            parseFloat(token.launchCircSupply || '0') !== 0 && 
-            token.launchCircSupply !== "0.0"
-        );
+        // SIMPLIFICATION: Un token est considéré comme "listé" UNIQUEMENT s'il a un markPx (prix de marché)
+        const listedTokens = tokens.filter(token => token.markPx);
         
-        // Tous les autres tokens sont considérés comme "non listés"
-        const unlistedTokens = tokens.filter(token => 
-            !token.markPx || 
-            parseFloat(token.launchCircSupply || '0') === 0 || 
-            token.launchCircSupply === "0.0"
-        );
+        // SIMPLIFICATION: Tous les autres tokens sont considérés comme "non listés"
+        const unlistedTokens = tokens.filter(token => !token.markPx);
         
         console.log(`Tokens listés: ${listedTokens.length}`);
         console.log(`Tokens non listés: ${unlistedTokens.length}`);
         
-        // Log des noms de quelques tokens non listés pour vérification
-        console.log('Exemples de tokens non listés:', unlistedTokens.slice(0, 10).map(t => t.name));
+        // Log des noms des tokens non listés pour vérification
+        console.log('Exemples de tokens non listés:', unlistedTokens.slice(0, 20).map(t => t.name));
         
         // Populate Listed Tokens table
         listedTokens.forEach((token, index) => {
@@ -167,8 +157,8 @@ async function loadData() {
             mainTableBody.appendChild(row);
         });
         
-        // Ensure all tokens are properly displayed in the unlisted section
-        populateUnlistedTokens(unlistedTokens);
+        // Recréation complète de l'affichage des tokens non listés
+        displayUnlistedTokens(unlistedTokens);
 
         // Update admin UI after loading data
         updateAdminUI();
@@ -180,31 +170,35 @@ async function loadData() {
     }
 }
 
-// Populate unlisted tokens section
-function populateUnlistedTokens(tokens) {
+// Fonction complètement recréée pour afficher les tokens non listés
+function displayUnlistedTokens(tokens) {
     const container = document.getElementById('unlistedTokensContainer');
-    if (!container) return;
+    if (!container) {
+        console.error("Container for unlisted tokens not found");
+        return;
+    }
     
+    // Vider le conteneur
     container.innerHTML = '';
     
-    // If no unlisted tokens, show a message
-    if (tokens.length === 0) {
+    // Si aucun token non listé, afficher un message
+    if (!tokens || tokens.length === 0) {
         container.innerHTML = '<p>No unlisted tokens found</p>';
         return;
     }
     
-    // Ajouter une information sur le nombre total de tokens non listés
+    // Afficher le nombre total de tokens non listés
     container.innerHTML = `<p class="token-count">${tokens.length} unlisted tokens found</p>`;
     
-    // Create card for each unlisted token, assurons-nous que tous sont affichés
+    // Créer les cartes pour chaque token non listé
     tokens.forEach(token => {
-        if (!token.name) return; // Skip tokens without a name
+        if (!token || !token.name) return; // Ignorer les tokens sans nom
         
         const card = document.createElement('div');
         card.className = 'token-card';
         card.innerHTML = `<span class="token-name">${token.name}</span>`;
         
-        // Make cards clickable to open token modal
+        // Rendre les cartes cliquables pour ouvrir le modal du token
         card.addEventListener('click', () => {
             openTokenModal(token.name);
         });
