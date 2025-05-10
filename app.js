@@ -134,6 +134,17 @@ app.get('/api/monitoring', (req, res) => {
     });
 });
 
+// Route spécifique pour le fichier CSS
+app.get('/style.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'style.css'));
+});
+
+// Route pour les assets
+app.get('/assets/:file', (req, res) => {
+  res.sendFile(path.join(__dirname, 'assets', req.params.file));
+});
+
 // Route pour la page d'accueil
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
