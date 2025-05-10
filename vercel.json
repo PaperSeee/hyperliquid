@@ -15,6 +15,11 @@
       "config": { "includeFiles": ["script.js"] }
     },
     {
+      "src": "*.html",
+      "use": "@vercel/static",
+      "config": { "includeFiles": ["login.html"] }
+    },
+    {
       "src": "assets/**",
       "use": "@vercel/static"
     }
@@ -27,6 +32,10 @@
     {
       "src": "/script.js",
       "dest": "/script.js"
+    },
+    {
+      "src": "/login.html",
+      "dest": "/login.html"
     },
     {
       "src": "/assets/(.*)",
