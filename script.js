@@ -1,4 +1,5 @@
 // Basic utility and formatting functions
+const API_BASE_URL = 'https://backend-f-inal.vercel.app';
 
 // Authentication utility - adds auth token to requests when available
 async function fetchWithAuth(url, options = {}) {
@@ -98,7 +99,7 @@ function formatSocialLinks(twitter, telegram, discord, website) {
 // Load all tokens data
 async function loadData() {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/tokens`);
         if (!response.ok) throw new Error('Failed to fetch tokens');
         
         const tokens = await response.json();
@@ -273,7 +274,7 @@ function findTokenRow(ticker) {
 // Adaptation de loadTokenData pour les tokens non listés
 async function loadTokenData(ticker) {
     try {
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens');
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/tokens`);
         if (!response.ok) throw new Error('Failed to fetch tokens');
         
         const tokens = await response.json();
@@ -373,7 +374,7 @@ function setupLoginHandler() {
             const password = document.getElementById('password').value;
             
             try {
-                const response = await fetch('https://backend-finalsure.vercel.app/api/auth/login', {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
@@ -464,7 +465,7 @@ async function saveTokenChanges() {
     }
     
     try {
-        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             body: JSON.stringify(data)
         });
@@ -600,7 +601,7 @@ async function saveEditedData() {
     }
     
     try {
-        const response = await fetchWithAuth(`https://backend-finalsure.vercel.app/api/tokens/${tokenIndex}`, {
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/tokens/${tokenIndex}`, {
             method: 'PUT',
             body: JSON.stringify(data)
         });
@@ -814,7 +815,7 @@ async function refreshData() {
         showNotification('Refreshing data...', 'info');
         
         // Appeler l'API pour déclencher la mise à jour
-        const response = await fetchWithAuth('https://backend-finalsure.vercel.app/api/tokens/refresh', {
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/tokens/refresh`, {
             method: 'POST'
         });
         
